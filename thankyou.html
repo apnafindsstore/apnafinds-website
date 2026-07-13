@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Order Confirmed | ApnaFinds</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15, 92, 74, .08), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245, 158, 11, .09), transparent 28%),
+        #FAF7F2;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, .88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, .94);
+      box-shadow: 0 22px 65px -28px rgba(10, 54, 34, .32);
+    }
+
+    .success-ring {
+      animation: successPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes successPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(15, 92, 74, .12);
+      }
+      50% {
+        box-shadow: 0 0 0 18px rgba(15, 92, 74, 0);
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/ai-helper.css">
+</head>
+
+<body class="min-h-screen font-sans text-gray-800 antialiased">
+
+  <nav class="border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </span>
+
+        <span class="text-xl font-black sm:text-2xl">
+          <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds.</span>
+        </span>
+      </a>
+
+      <a href="account.html" class="text-sm font-black text-brand-green hover:text-brand-dark">
+        My Account
+      </a>
+
+    </div>
+  </nav>
+
+  <main class="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-24">
+    <section id="confirmationCard" class="glass-card rounded-[2rem] p-7 text-center sm:p-12">
+
+      <span class="success-ring mx-auto grid h-24 w-24 place-items-center rounded-full bg-green-50 text-4xl text-brand-green">
+        <i class="fa-solid fa-check"></i>
+      </span>
+
+      <p class="mt-8 text-xs font-black uppercase tracking-[.22em] text-brand-orange">
+        Order placed successfully
+      </p>
+
+      <h1 class="mt-4 text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">
+        Thank You For Your Order
+      </h1>
+
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-gray-600">
+        Your ApnaFinds order has been saved. You can view it from your account or manage it from the admin orders page.
+      </p>
+
+      <div class="mx-auto mt-9 grid max-w-2xl gap-4 rounded-3xl bg-gray-50 p-5 text-left sm:grid-cols-2 sm:p-6">
+        <div>
+          <p class="text-xs font-black uppercase tracking-wider text-gray-400">Order ID</p>
+          <p id="orderId" class="mt-2 break-all font-black text-gray-900">—</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-black uppercase tracking-wider text-gray-400">Total</p>
+          <p id="orderTotal" class="mt-2 text-xl font-black text-brand-green">₹0</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-black uppercase tracking-wider text-gray-400">Payment</p>
+          <p id="paymentMethod" class="mt-2 font-black text-gray-900">—</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-black uppercase tracking-wider text-gray-400">Status</p>
+          <p id="orderStatus" class="mt-2 font-black text-brand-orange">Order placed</p>
+        </div>
+      </div>
+
+      <section
+        id="logisticsAutomationCard"
+        class="mt-8 rounded-2xl border border-green-100 bg-green-50 p-5 text-left"
+      >
+        <div class="flex items-start gap-4">
+          <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white text-brand-green">
+            <i class="fa-solid fa-truck-fast"></i>
+          </span>
+
+          <div>
+            <h2 class="font-black text-gray-900">
+              Automatic Courier Processing
+            </h2>
+
+            <p
+              id="logisticsAutomationText"
+              class="mt-2 text-sm leading-6 text-gray-600"
+            >
+              Sending this order to the logistics automation server...
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="mt-9 grid gap-3 sm:grid-cols-2">
+        <a
+          id="trackOrderButton"
+          href="track-order.html"
+          class="flex items-center justify-center gap-2 rounded-xl bg-brand-green px-7 py-4 font-black text-white hover:bg-brand-dark"
+        >
+          <i class="fa-solid fa-truck-fast"></i>
+          Track Order
+        </a>
+
+        <a
+          id="invoiceButton"
+          href="invoice.html"
+          class="flex items-center justify-center gap-2 rounded-xl border border-brand-green/20 bg-white px-7 py-4 font-black text-brand-green hover:bg-green-50"
+        >
+          <i class="fa-solid fa-file-invoice"></i>
+          View Invoice
+        </a>
+
+        <a
+          id="cancelOrderButton"
+          href="returns-center.html"
+          class="flex items-center justify-center gap-2 rounded-xl bg-red-50 px-7 py-4 font-black text-red-600 hover:bg-red-600 hover:text-white"
+        >
+          <i class="fa-solid fa-ban"></i>
+          Cancel Order
+        </a>
+
+        <a
+          href="account.html"
+          class="flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-7 py-4 font-black text-gray-700 hover:border-brand-green hover:text-brand-green"
+        >
+          <i class="fa-solid fa-user"></i>
+          My Account
+        </a>
+
+        <a
+          href="products.html"
+          class="flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-7 py-4 font-black text-gray-700 hover:border-brand-green hover:text-brand-green sm:col-span-2"
+        >
+          <i class="fa-solid fa-bag-shopping"></i>
+          Continue Shopping
+        </a>
+      </div>
+
+      <a
+        href="https://wa.me/919666337370"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-7 inline-flex items-center gap-2 text-sm font-black text-brand-green hover:text-brand-dark"
+      >
+        <i class="fa-brands fa-whatsapp text-lg"></i>
+        Need help with this order?
+      </a>
+
+    </section>
+
+    <section id="missingOrder" class="glass-card hidden rounded-[2rem] p-10 text-center">
+      <i class="fa-solid fa-circle-exclamation text-5xl text-brand-orange"></i>
+
+      <h1 class="mt-6 text-3xl font-black text-gray-900">Order details unavailable</h1>
+
+      <p class="mt-3 text-gray-500">
+        The confirmation information was not found in this browser.
+      </p>
+
+      <a
+        href="products.html"
+        class="mt-7 inline-flex rounded-xl bg-brand-green px-7 py-3.5 font-bold text-white"
+      >
+        Browse Products
+      </a>
+    </section>
+  </main>
+
+  <footer class="bg-[#071A14] text-white">
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-9 text-center text-sm text-gray-400 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <p>© <span id="currentYear"></span> ApnaFinds. Smart Finds. Better Living.</p>
+
+      <div class="flex justify-center gap-5">
+        <a href="shipping.html" class="hover:text-white">Shipping</a>
+        <a href="refund.html" class="hover:text-white">Refunds</a>
+        <a href="contact.html" class="hover:text-white">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const LAST_ORDER_KEY = "apnafinds_last_order";
+
+    function readObject(key) {
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value && typeof value === "object" && !Array.isArray(value)
+          ? value
+          : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function formatMoney(amount) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      }).format(Number(amount) || 0);
+    }
+
+    const order = readObject(LAST_ORDER_KEY);
+    const requestedOrderId =
+      new URLSearchParams(window.location.search).get("order");
+
+    if (
+      !order ||
+      (
+        requestedOrderId &&
+        String(order.id) !== String(requestedOrderId)
+      )
+    ) {
+      document.getElementById("confirmationCard").classList.add("hidden");
+      document.getElementById("missingOrder").classList.remove("hidden");
+    } else {
+      document.getElementById("orderId").textContent =
+        order.id ?? "—";
+
+      document.getElementById("orderTotal").textContent =
+        formatMoney(order.total ?? order.orderTotal ?? 0);
+
+      document.getElementById("paymentMethod").textContent =
+        [
+          order.paymentMethod ?? "COD",
+          Number(order.amountPaid || 0) > 0
+            ? `${formatMoney(order.amountPaid)} advance paid`
+            : "",
+          Number(order.balanceDue || 0) > 0
+            ? `${formatMoney(order.balanceDue)} due on delivery`
+            : ""
+        ].filter(Boolean).join(" · ");
+
+      document.getElementById("orderStatus").textContent =
+        order.status ?? "Order placed";
+
+      const orderId = String(order.id ?? order.orderId ?? "");
+
+      document.getElementById("trackOrderButton").href =
+        `track-order.html?order=${encodeURIComponent(orderId)}`;
+
+      document.getElementById("invoiceButton").href =
+        `invoice.html?order=${encodeURIComponent(orderId)}`;
+
+      const contact =
+        order.phone ??
+        order.email ??
+        order.shippingAddress?.phone ??
+        "";
+
+      document.getElementById("cancelOrderButton").href =
+        `returns-center.html?order=${encodeURIComponent(orderId)}` +
+        `&contact=${encodeURIComponent(contact)}`;
+    }
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+  <script src="js/thankyou-automation.js"></script>
+  <script src="js/backend-client.js"></script>
+  <script src="js/ai-helper.js"></script>
+</body>
+</html>

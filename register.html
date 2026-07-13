@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Create Account | ApnaFinds</title>
+
+  <meta
+    name="description"
+    content="Create an ApnaFinds customer account to manage orders and saved addresses."
+  >
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15, 92, 74, .09), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245, 158, 11, .10), transparent 28%),
+        #FAF7F2;
+    }
+
+    .auth-gradient {
+      background:
+        radial-gradient(circle at 88% 10%, rgba(245, 158, 11, .25), transparent 27%),
+        radial-gradient(circle at 10% 90%, rgba(255, 255, 255, .08), transparent 28%),
+        linear-gradient(135deg, #0F5C4A 0%, #114D41 42%, #0A3622 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, .9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, .95);
+      box-shadow: 0 24px 70px -30px rgba(10, 54, 34, .34);
+    }
+
+    .password-strength-bar {
+      height: 5px;
+      border-radius: 999px;
+      background: #E5E7EB;
+      overflow: hidden;
+    }
+
+    .password-strength-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      transition: width .25s ease, background-color .25s ease;
+    }
+
+    .toast {
+      transform: translate(-50%, 120%);
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0F5C4A;
+      border-radius: 999px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="css/ai-helper.css">
+</head>
+
+<body class="min-h-screen font-sans text-gray-800 antialiased">
+
+  <nav class="border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white shadow-lg shadow-brand-green/20">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </span>
+
+        <span class="text-xl font-black sm:text-2xl">
+          <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds.</span>
+        </span>
+      </a>
+
+      <a
+        id="loginTopLink"
+        href="login.html"
+        class="rounded-xl bg-green-50 px-4 py-2.5 text-sm font-black text-brand-green hover:bg-green-100"
+      >
+        Sign In
+      </a>
+
+    </div>
+  </nav>
+
+  <main class="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-stretch lg:grid-cols-2">
+
+    <section class="auth-gradient relative hidden overflow-hidden p-12 text-white lg:flex lg:flex-col lg:justify-between">
+      <div class="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-white/5 blur-3xl"></div>
+      <div class="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl"></div>
+
+      <div class="relative">
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-bold backdrop-blur">
+          <i class="fa-solid fa-user-plus text-brand-orange"></i>
+          Join ApnaFinds
+        </span>
+
+        <h1 class="mt-8 text-5xl font-black leading-tight">
+          Faster checkout.
+          <br>
+          Saved addresses.
+          <br>
+          Easy order tracking.
+        </h1>
+
+        <p class="mt-6 max-w-lg text-lg leading-8 text-white/70">
+          Create one customer account and keep your ApnaFinds shopping activity together.
+        </p>
+      </div>
+
+      <div class="relative space-y-4">
+        <div class="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-brand-orange">
+            <i class="fa-solid fa-check"></i>
+          </span>
+
+          <div>
+            <p class="font-black">Track every order</p>
+            <p class="mt-1 text-sm leading-6 text-white/55">View status, invoice and delivery details.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-brand-orange">
+            <i class="fa-solid fa-check"></i>
+          </span>
+
+          <div>
+            <p class="font-black">Reuse saved addresses</p>
+            <p class="mt-1 text-sm leading-6 text-white/55">Complete future checkouts more quickly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex items-center justify-center px-4 py-12 sm:px-8 lg:px-14">
+      <div class="glass-card w-full max-w-xl rounded-[2rem] p-6 sm:p-9">
+
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.2em] text-brand-orange">
+            Customer registration
+          </p>
+
+          <h1 class="mt-3 text-4xl font-black tracking-tight text-gray-900">
+            Create Account
+          </h1>
+
+          <p class="mt-3 text-sm leading-6 text-gray-500">
+            Enter your details to create an ApnaFinds customer profile.
+          </p>
+        </div>
+
+        <form id="registerForm" class="mt-8 space-y-5">
+
+          <div>
+            <label for="fullName" class="mb-2 block text-sm font-bold text-gray-700">
+              Full name
+            </label>
+
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+              <input
+                id="fullName"
+                type="text"
+                required
+                maxlength="60"
+                autocomplete="name"
+                class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+              >
+            </div>
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="email" class="mb-2 block text-sm font-bold text-gray-700">
+                Email address
+              </label>
+
+              <div class="relative">
+                <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+                >
+              </div>
+            </div>
+
+            <div>
+              <label for="phone" class="mb-2 block text-sm font-bold text-gray-700">
+                Mobile number
+              </label>
+
+              <div class="relative">
+                <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+                <input
+                  id="phone"
+                  type="tel"
+                  required
+                  maxlength="10"
+                  inputmode="numeric"
+                  autocomplete="tel"
+                  placeholder="10 digits"
+                  class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="password" class="mb-2 block text-sm font-bold text-gray-700">
+              Password
+            </label>
+
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+              <input
+                id="password"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="new-password"
+                class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-12 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+              >
+
+              <button
+                type="button"
+                data-toggle-password="password"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-green"
+                aria-label="Show password"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+
+            <div class="mt-3 password-strength-bar">
+              <div id="passwordStrengthFill" class="password-strength-fill"></div>
+            </div>
+
+            <p id="passwordHint" class="mt-2 text-xs font-semibold text-gray-400">
+              Use at least 6 characters with a letter and number.
+            </p>
+          </div>
+
+          <div>
+            <label for="confirmPassword" class="mb-2 block text-sm font-bold text-gray-700">
+              Confirm password
+            </label>
+
+            <div class="relative">
+              <i class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="new-password"
+                class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-12 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+              >
+
+              <button
+                type="button"
+                data-toggle-password="confirmPassword"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-green"
+                aria-label="Show password"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <label class="flex cursor-pointer items-start gap-3 rounded-2xl bg-gray-50 p-4">
+            <input
+              id="termsAccepted"
+              type="checkbox"
+              required
+              class="mt-1 h-4 w-4 accent-brand-green"
+            >
+
+            <span class="text-sm leading-6 text-gray-600">
+              I agree to the
+              <a href="terms.html" class="font-black text-brand-green">Terms & Conditions</a>
+              and
+              <a href="privacy.html" class="font-black text-brand-green">Privacy Policy</a>.
+            </span>
+          </label>
+
+          <label class="flex cursor-pointer items-center gap-3 text-sm font-semibold text-gray-600">
+            <input
+              id="marketingConsent"
+              type="checkbox"
+              class="h-4 w-4 accent-brand-green"
+            >
+            Send me offers and product updates.
+          </label>
+
+          <p id="formMessage" class="hidden rounded-xl p-3 text-sm font-bold"></p>
+
+          <button
+            id="submitButton"
+            type="submit"
+            class="flex w-full items-center justify-center gap-3 rounded-xl bg-brand-green py-4 text-lg font-black text-white shadow-lg shadow-brand-green/20 hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <i class="fa-solid fa-user-plus"></i>
+            Create Account
+          </button>
+
+        </form>
+
+        <p class="mt-7 text-center text-sm font-semibold text-gray-500">
+          Already registered?
+          <a id="loginBottomLink" href="login.html" class="font-black text-brand-green hover:text-brand-dark">
+            Sign in
+          </a>
+        </p>
+
+        <p class="mt-6 text-center text-xs leading-5 text-gray-400">
+          This browser-based registration is for testing. Use secure backend authentication before publishing.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/auth.js"></script>
+
+  <script>
+    const auth = window.ApnaFindsAuth;
+
+    if (auth.redirectLoggedInCustomer("account.html")) {
+      // Redirect handled by the shared authentication script.
+    }
+
+    const elements = {
+      registerForm: document.getElementById("registerForm"),
+      fullName: document.getElementById("fullName"),
+      email: document.getElementById("email"),
+      phone: document.getElementById("phone"),
+      password: document.getElementById("password"),
+      confirmPassword: document.getElementById("confirmPassword"),
+      termsAccepted: document.getElementById("termsAccepted"),
+      marketingConsent: document.getElementById("marketingConsent"),
+      formMessage: document.getElementById("formMessage"),
+      submitButton: document.getElementById("submitButton"),
+      passwordStrengthFill: document.getElementById("passwordStrengthFill"),
+      passwordHint: document.getElementById("passwordHint")
+    };
+
+    function showMessage(message, type = "error") {
+      elements.formMessage.textContent = message;
+      elements.formMessage.className =
+        type === "success"
+          ? "rounded-xl bg-green-50 p-3 text-sm font-bold text-brand-green"
+          : "rounded-xl bg-red-50 p-3 text-sm font-bold text-red-600";
+    }
+
+    function setSubmitting(enabled) {
+      elements.submitButton.disabled = enabled;
+
+      elements.submitButton.innerHTML = enabled
+        ? '<i class="fa-solid fa-spinner fa-spin"></i> Creating Account'
+        : '<i class="fa-solid fa-user-plus"></i> Create Account';
+    }
+
+    function updatePasswordStrength() {
+      const value = elements.password.value;
+
+      let score = 0;
+
+      if (value.length >= 6) score += 1;
+      if (value.length >= 10) score += 1;
+      if (/[A-Za-z]/.test(value)) score += 1;
+      if (/[0-9]/.test(value)) score += 1;
+      if (/[^A-Za-z0-9]/.test(value)) score += 1;
+
+      const widths = ["0%", "20%", "40%", "65%", "82%", "100%"];
+      const colors = [
+        "#E5E7EB",
+        "#EF4444",
+        "#F97316",
+        "#F59E0B",
+        "#22C55E",
+        "#0F5C4A"
+      ];
+
+      elements.passwordStrengthFill.style.width = widths[score];
+      elements.passwordStrengthFill.style.backgroundColor = colors[score];
+
+      const labels = [
+        "Use at least 6 characters with a letter and number.",
+        "Very weak password",
+        "Weak password",
+        "Fair password",
+        "Good password",
+        "Strong password"
+      ];
+
+      elements.passwordHint.textContent = labels[score];
+    }
+
+    document.querySelectorAll("[data-toggle-password]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(
+          button.dataset.togglePassword
+        );
+
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+
+        button.innerHTML = showing
+          ? '<i class="fa-solid fa-eye"></i>'
+          : '<i class="fa-solid fa-eye-slash"></i>';
+      });
+    });
+
+    elements.phone.addEventListener("input", () => {
+      elements.phone.value = auth.normalizePhone(elements.phone.value);
+    });
+
+    elements.password.addEventListener(
+      "input",
+      updatePasswordStrength
+    );
+
+    elements.registerForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (elements.password.value !== elements.confirmPassword.value) {
+        showMessage("The passwords do not match.");
+        return;
+      }
+
+      if (!elements.termsAccepted.checked) {
+        showMessage("Accept the terms and privacy policy.");
+        return;
+      }
+
+      setSubmitting(true);
+
+      const result = auth.createCustomerAccount({
+        name: elements.fullName.value,
+        email: elements.email.value,
+        phone: elements.phone.value,
+        password: elements.password.value,
+        marketingConsent: elements.marketingConsent.checked
+      });
+
+      if (!result.ok) {
+        setSubmitting(false);
+        showMessage(result.message);
+        return;
+      }
+
+      showMessage(
+        "Account created successfully. Opening your account...",
+        "success"
+      );
+
+      setTimeout(() => {
+        window.location.href = auth.getSafeRedirect("account.html");
+      }, 600);
+    });
+
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+
+    if (redirect) {
+      const loginURL =
+        `login.html?redirect=${encodeURIComponent(redirect)}`;
+
+      document.getElementById("loginTopLink").href = loginURL;
+      document.getElementById("loginBottomLink").href = loginURL;
+    }
+  </script>
+  <script src="js/backend-client.js"></script>
+  <script src="js/ai-helper.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Privacy Policy | ApnaFinds</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15, 92, 74, .08), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245, 158, 11, .09), transparent 28%),
+        #FAF7F2;
+    }
+
+    .hero-gradient {
+      background:
+        radial-gradient(circle at 88% 12%, rgba(245, 158, 11, .24), transparent 28%),
+        linear-gradient(135deg, #0F5C4A 0%, #114D41 42%, #0A3622 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, .9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, .95);
+      box-shadow: 0 22px 65px -30px rgba(10, 54, 34, .32);
+    }
+  </style>
+  <link rel="stylesheet" href="css/ai-helper.css">
+</head>
+
+<body class="min-h-screen font-sans text-gray-800 antialiased">
+
+  <nav class="sticky top-0 z-50 border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </span>
+
+        <span class="text-xl font-black sm:text-2xl">
+          <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds.</span>
+        </span>
+      </a>
+
+      <div class="hidden items-center gap-7 text-sm font-bold md:flex">
+        <a href="index.html" class="hover:text-brand-green">Home</a>
+        <a href="products.html" class="hover:text-brand-green">Products</a>
+        <a href="track-order.html" class="hover:text-brand-green">Track Order</a>
+        <a href="account.html" class="hover:text-brand-green">Account</a>
+      </div>
+
+      <a href="cart.html" class="text-brand-green" aria-label="Cart">
+        <i class="fa-solid fa-bag-shopping text-xl"></i>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero-gradient text-white">
+    <div class="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 sm:py-20">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-brand-orange">
+        Customer Information
+      </p>
+
+      <h1 class="mt-5 text-4xl font-black tracking-tight sm:text-6xl">
+        Privacy Policy
+      </h1>
+
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
+        Learn what information the website may collect and how it should be handled.
+      </p>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+    <article class="glass-card rounded-[2rem] p-7 sm:p-10">
+      
+      <div class="space-y-9">
+        <section>
+          <h2 class="text-2xl font-black text-gray-900">Information Collected</h2>
+          <p class="mt-4 leading-8 text-gray-600">
+            The website may collect customer names, email addresses, mobile numbers, delivery addresses, account information, order details and support messages.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-gray-900">How Information Is Used</h2>
+          <p class="mt-4 leading-8 text-gray-600">
+            Information may be used to process orders, provide delivery updates, manage customer accounts, respond to support requests, prevent misuse and improve the shopping experience.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-gray-900">Current Testing Storage</h2>
+          <p class="mt-4 leading-8 text-gray-600">
+            This development version stores account and order information in the browser using localStorage. Before launch, customer information must be moved to a secure backend with suitable access controls and retention practices.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-black text-gray-900">Contact</h2>
+          <p class="mt-4 leading-8 text-gray-600">
+            Privacy questions can be sent through the Contact page.
+          </p>
+        </section>
+      </div>
+
+    </article>
+  </main>
+
+  <footer class="bg-[#071A14] text-white">
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+      <div>
+        <p class="text-xl font-black">
+          Apna<span class="text-brand-orange">Finds.</span>
+        </p>
+        <p class="mt-4 text-sm leading-7 text-gray-400">Smart Finds. Better Living.</p>
+      </div>
+
+      <div>
+        <p class="font-black">Store</p>
+        <div class="mt-4 grid gap-3 text-sm text-gray-400">
+          <a href="products.html" class="hover:text-white">Products</a>
+          <a href="categories.html" class="hover:text-white">Categories</a>
+          <a href="about.html" class="hover:text-white">About</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-black">Support</p>
+        <div class="mt-4 grid gap-3 text-sm text-gray-400">
+          <a href="contact.html" class="hover:text-white">Contact</a>
+          <a href="track-order.html" class="hover:text-white">Track Order</a>
+          <a href="returns-center.html" class="hover:text-white">Returns</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-black">Policies</p>
+        <div class="mt-4 grid gap-3 text-sm text-gray-400">
+          <a href="shipping.html" class="hover:text-white">Shipping</a>
+          <a href="refund.html" class="hover:text-white">Refunds</a>
+          <a href="privacy.html" class="hover:text-white">Privacy</a>
+          <a href="terms.html" class="hover:text-white">Terms</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 py-6 text-center text-xs text-gray-500">
+      © <span id="currentYear"></span> ApnaFinds.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+  <script src="js/backend-client.js"></script>
+  <script src="js/ai-helper.js"></script>
+</body>
+</html>

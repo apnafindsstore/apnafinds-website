@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payments | ApnaFinds Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--g:#0F5C4A;--gd:#0A3622;--o:#F59E0B;--bg:#f4f7f6;--line:#e4ebe7}*{box-sizing:border-box}body{margin:0;font-family:"Plus Jakarta Sans",sans-serif;background:radial-gradient(circle at 0 0,rgba(15,92,74,.08),transparent 28%),var(--bg);color:#17211d}a{text-decoration:none;color:inherit}button,input,select{font:inherit}.wrap{max-width:1280px;margin:auto;padding:28px}.top{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:20px 0}.brand{display:flex;align-items:center;gap:12px;font-size:21px;font-weight:800}.brand i{width:44px;height:44px;display:grid;place-items:center;border-radius:15px;background:var(--g);color:white}.links{display:flex;gap:8px;flex-wrap:wrap}.link,.btn{border:0;border-radius:13px;padding:11px 15px;font-size:12px;font-weight:800;cursor:pointer}.link{background:white;border:1px solid var(--line)}.btn{background:var(--g);color:white}.hero{border-radius:28px;padding:28px;background:linear-gradient(135deg,var(--g),#114d41,var(--gd));color:white}.hero h1{margin:15px 0 8px;font-size:34px}.hero p{margin:0;color:rgba(255,255,255,.7)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px}.stat,.card{background:white;border:1px solid white;border-radius:22px;box-shadow:0 20px 55px -36px rgba(10,54,34,.5)}.stat{padding:20px}.stat small{color:#74817b;font-weight:800;text-transform:uppercase;font-size:10px}.stat strong{display:block;font-size:28px;margin-top:9px}.card{margin-top:20px;overflow:hidden}.tools{display:grid;grid-template-columns:1fr 210px auto;gap:10px;padding:18px;border-bottom:1px solid var(--line)}input,select{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px 14px;outline:none}.table{overflow:auto}table{width:100%;min-width:1120px;border-collapse:collapse}th,td{padding:14px 15px;border-bottom:1px solid #edf1ef;text-align:left;font-size:11px;vertical-align:top}th{background:#f8faf9;color:#74817b;text-transform:uppercase;font-size:9px;letter-spacing:.08em}td strong{font-size:12px}.pill{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:9px;font-weight:900;text-transform:uppercase}.paid{background:#ecfdf5;color:#047857}.pending{background:#fffbeb;color:#b45309}.rejected{background:#fef2f2;color:#b91c1c}.action{border:0;border-radius:9px;padding:8px 10px;font-size:9px;font-weight:900;cursor:pointer;margin:2px}.approve{background:#eaf6f1;color:var(--g)}.reject{background:#fef2f2;color:#b91c1c}.empty{padding:55px;text-align:center;color:#7b8781}.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,130%);opacity:0;background:#111827;color:white;padding:13px 18px;border-radius:13px;font-size:11px;font-weight:800;transition:.3s}.toast.show{transform:translate(-50%,0);opacity:1}@media(max-width:800px){.wrap{padding:15px}.top{align-items:flex-start}.stats{grid-template-columns:1fr 1fr}.tools{grid-template-columns:1fr}.hero h1{font-size:28px}}@media(max-width:480px){.stats{grid-template-columns:1fr}}
+  </style>
+  <script src="js/admin-auth.js"></script><script>window.ApnaFindsAdminAuth.installProtection();</script>
+</head>
+<body data-admin-protected="true">
+  <main class="wrap">
+    <header class="top">
+      <a class="brand" href="admin.html"><i class="fa-solid fa-indian-rupee-sign"></i><span>ApnaFinds Payments</span></a>
+      <nav class="links"><a class="link" href="admin-returns.html" class="rounded-xl bg-rose-50 px-4 py-3 text-sm font-black text-rose-700">Returns</a><a href="admin-management.html">Management</a><a class="link" href="admin-customers.html">Customers</a><a class="link" href="admin-seller.html">Seller Account</a></nav>
+    </header>
+    <section class="hero"><span><i class="fa-solid fa-shield-halved"></i> Payment control centre</span><h1>COD advances and payment status</h1><p>View advance payments, transaction IDs and the remaining amount customers must pay on delivery.</p></section>
+    <section class="stats"><article class="stat"><small>Payment records</small><strong id="records">0</strong></article><article class="stat"><small>Advance collected</small><strong id="collected">₹0</strong></article><article class="stat"><small>Pending verification</small><strong id="pending">0</strong></article><article class="stat"><small>COD balance due</small><strong id="balance">₹0</strong></article></section>
+    <section class="card">
+      <div class="tools"><input id="search" type="search" placeholder="Search order, customer, transaction ID"><select id="filter"><option value="all">All payment statuses</option><option value="paid">Paid / Verified</option><option value="pending">Pending</option><option value="rejected">Rejected</option></select><button id="export" class="btn"><i class="fa-solid fa-download"></i> Export CSV</button></div>
+      <div class="table"><table><thead><tr><th>Order</th><th>Customer</th><th>Method</th><th>Advance</th><th>Status</th><th>Transaction ID</th><th>COD balance</th><th>Date</th><th>Actions</th></tr></thead><tbody id="body"><tr><td colspan="9" class="empty">Loading payments…</td></tr></tbody></table></div>
+    </section>
+  </main>
+  <div id="toast" class="toast">Updated</div>
+  <script src="js/backend-client.js"></script>
+  <script>
+    let payments=[];const body=document.getElementById("body"),search=document.getElementById("search"),filter=document.getElementById("filter"),toast=document.getElementById("toast");
+    const money=v=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(Number(v)||0);
+    const esc=v=>{const d=document.createElement("div");d.textContent=String(v??"");return d.innerHTML};
+    const date=v=>{const d=new Date(v);return Number.isNaN(d.getTime())?"—":d.toLocaleString("en-IN")};
+    function show(m){toast.textContent=m;toast.classList.add("show");clearTimeout(show.t);show.t=setTimeout(()=>toast.classList.remove("show"),2500)}
+    function statusClass(s){s=String(s).toLowerCase();return s.includes("reject")?"rejected":s.includes("pending")?"pending":"paid"}
+    function render(){
+      const q=search.value.trim().toLowerCase(),f=filter.value;
+      const rows=payments.filter(p=>{const text=[p.orderId,p.customerName,p.phone,p.email,p.transactionId,p.status].join(" ").toLowerCase();const s=String(p.status).toLowerCase();return text.includes(q)&&(f==="all"||(f==="paid"&&(s.includes("paid")||s.includes("verified")))||s.includes(f))});
+      body.innerHTML=rows.length?rows.map(p=>`<tr><td><strong>${esc(p.orderId)}</strong></td><td><strong>${esc(p.customerName)}</strong><br>${esc(p.phone||p.email||"")}</td><td>${esc(p.paymentMethod)}</td><td><strong>${money(p.amountPaid)}</strong><br>Required: ${money(p.amount)}</td><td><span class="pill ${statusClass(p.status)}">${esc(p.status)}</span></td><td>${esc(p.transactionId||"Not recorded")}</td><td><strong>${money(p.balanceDue)}</strong></td><td>${esc(date(p.updatedAt||p.createdAt))}</td><td><button class="action approve" data-status="Verified" data-id="${esc(p.orderId)}">Verify</button><button class="action reject" data-status="Rejected" data-id="${esc(p.orderId)}">Reject</button></td></tr>`).join(""):`<tr><td colspan="9" class="empty">No matching payments</td></tr>`;
+    }
+    async function load(){try{const data=await ApnaFindsAPI.adminRequest("/api/admin/payments");payments=data.payments||[];document.getElementById("records").textContent=data.counts?.records||0;document.getElementById("collected").textContent=money(data.counts?.advanceCollected);document.getElementById("pending").textContent=data.counts?.pending||0;document.getElementById("balance").textContent=money(data.counts?.codBalanceDue);render()}catch(e){show(e.message);body.innerHTML=`<tr><td colspan="9" class="empty">${esc(e.message)}</td></tr>`}}
+    body.addEventListener("click",async e=>{const b=e.target.closest("[data-status]");if(!b)return;b.disabled=true;try{await ApnaFindsAPI.adminRequest(`/api/admin/payments/${encodeURIComponent(b.dataset.id)}/status`,{method:"POST",body:JSON.stringify({status:b.dataset.status})});show(`Payment ${b.dataset.status.toLowerCase()}`);await load()}catch(err){show(err.message)}finally{b.disabled=false}});
+    search.addEventListener("input",render);filter.addEventListener("change",render);
+    document.getElementById("export").addEventListener("click",()=>{const rows=[["Order","Customer","Phone","Email","Method","Advance Required","Advance Paid","Status","Transaction ID","COD Balance"],...payments.map(p=>[p.orderId,p.customerName,p.phone,p.email,p.paymentMethod,p.amount,p.amountPaid,p.status,p.transactionId,p.balanceDue])];const csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="apnafinds-payments.csv";a.click();URL.revokeObjectURL(a.href)});
+    load();setInterval(load,30000);
+  </script>
+</body>
+</html>

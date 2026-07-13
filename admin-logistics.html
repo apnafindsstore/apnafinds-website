@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Manage ApnaFinds courier bookings, AWB numbers, pickups, tracking, returns and reverse logistics."
+  >
+
+  <title>Logistics Automation | ApnaFinds Admin</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              accent: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          },
+          boxShadow: {
+            soft: "0 18px 55px -28px rgba(10,54,34,.32)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/admin-logistics.css">
+
+  <script src="js/admin-auth.js"></script>
+  <script>
+    window.ApnaFindsAdminAuth.installProtection();
+  </script>
+</head>
+
+<body
+  data-admin-protected="true"
+  class="min-h-screen font-sans text-gray-800 antialiased transition-colors dark:bg-gray-950 dark:text-gray-100"
+>
+  <div class="flex min-h-screen">
+
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 z-40 hidden bg-black/45 backdrop-blur-sm lg:hidden"
+    ></div>
+
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col bg-[#081C15] text-white shadow-2xl transition-transform duration-300 lg:translate-x-0"
+    >
+      <div class="flex h-24 items-center justify-between border-b border-white/10 px-6">
+        <a href="admin.html" class="flex items-center gap-3">
+          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-brand-accent">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </span>
+
+          <div>
+            <p class="text-xl font-extrabold tracking-tight">
+              Apna<span class="text-green-400">Finds</span><span class="text-brand-accent">.</span>
+            </p>
+            <p class="text-[11px] font-bold uppercase tracking-[.2em] text-white/45">
+              Admin panel
+            </p>
+          </div>
+        </a>
+
+        <button
+          id="closeSidebarButton"
+          type="button"
+          class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 lg:hidden"
+          aria-label="Close menu"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <nav class="flex-1 space-y-2 overflow-y-auto p-5">
+        <a
+          href="admin.html"
+          class="sidebar-link flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-bold text-white/70"
+        >
+          <i class="fa-solid fa-chart-pie w-5 text-center text-brand-accent"></i>
+          Dashboard
+        </a>
+
+        <a
+          href="admin.html#products"
+          class="sidebar-link flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-bold text-white/70"
+        >
+          <i class="fa-solid fa-boxes-stacked w-5 text-center text-green-400"></i>
+          Products
+        </a>
+
+        <a
+          href="admin-management.html#orders"
+          class="sidebar-link flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-bold text-white/70"
+        >
+          <i class="fa-solid fa-receipt w-5 text-center text-blue-400"></i>
+          Orders
+        </a>
+
+        <a
+          href="admin-management.html#customers"
+          class="sidebar-link flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-bold text-white/70"
+        >
+          <i class="fa-solid fa-users w-5 text-center text-purple-400"></i>
+          Customers
+        </a>
+
+        <a
+          href="admin-returns.html"
+          class="sidebar-link flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-bold text-white/70"
+        >
+          <i class="fa-solid fa-rotate-left w-5 text-center text-rose-400"></i>
+          Returns & Refunds
+        </a>
+
+        <a
+          href="admin-logistics.html"
+          class="sidebar-link active flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-bold"
+        >
+          <i class="fa-solid fa-truck-fast w-5 text-center text-cyan-300"></i>
+          Logistics Automation
+        </a>
+
+      </nav>
+
+      <div class="border-t border-white/10 p-5">
+        <div class="flex items-center gap-3 rounded-2xl bg-white/5 p-3">
+          <span
+            id="sidebarAdminAvatar"
+            class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-green font-black text-white"
+          >
+            A
+          </span>
+
+          <div class="min-w-0">
+            <p id="sidebarAdminName" class="truncate text-sm font-black">Administrator</p>
+            <p class="text-[11px] font-semibold text-white/45">Store manager</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="min-w-0 flex-1 lg:ml-72">
+
+      <header class="sticky top-0 z-30 border-b border-white/70 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/80">
+        <div class="flex h-20 items-center justify-between gap-4 px-4 sm:px-6 xl:px-10">
+          <div class="flex min-w-0 items-center gap-3">
+            <button
+              id="openSidebarButton"
+              type="button"
+              class="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-gray-200 bg-white text-gray-700 lg:hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+              aria-label="Open menu"
+            >
+              <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="min-w-0">
+              <h1 class="truncate text-xl font-black text-gray-900 sm:text-2xl dark:text-white">
+                Logistics Automation
+              </h1>
+              <p class="hidden truncate text-xs font-semibold text-gray-400 sm:block">
+                Courier booking, AWB, pickup, tracking and reverse logistics
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div
+              id="providerBadge"
+              class="hidden items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-black text-gray-600 sm:flex dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
+            >
+              <span class="h-2.5 w-2.5 rounded-full bg-gray-300"></span>
+              Connecting
+            </div>
+
+            <button
+              id="darkModeButton"
+              type="button"
+              class="grid h-11 w-11 place-items-center rounded-xl border border-gray-200 bg-white text-gray-700 transition hover:border-brand-green hover:text-brand-green dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+              aria-label="Toggle dark mode"
+            >
+              <i id="darkModeIcon" class="fa-solid fa-moon"></i>
+            </button>
+
+            <button
+              id="logoutAdminButton"
+              type="button"
+              class="grid h-11 w-11 place-items-center rounded-xl border border-gray-200 bg-white text-gray-700 transition hover:border-red-300 hover:text-red-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+              aria-label="Log out"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="p-4 sm:p-6 xl:p-10">
+
+        <section class="overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-green via-[#114d41] to-brand-dark p-6 text-white shadow-2xl shadow-brand-green/15 sm:p-8">
+          <div class="grid items-center gap-8 xl:grid-cols-[1.35fr_.65fr]">
+            <div>
+              <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[.15em]">
+                <i class="fa-solid fa-wand-magic-sparkles text-brand-accent"></i>
+                Logistics control centre
+              </span>
+
+              <h2 class="mt-5 max-w-3xl text-3xl font-black tracking-tight sm:text-4xl">
+                Manage every shipment from one dashboard.
+              </h2>
+
+              <p class="mt-4 max-w-2xl text-sm font-medium leading-7 text-white/70 sm:text-base">
+                Import orders, automatically book couriers, generate AWB numbers, schedule pickups, refresh tracking and manage reverse pickups.
+              </p>
+
+              <div class="mt-6 flex flex-wrap gap-3 text-xs font-bold text-white/75">
+                <span class="rounded-full bg-white/10 px-4 py-2">
+                  <i class="fa-solid fa-check mr-2 text-green-300"></i>
+                  Automatic booking
+                </span>
+
+                <span class="rounded-full bg-white/10 px-4 py-2">
+                  <i class="fa-solid fa-check mr-2 text-green-300"></i>
+                  Live tracking
+                </span>
+
+                <span class="rounded-full bg-white/10 px-4 py-2">
+                  <i class="fa-solid fa-check mr-2 text-green-300"></i>
+                  Reverse pickup
+                </span>
+              </div>
+            </div>
+
+            <div class="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-[.15em] text-white/50">
+                    Provider status
+                  </p>
+                  <p id="providerStatus" class="mt-2 text-lg font-black">
+                    Enter the admin API token
+                  </p>
+                </div>
+
+                <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-accent text-xl text-gray-950">
+                  <i class="fa-solid fa-satellite-dish"></i>
+                </span>
+              </div>
+
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <div class="rounded-2xl bg-black/10 p-4">
+                  <p class="text-[10px] font-black uppercase tracking-wider text-white/45">Last sync</p>
+                  <p id="lastUpdated" class="mt-2 text-sm font-black">Not synced</p>
+                </div>
+
+                <div class="rounded-2xl bg-black/10 p-4">
+                  <p class="text-[10px] font-black uppercase tracking-wider text-white/45">Connection</p>
+                  <p id="connectionState" class="mt-2 text-sm font-black">Waiting</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-6 grid gap-5 xl:grid-cols-[1fr_1.15fr]">
+
+          <article class="glass-card rounded-3xl p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-brand-green">
+                  Secure connection
+                </p>
+                <h2 class="mt-2 text-xl font-black text-gray-900 dark:text-white">
+                  Admin API Token
+                </h2>
+                <p class="mt-2 text-sm font-medium leading-6 text-gray-500">
+                  Enter the same token configured as <code>ADMIN_API_TOKEN</code> in your <code>.env</code> file.
+                </p>
+              </div>
+
+              <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-green-50 text-xl text-brand-green dark:bg-green-950/40">
+                <i class="fa-solid fa-key"></i>
+              </span>
+            </div>
+
+            <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+              <div class="relative min-w-0 flex-1">
+                <input
+                  id="adminApiToken"
+                  type="password"
+                  autocomplete="off"
+                  placeholder="Enter admin API token"
+                  class="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3.5 pr-12 text-sm font-semibold text-gray-900 outline-none transition focus:border-brand-green focus:ring-4 focus:ring-brand-green/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                >
+
+                <button
+                  id="toggleTokenButton"
+                  type="button"
+                  class="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-xl text-gray-400 hover:bg-gray-100 hover:text-brand-green dark:hover:bg-gray-800"
+                  aria-label="Show or hide token"
+                >
+                  <i id="toggleTokenIcon" class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+
+              <button
+                id="saveAdminToken"
+                type="button"
+                class="admin-button primary justify-center"
+              >
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Token
+              </button>
+            </div>
+          </article>
+
+          <article class="rounded-3xl border border-amber-200 bg-amber-50 p-5 sm:p-6 dark:border-amber-900/60 dark:bg-amber-950/25">
+            <div class="flex gap-4">
+              <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-amber-100 text-xl text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                <i class="fa-solid fa-circle-info"></i>
+              </span>
+
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-amber-700 dark:text-amber-300">
+                  Demo and live mode
+                </p>
+
+                <h2 class="mt-2 text-xl font-black text-amber-950 dark:text-amber-100">
+                  Test safely before activating a courier
+                </h2>
+
+                <p class="mt-2 text-sm font-medium leading-6 text-amber-900/75 dark:text-amber-200/75">
+                  Demo mode works without courier credentials. For live Shiprocket booking, configure your account credentials, pickup location, pickup PIN code, parcel dimensions and KYC details on the server.
+                </p>
+              </div>
+            </div>
+          </article>
+
+        </section>
+
+        <section class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+
+          <article class="stat-card">
+            <div>
+              <p>Orders</p>
+              <strong id="statOrders">0</strong>
+            </div>
+            <span class="bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300">
+              <i class="fa-solid fa-receipt"></i>
+            </span>
+          </article>
+
+          <article class="stat-card">
+            <div>
+              <p>Queued</p>
+              <strong id="statQueued">0</strong>
+            </div>
+            <span class="bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300">
+              <i class="fa-solid fa-clock"></i>
+            </span>
+          </article>
+
+          <article class="stat-card">
+            <div>
+              <p>Shipments</p>
+              <strong id="statShipments">0</strong>
+            </div>
+            <span class="bg-green-50 text-brand-green dark:bg-green-950/40 dark:text-green-300">
+              <i class="fa-solid fa-box"></i>
+            </span>
+          </article>
+
+          <article class="stat-card">
+            <div>
+              <p>In Transit</p>
+              <strong id="statTransit">0</strong>
+            </div>
+            <span class="bg-cyan-50 text-cyan-600 dark:bg-cyan-950/40 dark:text-cyan-300">
+              <i class="fa-solid fa-truck-fast"></i>
+            </span>
+          </article>
+
+          <article class="stat-card">
+            <div>
+              <p>Returns</p>
+              <strong id="statReturns">0</strong>
+            </div>
+            <span class="bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300">
+              <i class="fa-solid fa-rotate-left"></i>
+            </span>
+          </article>
+
+        </section>
+
+        <section class="glass-card mt-6 overflow-hidden rounded-3xl">
+          <div class="border-b border-gray-100 p-5 sm:p-6 dark:border-white/10">
+            <div class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-brand-green">
+                  Fulfilment queue
+                </p>
+                <h2 class="mt-2 text-2xl font-black text-gray-900 dark:text-white">
+                  Orders and Shipments
+                </h2>
+                <p class="mt-2 text-sm font-medium text-gray-500">
+                  Book, retry, cancel or refresh tracking for every order.
+                </p>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button id="importBrowserOrders" type="button" class="admin-button secondary">
+                  <i class="fa-solid fa-file-import"></i>
+                  Import Orders
+                </button>
+
+                <button id="runAutomation" type="button" class="admin-button primary">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  Run Automation
+                </button>
+
+                <button id="refreshDashboard" type="button" class="admin-button outline">
+                  <i class="fa-solid fa-rotate"></i>
+                  Refresh
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-5 grid gap-3 md:grid-cols-[1fr_220px]">
+              <label class="relative block">
+                <span class="sr-only">Search orders</span>
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+                <input
+                  id="orderSearch"
+                  type="search"
+                  placeholder="Search order ID, customer, phone, courier or AWB..."
+                  class="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 text-sm font-semibold outline-none transition focus:border-brand-green focus:ring-4 focus:ring-brand-green/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                >
+              </label>
+
+              <select
+                id="orderStatusFilter"
+                class="rounded-2xl border border-gray-200 bg-white px-4 py-3.5 text-sm font-bold text-gray-700 outline-none focus:border-brand-green dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+              >
+                <option value="all">All statuses</option>
+                <option value="queued">Queued</option>
+                <option value="booked">Booked</option>
+                <option value="pickup">Pickup</option>
+                <option value="transit">In transit</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancel">Cancelled</option>
+                <option value="failed">Failed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Order Status</th>
+                  <th>Automation</th>
+                  <th>Courier / AWB</th>
+                  <th>Shipment Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="ordersBody">
+                <tr class="empty-row">
+                  <td colspan="8">
+                    <div class="empty-state">
+                      <i class="fa-solid fa-key"></i>
+                      <strong>Enter the admin API token</strong>
+                      <span>Your server logistics data will appear here.</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="flex flex-col gap-2 border-t border-gray-100 px-5 py-4 text-xs font-semibold text-gray-400 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
+            <span id="ordersResultCount">0 orders displayed</span>
+            <span>Orders are saved on the Node.js server.</span>
+          </div>
+        </section>
+
+        <section class="glass-card mt-6 overflow-hidden rounded-3xl">
+          <div class="border-b border-gray-100 p-5 sm:p-6 dark:border-white/10">
+            <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-rose-600">
+                  Reverse logistics
+                </p>
+                <h2 class="mt-2 text-2xl font-black text-gray-900 dark:text-white">
+                  Returns and Reverse Pickups
+                </h2>
+                <p class="mt-2 text-sm font-medium text-gray-500">
+                  Approve requests, schedule reverse pickup and update refund progress.
+                </p>
+              </div>
+
+              <div class="grid gap-3 sm:grid-cols-[280px_210px]">
+                <label class="relative block">
+                  <span class="sr-only">Search returns</span>
+                  <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+                  <input
+                    id="returnSearch"
+                    type="search"
+                    placeholder="Search request, order or customer..."
+                    class="w-full rounded-2xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 text-sm font-semibold outline-none transition focus:border-brand-green focus:ring-4 focus:ring-brand-green/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                  >
+                </label>
+
+                <select
+                  id="returnStatusFilter"
+                  class="rounded-2xl border border-gray-200 bg-white px-4 py-3.5 text-sm font-bold text-gray-700 outline-none focus:border-brand-green dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200"
+                >
+                  <option value="all">All return statuses</option>
+                  <option value="requested">Requested</option>
+                  <option value="review">Under review</option>
+                  <option value="approved">Approved</option>
+                  <option value="pickup">Pickup scheduled</option>
+                  <option value="received">Received</option>
+                  <option value="refund">Refund processing</option>
+                  <option value="replacement">Replacement</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Request</th>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Value</th>
+                  <th>Status</th>
+                  <th>Reverse AWB</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="returnsBody">
+                <tr class="empty-row">
+                  <td colspan="8">
+                    <div class="empty-state">
+                      <i class="fa-solid fa-rotate-left"></i>
+                      <strong>No return requests loaded</strong>
+                      <span>Connect to the server to load reverse-logistics requests.</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="border-t border-gray-100 px-5 py-4 text-xs font-semibold text-gray-400 dark:border-white/10">
+            <span id="returnsResultCount">0 returns displayed</span>
+          </div>
+        </section>
+
+        <section class="mt-6 grid gap-6 xl:grid-cols-[1.15fr_.85fr]">
+
+          <article class="glass-card overflow-hidden rounded-3xl">
+            <div class="flex items-center justify-between gap-4 border-b border-gray-100 p-5 sm:p-6 dark:border-white/10">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-brand-green">
+                  Activity log
+                </p>
+                <h2 class="mt-2 text-xl font-black text-gray-900 dark:text-white">
+                  Recent Automation Events
+                </h2>
+              </div>
+
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-green-50 text-brand-green dark:bg-green-950/40">
+                <i class="fa-solid fa-list-check"></i>
+              </span>
+            </div>
+
+            <div id="eventsList" class="max-h-[520px] overflow-y-auto p-5 sm:p-6">
+              <div class="empty-state">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <strong>No automation events loaded</strong>
+                <span>Run automation or refresh the dashboard.</span>
+              </div>
+            </div>
+          </article>
+
+          <aside class="glass-card rounded-3xl p-5 sm:p-6">
+            <p class="text-xs font-black uppercase tracking-[.18em] text-brand-accent">
+              Live setup checklist
+            </p>
+
+            <h2 class="mt-2 text-xl font-black text-gray-900 dark:text-white">
+              Before activating Shiprocket
+            </h2>
+
+            <div class="mt-6 space-y-4">
+              <div class="setup-step">
+                <span>1</span>
+                <div>
+                  <h3>Create and verify your account</h3>
+                  <p>Complete business details, KYC and pickup-address verification.</p>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <span>2</span>
+                <div>
+                  <h3>Add credentials to <code>.env</code></h3>
+                  <p>Set the Shiprocket email, password, pickup location and PIN code.</p>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <span>3</span>
+                <div>
+                  <h3>Confirm package defaults</h3>
+                  <p>Check parcel weight, length, breadth and height before booking.</p>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <span>4</span>
+                <div>
+                  <h3>Test one real order</h3>
+                  <p>Verify the courier, AWB, label, pickup and customer tracking flow.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 rounded-2xl border border-brand-green/20 bg-green-50 px-5 py-4 text-sm font-bold leading-6 text-brand-green dark:bg-green-950/30">
+              <i class="fa-solid fa-shield-halved mr-2"></i>
+              This page is restricted to administrators and controls courier operations only.
+            </div>
+          </aside>
+
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div
+    id="logisticsToast"
+    class="toast fixed bottom-5 left-1/2 z-[120] flex max-w-[calc(100%-2rem)] items-center gap-3 rounded-2xl bg-gray-950 px-5 py-3.5 text-sm font-bold text-white shadow-2xl"
+    role="status"
+    aria-live="polite"
+  >
+    <i id="logisticsToastIcon" class="fa-solid fa-circle-check text-green-400"></i>
+    <span id="logisticsToastText">Updated</span>
+  </div>
+
+  <script src="js/backend-client.js"></script>
+  <script src="js/admin-logistics.js"></script>
+</body>
+</html>
