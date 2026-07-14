@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ApnaFinds | Smart Finds. Better Living.</title>
+
+  <meta
+    name="description"
+    content="Discover trending gadgets, kitchen essentials, lifestyle products and smart home accessories at ApnaFinds."
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          },
+          boxShadow: {
+            soft: "0 18px 55px -25px rgba(10,54,34,.28)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15,92,74,.07), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245,158,11,.08), transparent 28%),
+        #FAF7F2;
+    }
+
+    .hero-gradient {
+      background:
+        radial-gradient(circle at 90% 10%, rgba(245,158,11,.24), transparent 28%),
+        radial-gradient(circle at 15% 85%, rgba(255,255,255,.08), transparent 30%),
+        linear-gradient(135deg, #0F5C4A 0%, #114D41 42%, #0A3622 100%);
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.92);
+      box-shadow: 0 18px 55px -28px rgba(10,54,34,.28);
+    }
+
+    .floating {
+      animation: floating 5s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-13px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-lift {
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .card-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 55px -24px rgba(15,92,74,.32);
+      border-color: rgba(245,158,11,.34);
+    }
+
+    .mobile-menu {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height .3s ease, opacity .3s ease;
+    }
+
+    .mobile-menu.open {
+      max-height: 440px;
+      opacity: 1;
+    }
+
+    .search-results {
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .search-results.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-panel {
+      transform: translateY(18px) scale(.98);
+      transition: transform .25s ease;
+    }
+
+    .modal-backdrop.open .modal-panel {
+      transform: translateY(0) scale(1);
+    }
+
+    .toast {
+      transform: translate(-50%, 120%);
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0F5C4A;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-gray-800 antialiased">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 border-b border-white/70 bg-white/85 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="flex h-20 items-center justify-between gap-4">
+
+        <a href="index.html" class="group flex shrink-0 items-center gap-2" aria-label="ApnaFinds home">
+          <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white shadow-lg shadow-brand-green/20">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </span>
+
+          <span class="text-xl font-extrabold tracking-tight text-gray-900 sm:text-2xl">
+            <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds</span><span class="text-brand-orange">.</span>
+          </span>
+        </a>
+
+        <div class="relative hidden w-full max-w-md lg:block">
+          <form id="desktopSearchForm" class="flex">
+            <label for="desktopSearchInput" class="sr-only">Search products</label>
+
+            <input
+              id="desktopSearchInput"
+              type="search"
+              autocomplete="off"
+              placeholder="Search products..."
+              class="min-w-0 flex-1 rounded-l-2xl border border-r-0 border-gray-200 bg-gray-50/80 px-5 py-3 text-sm outline-none transition focus:border-brand-green focus:bg-white focus:ring-2 focus:ring-brand-green/10"
+            >
+
+            <button
+              type="submit"
+              class="rounded-r-2xl bg-brand-orange px-5 text-white transition hover:bg-orange-600"
+              aria-label="Search"
+            >
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+
+          <div
+            id="desktopSearchResults"
+            class="search-results absolute left-0 right-0 top-[calc(100%+10px)] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
+          ></div>
+        </div>
+
+        <div class="hidden items-center gap-7 text-sm font-bold text-gray-700 lg:flex">
+          <a href="index.html" class="text-brand-green">Home</a>
+          <a href="categories.html" class="transition hover:text-brand-green">Categories</a>
+          <a href="products.html" class="transition hover:text-brand-green">Products</a>
+
+          <a href="cart.html" class="relative transition hover:text-brand-green">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-bag-shopping"></i>
+              Cart
+            </span>
+
+            <span
+              id="cartCount"
+              class="absolute -right-4 -top-3 grid h-5 min-w-5 place-items-center rounded-full bg-brand-orange px-1 text-[10px] font-black text-white"
+            >
+              0
+            </span>
+          </a>
+
+          <div id="userArea">
+            <a href="login.html" class="transition hover:text-brand-green">
+              <i class="fa-regular fa-user mr-1"></i>
+              Login
+            </a>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 lg:hidden">
+          <a href="cart.html" class="relative text-brand-green" aria-label="Shopping cart">
+            <i class="fa-solid fa-bag-shopping text-xl"></i>
+
+            <span
+              id="mobileCartCount"
+              class="absolute -right-3 -top-3 grid h-5 min-w-5 place-items-center rounded-full bg-brand-orange px-1 text-[10px] font-black text-white"
+            >
+              0
+            </span>
+          </a>
+
+          <button
+            id="mobileMenuBtn"
+            type="button"
+            class="grid h-11 w-11 place-items-center rounded-xl border border-gray-200 bg-white text-gray-700"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+          >
+            <i id="mobileMenuIcon" class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobileMenu" class="mobile-menu lg:hidden">
+        <div class="border-t border-gray-100 pb-5 pt-4">
+          <form id="mobileSearchForm" class="flex">
+            <label for="mobileSearchInput" class="sr-only">Search products</label>
+
+            <input
+              id="mobileSearchInput"
+              type="search"
+              placeholder="Search products..."
+              class="min-w-0 flex-1 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-brand-green"
+            >
+
+            <button type="submit" class="rounded-r-xl bg-brand-orange px-5 text-white" aria-label="Search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+
+          <div class="mt-4 grid gap-2">
+            <a href="index.html" class="rounded-xl bg-green-50 px-4 py-3 font-bold text-brand-green">Home</a>
+            <a href="categories.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Categories</a>
+            <a href="products.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Products</a>
+            <a href="cart.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Cart</a>
+            <div id="mobileUserArea">
+              <a href="login.html" class="block rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Login</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-gradient relative overflow-hidden text-white">
+    <div class="pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full bg-white/5 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-28 bottom-0 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
+      <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-16">
+
+        <div class="reveal">
+          <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-bold backdrop-blur">
+            <i class="fa-solid fa-star text-brand-orange"></i>
+            India's Trending Smart Product Store
+          </span>
+
+          <h1 class="mt-8 text-5xl font-black leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
+            Smart Finds.
+            <br>
+            <span class="text-amber-400">Better Living.</span>
+          </h1>
+
+          <p class="mt-7 max-w-xl text-lg leading-8 text-white/75 sm:text-xl">
+            Discover trending gadgets, kitchen tools, home essentials, pet products and lifestyle accessories carefully selected to improve everyday life.
+          </p>
+
+          <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+            <a
+              href="products.html"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-orange px-8 py-4 font-black text-white shadow-xl shadow-black/10 transition hover:-translate-y-0.5 hover:bg-orange-600"
+            >
+              <i class="fa-solid fa-cart-shopping"></i>
+              Shop Now
+            </a>
+
+            <a
+              href="categories.html"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/25 bg-white/5 px-8 py-4 font-bold text-white backdrop-blur transition hover:bg-white/10"
+            >
+              Explore Categories
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+
+          <div class="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-white/65">
+            <span><i class="fa-solid fa-check mr-2 text-green-300"></i>Secure shopping</span>
+            <span><i class="fa-solid fa-check mr-2 text-green-300"></i>Fast support</span>
+            <span><i class="fa-solid fa-check mr-2 text-green-300"></i>Easy returns</span>
+          </div>
+        </div>
+
+        <div class="relative reveal">
+          <div class="absolute -inset-4 rounded-[2.5rem] border border-white/10 bg-white/5 blur-sm"></div>
+
+          <img
+            src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1200"
+            alt="Modern stylish living room"
+            class="floating relative h-[430px] w-full rounded-[2.25rem] object-cover shadow-2xl shadow-black/30 sm:h-[520px]"
+          >
+
+          <div class="absolute -bottom-5 left-5 rounded-2xl border border-white/15 bg-white/90 p-4 text-gray-900 shadow-2xl backdrop-blur sm:left-8">
+            <div class="flex items-center gap-3">
+              <span class="grid h-11 w-11 place-items-center rounded-xl bg-green-100 text-brand-green">
+                <i class="fa-solid fa-shield-heart"></i>
+              </span>
+
+              <div>
+                <p class="text-sm font-black">Curated for quality</p>
+                <p class="mt-1 text-xs font-semibold text-gray-500">Useful finds for modern homes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="relative z-10 -mt-1 bg-white py-14 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+        <article class="rounded-3xl border border-gray-100 bg-white p-6 text-center card-lift">
+          <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-green-50 text-2xl text-brand-green">
+            <i class="fa-solid fa-truck-fast"></i>
+          </span>
+          <h2 class="mt-5 text-lg font-black text-gray-900">Fast Delivery</h2>
+          <p class="mt-2 text-sm font-medium text-gray-500">Across India</p>
+        </article>
+
+        <article class="rounded-3xl border border-gray-100 bg-white p-6 text-center card-lift">
+          <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-blue-50 text-2xl text-blue-600">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+          <h2 class="mt-5 text-lg font-black text-gray-900">Secure Payments</h2>
+          <p class="mt-2 text-sm font-medium text-gray-500">100% Protected</p>
+        </article>
+
+        <article class="rounded-3xl border border-gray-100 bg-white p-6 text-center card-lift">
+          <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-amber-50 text-2xl text-brand-orange">
+            <i class="fa-solid fa-star"></i>
+          </span>
+          <h2 class="mt-5 text-lg font-black text-gray-900">Top Rated</h2>
+          <p class="mt-2 text-sm font-medium text-gray-500">Loved By Customers</p>
+        </article>
+
+        <article class="rounded-3xl border border-gray-100 bg-white p-6 text-center card-lift">
+          <span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-purple-50 text-2xl text-purple-600">
+            <i class="fa-solid fa-tags"></i>
+          </span>
+          <h2 class="mt-5 text-lg font-black text-gray-900">Best Prices</h2>
+          <p class="mt-2 text-sm font-medium text-gray-500">Affordable Quality</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section id="categories" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24">
+    <div class="mx-auto max-w-2xl text-center reveal">
+      <span class="text-xs font-black uppercase tracking-[.22em] text-brand-orange">Browse collections</span>
+      <a href="categories.html" class="group inline-block">
+        <h2 class="mt-4 text-4xl font-black tracking-tight text-gray-900 transition group-hover:text-brand-green sm:text-5xl">
+          Shop By Category <i class="fa-solid fa-arrow-up-right-from-square ml-2 text-xl text-brand-orange"></i>
+        </h2>
+      </a>
+      <p class="mt-4 text-base font-medium text-gray-500">Explore our most popular collections</p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+
+      <a href="products.html?category=Kitchen" class="glass-card card-lift rounded-3xl p-6 text-center">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-orange-50 text-3xl">🍳</span>
+        <h3 class="mt-4 font-black text-gray-900">Kitchen</h3>
+      </a>
+
+      <a href="products.html?category=Home" class="glass-card card-lift rounded-3xl p-6 text-center">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-green-50 text-3xl">🏠</span>
+        <h3 class="mt-4 font-black text-gray-900">Home</h3>
+      </a>
+
+      <a href="products.html?category=Gadgets" class="glass-card card-lift rounded-3xl p-6 text-center">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-blue-50 text-3xl">💻</span>
+        <h3 class="mt-4 font-black text-gray-900">Tech</h3>
+      </a>
+
+      <a href="products.html?category=Pet%20Care" class="glass-card card-lift rounded-3xl p-6 text-center">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-amber-50 text-3xl">🐶</span>
+        <h3 class="mt-4 font-black text-gray-900">Pet Care</h3>
+      </a>
+
+      <a href="products.html?category=Beauty" class="glass-card card-lift rounded-3xl p-6 text-center">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-pink-50 text-3xl">💄</span>
+        <h3 class="mt-4 font-black text-gray-900">Beauty</h3>
+      </a>
+
+      <a href="products.html?category=Lifestyle" class="glass-card card-lift rounded-3xl p-6 text-center">
+        <span class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-purple-50 text-3xl">✨</span>
+        <h3 class="mt-4 font-black text-gray-900">Lifestyle</h3>
+      </a>
+
+    </div>
+
+    <div class="mt-10 text-center">
+      <a
+        href="categories.html"
+        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand-green/20 bg-white px-7 py-3.5 font-bold text-brand-green shadow-sm transition hover:bg-brand-green hover:text-white"
+      >
+        View All Categories
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="bg-white py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+
+      <div class="mx-auto max-w-2xl text-center reveal">
+        <span class="text-xs font-black uppercase tracking-[.22em] text-brand-green">Popular picks</span>
+        <h2 class="mt-4 text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Featured Products</h2>
+        <p class="mt-4 text-base font-medium text-gray-500">Handpicked customer favorites</p>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+        <article class="group overflow-hidden rounded-3xl border border-gray-100 bg-brand-cream p-4 card-lift">
+          <div class="relative overflow-hidden rounded-2xl bg-white">
+            <img
+              src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700"
+              alt="Smart Watch"
+              class="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+            >
+            <span class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-brand-green shadow-sm">Featured</span>
+          </div>
+
+          <div class="px-1 pb-2 pt-5">
+            <h3 class="text-xl font-black text-gray-900">Smart Watch</h3>
+            <p class="mt-2 text-xl font-black text-brand-green">₹1,999</p>
+            <a href="products.html?category=Gadgets" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green py-3 text-sm font-bold text-white hover:bg-brand-dark">
+              View Collection
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+        <article class="group overflow-hidden rounded-3xl border border-gray-100 bg-brand-cream p-4 card-lift">
+          <div class="relative overflow-hidden rounded-2xl bg-white">
+            <img
+              src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1000"
+              alt="Kitchen Organizer"
+              class="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+            >
+            <span class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-brand-orange shadow-sm">Popular</span>
+          </div>
+
+          <div class="px-1 pb-2 pt-5">
+            <h3 class="text-xl font-black text-gray-900">Kitchen Organizer</h3>
+            <p class="mt-2 text-xl font-black text-brand-green">₹799</p>
+            <a href="products.html?category=Kitchen" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green py-3 text-sm font-bold text-white hover:bg-brand-dark">
+              View Collection
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+        <article class="group overflow-hidden rounded-3xl border border-gray-100 bg-brand-cream p-4 card-lift">
+          <div class="relative overflow-hidden rounded-2xl bg-white">
+            <img
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700"
+              alt="Premium Sneakers"
+              class="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+            >
+            <span class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-purple-600 shadow-sm">Lifestyle</span>
+          </div>
+
+          <div class="px-1 pb-2 pt-5">
+            <h3 class="text-xl font-black text-gray-900">Premium Sneakers</h3>
+            <p class="mt-2 text-xl font-black text-brand-green">₹2,499</p>
+            <a href="products.html" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green py-3 text-sm font-bold text-white hover:bg-brand-dark">
+              View Collection
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+        <article class="group overflow-hidden rounded-3xl border border-gray-100 bg-brand-cream p-4 card-lift">
+          <div class="relative overflow-hidden rounded-2xl bg-white">
+            <img
+              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=700"
+              alt="Pet Accessories"
+              class="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+            >
+            <span class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-blue-600 shadow-sm">Pet Care</span>
+          </div>
+
+          <div class="px-1 pb-2 pt-5">
+            <h3 class="text-xl font-black text-gray-900">Pet Accessories</h3>
+            <p class="mt-2 text-xl font-black text-brand-green">₹599</p>
+            <a href="products.html?category=Pet%20Care" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green py-3 text-sm font-bold text-white hover:bg-brand-dark">
+              View Collection
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="products.html"
+          class="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-green px-8 py-4 font-bold text-white shadow-lg shadow-brand-green/20 transition hover:-translate-y-0.5 hover:bg-brand-dark"
+        >
+          View All Products
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+
+      <div class="mx-auto max-w-2xl text-center reveal">
+        <span class="text-xs font-black uppercase tracking-[.22em] text-brand-orange">The ApnaFinds promise</span>
+        <h2 class="mt-4 text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Why Choose ApnaFinds?</h2>
+        <p class="mt-4 text-base font-medium text-gray-500">Quality products at honest prices</p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+
+        <article class="glass-card card-lift rounded-3xl p-7 sm:p-8">
+          <span class="grid h-16 w-16 place-items-center rounded-2xl bg-amber-50 text-3xl text-brand-orange">
+            <i class="fa-solid fa-trophy"></i>
+          </span>
+          <h3 class="mt-6 text-2xl font-black text-gray-900">Premium Selection</h3>
+          <p class="mt-4 leading-7 text-gray-600">
+            Every product is carefully selected based on quality, value and customer satisfaction.
+          </p>
+        </article>
+
+        <article class="glass-card card-lift rounded-3xl p-7 sm:p-8">
+          <span class="grid h-16 w-16 place-items-center rounded-2xl bg-green-50 text-3xl text-brand-green">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+          </span>
+          <h3 class="mt-6 text-2xl font-black text-gray-900">Affordable Prices</h3>
+          <p class="mt-4 leading-7 text-gray-600">
+            Get premium quality products without paying premium prices.
+          </p>
+        </article>
+
+        <article class="glass-card card-lift rounded-3xl p-7 sm:p-8">
+          <span class="grid h-16 w-16 place-items-center rounded-2xl bg-red-50 text-3xl text-red-500">
+            <i class="fa-solid fa-heart"></i>
+          </span>
+          <h3 class="mt-6 text-2xl font-black text-gray-900">Customer First</h3>
+          <p class="mt-4 leading-7 text-gray-600">
+            Fast support, secure shopping and hassle-free returns.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="bg-white py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+
+      <div class="mx-auto max-w-2xl text-center reveal">
+        <span class="text-xs font-black uppercase tracking-[.22em] text-brand-green">Customer stories</span>
+        <h2 class="mt-4 text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">Loved By Customers</h2>
+        <p class="mt-4 text-base font-medium text-gray-500">Real reviews from happy shoppers</p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+
+        <article class="rounded-3xl border border-gray-100 bg-brand-cream p-7 card-lift">
+          <div class="flex gap-1 text-brand-orange" aria-label="5 out of 5 stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+
+          <p class="mt-5 leading-7 text-gray-600">
+            Excellent quality products and super fast delivery. Highly recommended.
+          </p>
+
+          <div class="mt-7 flex items-center gap-3">
+            <span class="grid h-11 w-11 place-items-center rounded-full bg-brand-green font-black text-white">RS</span>
+            <div>
+              <h3 class="font-black text-gray-900">Rahul Sharma</h3>
+              <p class="mt-1 text-xs font-semibold text-gray-400">Verified shopper</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-3xl border border-gray-100 bg-brand-cream p-7 card-lift">
+          <div class="flex gap-1 text-brand-orange" aria-label="5 out of 5 stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+
+          <p class="mt-5 leading-7 text-gray-600">
+            ApnaFinds has become my favorite online store. Amazing products and prices.
+          </p>
+
+          <div class="mt-7 flex items-center gap-3">
+            <span class="grid h-11 w-11 place-items-center rounded-full bg-purple-600 font-black text-white">PP</span>
+            <div>
+              <h3 class="font-black text-gray-900">Priya Patel</h3>
+              <p class="mt-1 text-xs font-semibold text-gray-400">Verified shopper</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-3xl border border-gray-100 bg-brand-cream p-7 card-lift">
+          <div class="flex gap-1 text-brand-orange" aria-label="5 out of 5 stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+
+          <p class="mt-5 leading-7 text-gray-600">
+            Ordered kitchen tools and everything arrived perfectly. Will order again.
+          </p>
+
+          <div class="mt-7 flex items-center gap-3">
+            <span class="grid h-11 w-11 place-items-center rounded-full bg-blue-600 font-black text-white">AV</span>
+            <div>
+              <h3 class="font-black text-gray-900">Arjun Verma</h3>
+              <p class="mt-1 text-xs font-semibold text-gray-400">Verified shopper</p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="hero-gradient relative overflow-hidden py-20 text-white sm:py-24">
+    <div class="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-white/5 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-16 bottom-0 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
+      <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-2xl text-brand-orange">
+        <i class="fa-solid fa-envelope-open-text"></i>
+      </span>
+
+      <h2 class="mt-7 text-4xl font-black tracking-tight sm:text-5xl">Join The ApnaFinds Community</h2>
+
+      <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">
+        Get exclusive offers, product updates and members-only discounts.
+      </p>
+
+      <form id="newsletterForm" class="mx-auto mt-9 flex max-w-2xl flex-col gap-3 sm:flex-row">
+        <label for="newsletterEmail" class="sr-only">Email address</label>
+
+        <input
+          id="newsletterEmail"
+          type="email"
+          required
+          autocomplete="email"
+          placeholder="Enter your email"
+          class="min-w-0 flex-1 rounded-2xl border border-white/10 bg-white px-6 py-4 text-gray-900 outline-none focus:ring-4 focus:ring-white/15"
+        >
+
+        <button
+          type="submit"
+          class="rounded-2xl bg-brand-orange px-8 py-4 font-black text-white shadow-xl shadow-black/10 transition hover:bg-orange-600"
+        >
+          Subscribe
+        </button>
+      </form>
+
+      <p class="mt-4 text-xs font-semibold text-white/50">No spam. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#071A14] text-white">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+
+      <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+
+        <div>
+          <a href="index.html" class="inline-flex items-center gap-2">
+            <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-brand-orange">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </span>
+
+            <span class="text-2xl font-black">
+              <span class="text-green-400">Apna</span><span class="text-amber-400">Finds</span><span class="text-amber-400">.</span>
+            </span>
+          </a>
+
+          <p class="mt-5 max-w-sm leading-7 text-gray-400">
+            Smart Finds. Better Living. Premium products for modern lifestyles.
+          </p>
+
+          <button
+            id="footerBotBtn"
+            type="button"
+            class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/15"
+          >
+            <i class="fa-solid fa-robot text-brand-orange"></i>
+            Ask AI Assistant
+          </button>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-black">Quick Links</h2>
+
+          <ul class="mt-5 space-y-3 text-sm font-medium text-gray-400">
+            <li><a href="index.html" class="transition hover:text-white">Home</a></li>
+            <li><a href="products.html" class="transition hover:text-white">Products</a></li>
+            <li><a href="cart.html" class="transition hover:text-white">Cart</a></li>
+            <li><a href="login.html" class="transition hover:text-white">Login</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-black">Policies</h2>
+
+          <ul class="mt-5 space-y-3 text-sm font-medium text-gray-400">
+            <li><a href="about.html" class="transition hover:text-white">About Us</a></li>
+            <li><a href="contact.html" class="transition hover:text-white">Contact Us</a></li>
+            <li><a href="privacy.html" class="transition hover:text-white">Privacy Policy</a></li>
+            <li><a href="terms.html" class="transition hover:text-white">Terms & Conditions</a></li>
+            <li><a href="refund.html" class="transition hover:text-white">Refund Policy</a></li>
+            <li><a href="shipping.html" class="transition hover:text-white">Shipping Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-black">Support</h2>
+
+          <ul class="mt-5 space-y-4 text-sm font-medium text-gray-400">
+            <li>
+              <a href="mailto:support@apnafinds.com" class="flex items-start gap-3 transition hover:text-white">
+                <i class="fa-solid fa-envelope mt-1 text-brand-orange"></i>
+                support@apnafinds.com
+              </a>
+            </li>
+
+            <li>
+              <a href="tel:+919666337370" class="flex items-start gap-3 transition hover:text-white">
+                <i class="fa-solid fa-phone mt-1 text-brand-orange"></i>
+                +91 9666337370
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="https://wa.me/919666337370"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-start gap-3 transition hover:text-white"
+              >
+                <i class="fa-brands fa-whatsapp mt-1 text-green-400"></i>
+                WhatsApp Support
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="my-10 border-t border-white/10"></div>
+
+      <div class="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
+        <p class="text-sm font-medium text-gray-500">
+          © <span id="currentYear">2026</span> ApnaFinds. All Rights Reserved.
+        </p>
+
+        <div class="flex gap-3">
+          <a href="#" class="grid h-10 w-10 place-items-center rounded-xl bg-pink-600 text-white transition hover:-translate-y-0.5" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+
+          <a href="#" class="grid h-10 w-10 place-items-center rounded-xl bg-blue-600 text-white transition hover:-translate-y-0.5" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <a href="#" class="grid h-10 w-10 place-items-center rounded-xl bg-red-600 text-white transition hover:-translate-y-0.5" aria-label="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- FLOATING SUPPORT BUTTONS -->
+  <div class="fixed bottom-5 right-4 z-40 flex flex-col items-end gap-3 sm:right-6">
+
+    <button
+      id="floatingBotBtn"
+      type="button"
+      class="group relative grid h-14 w-14 place-items-center rounded-full bg-brand-dark text-xl text-white shadow-2xl transition hover:scale-105 hover:bg-brand-green"
+      aria-label="Ask AI Assistant"
+    >
+      <i class="fa-solid fa-robot"></i>
+
+      <span class="pointer-events-none absolute right-[calc(100%+12px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg bg-gray-950 px-3 py-2 text-xs font-bold text-white shadow-lg group-hover:block">
+        Ask AI Assistant
+      </span>
+    </button>
+
+    <a
+      href="https://wa.me/919666337370"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group relative grid h-16 w-16 place-items-center rounded-full bg-green-500 text-3xl text-white shadow-2xl transition hover:scale-105 hover:bg-green-600"
+      aria-label="Chat with ApnaFinds on WhatsApp"
+    >
+      <i class="fa-brands fa-whatsapp"></i>
+
+      <span class="pointer-events-none absolute right-[calc(100%+12px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-lg bg-gray-950 px-3 py-2 text-xs font-bold text-white shadow-lg group-hover:block">
+        Chat With Us
+      </span>
+    </a>
+
+  </div>
+
+  <!-- AI SUPPORT MODAL -->
+  <div
+    id="supportBot"
+    class="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="supportBotTitle"
+  >
+    <div class="modal-panel w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-brand-green/10 text-xl text-brand-green">
+            <i class="fa-solid fa-robot"></i>
+          </span>
+
+          <h2 id="supportBotTitle" class="mt-5 text-2xl font-black text-gray-900">
+            AI Support Assistant
+          </h2>
+
+          <p class="mt-2 text-sm leading-6 text-gray-500">
+            Ask about shipping, refunds, cancellations or contact details.
+          </p>
+        </div>
+
+        <button
+          id="closeBotBtn"
+          type="button"
+          class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200"
+          aria-label="Close support assistant"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        <button type="button" data-bot-question="shipping" class="rounded-full bg-green-50 px-4 py-2 text-xs font-bold text-brand-green">Shipping</button>
+        <button type="button" data-bot-question="refund" class="rounded-full bg-amber-50 px-4 py-2 text-xs font-bold text-amber-700">Refund</button>
+        <button type="button" data-bot-question="cancel" class="rounded-full bg-red-50 px-4 py-2 text-xs font-bold text-red-600">Cancellation</button>
+        <button type="button" data-bot-question="contact" class="rounded-full bg-blue-50 px-4 py-2 text-xs font-bold text-blue-600">Contact</button>
+      </div>
+
+      <form id="botForm" class="mt-6">
+        <label for="question" class="mb-2 block text-sm font-bold text-gray-700">Your question</label>
+
+        <div class="flex gap-2">
+          <input
+            id="question"
+            type="text"
+            required
+            autocomplete="off"
+            placeholder="Ask your question..."
+            class="min-w-0 flex-1 rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+          >
+
+          <button type="submit" class="rounded-xl bg-brand-green px-5 font-bold text-white hover:bg-brand-dark">
+            Ask
+          </button>
+        </div>
+      </form>
+
+      <div
+        id="botReplyBox"
+        class="mt-5 hidden rounded-2xl border border-green-100 bg-green-50 p-4"
+      >
+        <div class="flex gap-3">
+          <i class="fa-solid fa-robot mt-1 text-brand-green"></i>
+          <p id="botReply" class="text-sm font-medium leading-6 text-gray-700"></p>
+        </div>
+      </div>
+
+      <a
+        href="https://wa.me/919666337370"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-green-200 bg-white py-3.5 text-sm font-bold text-brand-green hover:bg-green-50"
+      >
+        <i class="fa-brands fa-whatsapp"></i>
+        Continue on WhatsApp
+      </a>
+
+    </div>
+  </div>
+
+  <div
+    id="toast"
+    class="toast fixed bottom-5 left-1/2 z-[120] rounded-xl bg-gray-950 px-5 py-3 text-sm font-bold text-white shadow-2xl"
+  >
+    Updated
+  </div>
+
+  <script>
+    const CART_KEY = "apnafinds_cart";
+    const USER_KEY = "currentUser";
+    const PRODUCTS_KEY = "adminProducts";
+    const SUBSCRIBERS_KEY = "apnafinds_subscribers";
+
+    const fallbackProducts = [
+      { name: "Electric Garlic Chopper", category: "Kitchen" },
+      { name: "Portable Blender", category: "Kitchen" },
+      { name: "Vegetable Cutter", category: "Kitchen" },
+      { name: "Oil Spray Bottle", category: "Kitchen" },
+      { name: "LED Motion Sensor Light", category: "Home" },
+      { name: "Mini Vacuum Cleaner", category: "Home" },
+      { name: "Cable Organizer Kit", category: "Home" },
+      { name: "Pet Hair Remover", category: "Pet Care" },
+      { name: "Pet Water Bottle", category: "Pet Care" },
+      { name: "Makeup Organizer Box", category: "Beauty" },
+      { name: "Facial Cleansing Brush", category: "Beauty" },
+      { name: "Car Phone Holder", category: "Gadgets" },
+      { name: "Laptop Stand", category: "Gadgets" },
+      { name: "Wireless Earbuds", category: "Gadgets" }
+    ];
+
+    const elements = {
+      cartCount: document.getElementById("cartCount"),
+      mobileCartCount: document.getElementById("mobileCartCount"),
+      userArea: document.getElementById("userArea"),
+      mobileUserArea: document.getElementById("mobileUserArea"),
+      desktopSearchInput: document.getElementById("desktopSearchInput"),
+      desktopSearchResults: document.getElementById("desktopSearchResults"),
+      mobileMenu: document.getElementById("mobileMenu"),
+      mobileMenuBtn: document.getElementById("mobileMenuBtn"),
+      mobileMenuIcon: document.getElementById("mobileMenuIcon"),
+      supportBot: document.getElementById("supportBot"),
+      question: document.getElementById("question"),
+      botReplyBox: document.getElementById("botReplyBox"),
+      botReply: document.getElementById("botReply"),
+      toast: document.getElementById("toast")
+    };
+
+    function readArray(key) {
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return Array.isArray(value) ? value : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function readObject(key) {
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value && typeof value === "object" && !Array.isArray(value)
+          ? value
+          : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function escapeHTML(value) {
+      const div = document.createElement("div");
+      div.textContent = String(value ?? "");
+      return div.innerHTML;
+    }
+
+    function getCartQuantity() {
+      return readArray(CART_KEY).reduce((sum, item) => {
+        return sum + Math.max(
+          1,
+          Number(item.quantity ?? item.qty ?? 1)
+        );
+      }, 0);
+    }
+
+    function updateCartCount() {
+      const quantity = getCartQuantity();
+      const display = quantity > 99 ? "99+" : String(quantity);
+
+      elements.cartCount.textContent = display;
+      elements.mobileCartCount.textContent = display;
+    }
+
+    function getUserName(user) {
+      return String(
+        user?.name ??
+        user?.fullName ??
+        [user?.firstName, user?.lastName].filter(Boolean).join(" ") ??
+        "Account"
+      ).trim() || "Account";
+    }
+
+    function updateUserArea() {
+      const currentUser = readObject(USER_KEY);
+
+      if (!currentUser) {
+        elements.userArea.innerHTML = `
+          <a href="login.html" class="transition hover:text-brand-green">
+            <i class="fa-regular fa-user mr-1"></i>
+            Login
+          </a>
+        `;
+
+        elements.mobileUserArea.innerHTML = `
+          <a href="login.html" class="block rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">
+            Login
+          </a>
+        `;
+
+        return;
+      }
+
+      const name = getUserName(currentUser);
+      const firstName = name.split(/\s+/)[0] || "Account";
+
+      elements.userArea.innerHTML = `
+        <a href="account.html" class="flex items-center gap-2 rounded-xl bg-green-50 px-3 py-2 text-brand-green transition hover:bg-green-100">
+          <i class="fa-solid fa-circle-user"></i>
+          <span class="max-w-24 truncate">${escapeHTML(firstName)}</span>
+        </a>
+      `;
+
+      elements.mobileUserArea.innerHTML = `
+        <a href="account.html" class="block rounded-xl bg-green-50 px-4 py-3 font-bold text-brand-green">
+          <i class="fa-solid fa-circle-user mr-2"></i>
+          ${escapeHTML(name)}
+        </a>
+      `;
+    }
+
+    function loadSearchProducts() {
+      const adminProducts = readArray(PRODUCTS_KEY);
+
+      const source = adminProducts.length
+        ? adminProducts
+        : fallbackProducts;
+
+      return source.map(product => ({
+        name: String(product.name ?? product.title ?? "Product"),
+        category: String(product.category ?? "Products")
+      }));
+    }
+
+    function showSearchResults(term) {
+      const query = term.trim().toLowerCase();
+
+      if (!query) {
+        elements.desktopSearchResults.classList.remove("open");
+        elements.desktopSearchResults.innerHTML = "";
+        return;
+      }
+
+      const matches = loadSearchProducts()
+        .filter(product => {
+          return `${product.name} ${product.category}`
+            .toLowerCase()
+            .includes(query);
+        })
+        .slice(0, 5);
+
+      if (!matches.length) {
+        elements.desktopSearchResults.innerHTML = `
+          <div class="p-5 text-center">
+            <p class="font-bold text-gray-900">No matching products</p>
+            <p class="mt-1 text-xs text-gray-500">View all products and try another search.</p>
+            <a href="products.html" class="mt-4 inline-flex rounded-xl bg-brand-green px-4 py-2.5 text-xs font-bold text-white">
+              Browse Products
+            </a>
+          </div>
+        `;
+      } else {
+        elements.desktopSearchResults.innerHTML = `
+          <div class="p-2">
+            ${matches.map(product => `
+              <a
+                href="products.html?category=${encodeURIComponent(product.category)}"
+                class="flex items-center justify-between gap-4 rounded-xl px-3 py-3 transition hover:bg-gray-50"
+              >
+                <div class="min-w-0">
+                  <p class="truncate text-sm font-bold text-gray-900">${escapeHTML(product.name)}</p>
+                  <p class="mt-1 text-xs font-semibold text-gray-400">${escapeHTML(product.category)}</p>
+                </div>
+                <i class="fa-solid fa-arrow-right text-xs text-brand-green"></i>
+              </a>
+            `).join("")}
+
+            <a
+              href="products.html"
+              class="mt-1 flex items-center justify-center rounded-xl bg-green-50 px-4 py-3 text-xs font-black text-brand-green"
+            >
+              View all products
+            </a>
+          </div>
+        `;
+      }
+
+      elements.desktopSearchResults.classList.add("open");
+    }
+
+    function goToSearch(term) {
+      const query = term.trim();
+
+      if (!query) {
+        showToast("Enter a product name");
+        return;
+      }
+
+      sessionStorage.setItem("apnafinds_pending_search", query);
+      window.location.href = `products.html?search=${encodeURIComponent(query)}`;
+    }
+
+    function toggleMobileMenu() {
+      const isOpen = elements.mobileMenu.classList.toggle("open");
+
+      elements.mobileMenuBtn.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
+
+      elements.mobileMenuIcon.className =
+        isOpen
+          ? "fa-solid fa-xmark"
+          : "fa-solid fa-bars";
+    }
+
+    function openSupportBot() {
+      elements.supportBot.classList.add("open");
+      document.body.classList.add("overflow-hidden");
+
+      setTimeout(() => {
+        elements.question.focus();
+      }, 150);
+    }
+
+    function closeSupportBot() {
+      elements.supportBot.classList.remove("open");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    function getBotReply(question) {
+      const q = question.toLowerCase();
+
+      if (q.includes("shipping") || q.includes("delivery")) {
+        return "Orders are normally delivered within 3–7 business days. Delivery time can vary by PIN code and product source.";
+      }
+
+      if (q.includes("refund") || q.includes("return")) {
+        return "Refunds are processed within 5–7 working days after the return is approved and the product passes verification.";
+      }
+
+      if (q.includes("cancel")) {
+        return "You can request cancellation before the order is shipped. Once dispatched, the return policy will apply.";
+      }
+
+      if (
+        q.includes("contact") ||
+        q.includes("phone") ||
+        q.includes("whatsapp") ||
+        q.includes("support")
+      ) {
+        return "Call +91 96663 37370, email support@apnafinds.com, or use the WhatsApp button for assistance.";
+      }
+
+      if (q.includes("payment") || q.includes("cod")) {
+        return "Available payment options depend on checkout configuration. Cash on Delivery and online payment options may be shown during checkout.";
+      }
+
+      return "Please contact our support team for further assistance. You can call +91 96663 37370 or message us on WhatsApp.";
+    }
+
+    function answerBot(question) {
+      elements.botReply.textContent = getBotReply(question);
+      elements.botReplyBox.classList.remove("hidden");
+    }
+
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.add("show");
+
+      clearTimeout(showToast.timer);
+
+      showToast.timer = setTimeout(() => {
+        elements.toast.classList.remove("show");
+      }, 2300);
+    }
+
+    document.getElementById("desktopSearchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      goToSearch(elements.desktopSearchInput.value);
+    });
+
+    elements.desktopSearchInput.addEventListener("input", event => {
+      showSearchResults(event.target.value);
+    });
+
+    elements.desktopSearchInput.addEventListener("focus", event => {
+      showSearchResults(event.target.value);
+    });
+
+    document.addEventListener("click", event => {
+      const searchArea = event.target.closest("#desktopSearchForm, #desktopSearchResults");
+
+      if (!searchArea) {
+        elements.desktopSearchResults.classList.remove("open");
+      }
+    });
+
+    document.getElementById("mobileSearchForm").addEventListener("submit", event => {
+      event.preventDefault();
+      goToSearch(document.getElementById("mobileSearchInput").value);
+    });
+
+    elements.mobileMenuBtn.addEventListener("click", toggleMobileMenu);
+
+    document.getElementById("newsletterForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const emailInput = document.getElementById("newsletterEmail");
+      const email = emailInput.value.trim().toLowerCase();
+
+      if (!email) {
+        showToast("Enter your email address");
+        return;
+      }
+
+      const subscribers = readArray(SUBSCRIBERS_KEY);
+
+      if (!subscribers.includes(email)) {
+        subscribers.push(email);
+        localStorage.setItem(
+          SUBSCRIBERS_KEY,
+          JSON.stringify(subscribers)
+        );
+      }
+
+      emailInput.value = "";
+      showToast("You are subscribed to ApnaFinds");
+    });
+
+    [
+      "footerBotBtn",
+      "floatingBotBtn"
+    ].forEach(id => {
+      document.getElementById(id).addEventListener(
+        "click",
+        openSupportBot
+      );
+    });
+
+    document.getElementById("closeBotBtn").addEventListener(
+      "click",
+      closeSupportBot
+    );
+
+    elements.supportBot.addEventListener("click", event => {
+      if (event.target === elements.supportBot) {
+        closeSupportBot();
+      }
+    });
+
+    document.getElementById("botForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const question = elements.question.value.trim();
+
+      if (!question) return;
+
+      answerBot(question);
+    });
+
+    document.querySelectorAll("[data-bot-question]").forEach(button => {
+      button.addEventListener("click", () => {
+        const question = button.dataset.botQuestion;
+        elements.question.value = question;
+        answerBot(question);
+      });
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeSupportBot();
+        elements.desktopSearchResults.classList.remove("open");
+
+        if (elements.mobileMenu.classList.contains("open")) {
+          toggleMobileMenu();
+        }
+      }
+    });
+
+    const revealObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12
+      }
+    );
+
+    document.querySelectorAll(".reveal").forEach(element => {
+      revealObserver.observe(element);
+    });
+
+    window.addEventListener("pageshow", () => {
+      updateCartCount();
+      updateUserArea();
+    });
+
+    window.addEventListener("storage", event => {
+      if ([CART_KEY, USER_KEY].includes(event.key)) {
+        updateCartCount();
+        updateUserArea();
+      }
+    });
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+
+    updateCartCount();
+    updateUserArea();
+  </script>
+</body>
+</html>

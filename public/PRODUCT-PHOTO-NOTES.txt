@@ -1,0 +1,47 @@
+APNAFINDS V3 — INDEX PRESERVED + REAL-PHOTO STOREFRONT
+========================================================
+
+IMPORTANT DESIGN RULE
+---------------------
+public/index.html is the exact Index code supplied by the user. It was not redesigned.
+The remaining storefront and admin pages use the same ApnaFinds green, orange,
+cream and Plus Jakarta Sans design language.
+
+PRODUCT PHOTOS
+--------------
+The 28 default products use photographic stock-image URLs instead of cartoon SVGs.
+Old SVG, Picsum, placeholder, file:// and deprecated Source URLs are migrated
+at runtime to the new photo map.
+
+These are real photographic stock placeholders, but they are NOT guaranteed to
+show the exact supplier model, colour, capacity or packaging you will deliver.
+Before public launch, replace every listing with your own supplier-authorized
+or self-photographed product image through:
+
+Admin -> Products -> Edit -> Image URL
+
+A clean local JPG is used only when a remote photo cannot load.
+
+AUTOMATIC PROCESS
+-----------------
+- Checkout order saved to Node.js server
+- Automatic demo courier booking
+- Demo AWB generation
+- Automatic tracking stages
+- Customer tracking page
+- Admin order/customer/return management
+- Reverse pickup and demo return/refund stages
+- Server-backed admin login
+
+START
+-----
+Double-click START-APNAFINDS.bat and keep the server window open.
+Open http://localhost:3000 — never file:/// and never Live Server.
+
+FRESH LOCAL ADMIN LOGIN
+-----------------------
+Email: admin@apnafinds.local
+Password: ApnaFinds@123
+
+If an old .env causes an invalid-login error, run RESET-LOCAL-LOGIN.bat,
+then restart START-APNAFINDS.bat.

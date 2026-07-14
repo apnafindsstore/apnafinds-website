@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Customer Login | ApnaFinds</title>
+
+  <meta
+    name="description"
+    content="Sign in to your ApnaFinds customer account."
+  >
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15, 92, 74, .09), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245, 158, 11, .10), transparent 28%),
+        #FAF7F2;
+    }
+
+    .auth-gradient {
+      background:
+        radial-gradient(circle at 88% 10%, rgba(245, 158, 11, .25), transparent 27%),
+        radial-gradient(circle at 10% 90%, rgba(255, 255, 255, .08), transparent 28%),
+        linear-gradient(135deg, #0F5C4A 0%, #114D41 42%, #0A3622 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, .9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, .95);
+      box-shadow: 0 24px 70px -30px rgba(10, 54, 34, .34);
+    }
+
+    .password-strength-bar {
+      height: 5px;
+      border-radius: 999px;
+      background: #E5E7EB;
+      overflow: hidden;
+    }
+
+    .password-strength-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      transition: width .25s ease, background-color .25s ease;
+    }
+
+    .toast {
+      transform: translate(-50%, 120%);
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0F5C4A;
+      border-radius: 999px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="css/ai-helper.css">
+</head>
+
+<body class="min-h-screen font-sans text-gray-800 antialiased">
+
+  <nav class="border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white shadow-lg shadow-brand-green/20">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </span>
+
+        <span class="text-xl font-black sm:text-2xl">
+          <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds.</span>
+        </span>
+      </a>
+
+      <a
+        href="register.html"
+        class="rounded-xl bg-green-50 px-4 py-2.5 text-sm font-black text-brand-green hover:bg-green-100"
+      >
+        Create Account
+      </a>
+
+    </div>
+  </nav>
+
+  <main class="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-stretch lg:grid-cols-2">
+
+    <section class="auth-gradient relative hidden overflow-hidden p-12 text-white lg:flex lg:flex-col lg:justify-between">
+      <div class="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-white/5 blur-3xl"></div>
+      <div class="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl"></div>
+
+      <div class="relative">
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-bold backdrop-blur">
+          <i class="fa-solid fa-shield-heart text-brand-orange"></i>
+          Welcome back
+        </span>
+
+        <h1 class="mt-8 text-5xl font-black leading-tight">
+          Your orders,
+          <br>
+          addresses and account
+          <br>
+          in one place.
+        </h1>
+
+        <p class="mt-6 max-w-lg text-lg leading-8 text-white/70">
+          Sign in to view orders, save addresses, track deliveries and manage your ApnaFinds profile.
+        </p>
+      </div>
+
+      <div class="relative grid gap-4 sm:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <i class="fa-solid fa-box text-brand-orange"></i>
+          <p class="mt-3 text-sm font-black">Order history</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <i class="fa-solid fa-location-dot text-brand-orange"></i>
+          <p class="mt-3 text-sm font-black">Saved addresses</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <i class="fa-solid fa-truck-fast text-brand-orange"></i>
+          <p class="mt-3 text-sm font-black">Easy tracking</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="flex items-center justify-center px-4 py-12 sm:px-8 lg:px-14">
+      <div class="glass-card w-full max-w-lg rounded-[2rem] p-6 sm:p-9">
+
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.2em] text-brand-orange">
+            Customer account
+          </p>
+
+          <h1 class="mt-3 text-4xl font-black tracking-tight text-gray-900">
+            Sign In
+          </h1>
+
+          <p class="mt-3 text-sm leading-6 text-gray-500">
+            Enter the email and password used when creating your account.
+          </p>
+        </div>
+
+        <form id="loginForm" class="mt-8 space-y-5">
+
+          <div>
+            <label for="email" class="mb-2 block text-sm font-bold text-gray-700">
+              Email address
+            </label>
+
+            <div class="relative">
+              <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+              <input
+                id="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="you@example.com"
+                class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+              >
+            </div>
+          </div>
+
+          <div>
+            <div class="mb-2 flex items-center justify-between gap-4">
+              <label for="password" class="block text-sm font-bold text-gray-700">
+                Password
+              </label>
+
+              <a
+                href="forgot-password.html"
+                class="text-xs font-black text-brand-green hover:text-brand-dark"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            <div class="relative">
+              <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+
+              <input
+                id="password"
+                type="password"
+                required
+                autocomplete="current-password"
+                class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-12 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
+              >
+
+              <button
+                type="button"
+                data-toggle-password="password"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-green"
+                aria-label="Show password"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <label class="flex cursor-pointer items-center gap-3 text-sm font-semibold text-gray-600">
+            <input
+              id="rememberMe"
+              type="checkbox"
+              class="h-4 w-4 accent-brand-green"
+            >
+            Keep me signed in on this browser
+          </label>
+
+          <p id="formMessage" class="hidden rounded-xl p-3 text-sm font-bold"></p>
+
+          <button
+            id="submitButton"
+            type="submit"
+            class="flex w-full items-center justify-center gap-3 rounded-xl bg-brand-green py-4 text-lg font-black text-white shadow-lg shadow-brand-green/20 hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Sign In
+          </button>
+
+        </form>
+
+        <div class="my-7 flex items-center gap-4">
+          <div class="h-px flex-1 bg-gray-200"></div>
+          <span class="text-xs font-black uppercase tracking-wider text-gray-400">New here?</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+
+        <a
+          id="registerLink"
+          href="register.html"
+          class="flex w-full items-center justify-center gap-2 rounded-xl border border-brand-green/20 bg-white py-3.5 font-black text-brand-green hover:bg-green-50"
+        >
+          Create an ApnaFinds Account
+        </a>
+
+        <p class="mt-6 text-center text-xs leading-5 text-gray-400">
+          This localStorage login is for website testing. Use secure backend authentication before publishing.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div
+    id="toast"
+    class="toast fixed bottom-5 left-1/2 z-[120] rounded-xl bg-gray-950 px-5 py-3 text-sm font-bold text-white shadow-2xl"
+  ></div>
+
+  <script src="js/auth.js"></script>
+
+  <script>
+    const auth = window.ApnaFindsAuth;
+
+    if (auth.redirectLoggedInCustomer("account.html")) {
+      // Redirect is handled by the shared script.
+    }
+
+    const elements = {
+      loginForm: document.getElementById("loginForm"),
+      email: document.getElementById("email"),
+      password: document.getElementById("password"),
+      formMessage: document.getElementById("formMessage"),
+      submitButton: document.getElementById("submitButton"),
+      toast: document.getElementById("toast")
+    };
+
+    function showMessage(message, type = "error") {
+      elements.formMessage.textContent = message;
+      elements.formMessage.className =
+        type === "success"
+          ? "rounded-xl bg-green-50 p-3 text-sm font-bold text-brand-green"
+          : "rounded-xl bg-red-50 p-3 text-sm font-bold text-red-600";
+    }
+
+    function setSubmitting(enabled) {
+      elements.submitButton.disabled = enabled;
+
+      elements.submitButton.innerHTML = enabled
+        ? '<i class="fa-solid fa-spinner fa-spin"></i> Signing In'
+        : '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+    }
+
+    document.querySelectorAll("[data-toggle-password]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(
+          button.dataset.togglePassword
+        );
+
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+
+        button.innerHTML = showing
+          ? '<i class="fa-solid fa-eye"></i>'
+          : '<i class="fa-solid fa-eye-slash"></i>';
+
+        button.setAttribute(
+          "aria-label",
+          showing ? "Show password" : "Hide password"
+        );
+      });
+    });
+
+    elements.loginForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      setSubmitting(true);
+
+      const result = auth.loginCustomer(
+        elements.email.value,
+        elements.password.value
+      );
+
+      if (!result.ok) {
+        setSubmitting(false);
+        showMessage(result.message);
+        return;
+      }
+
+      showMessage("Login successful. Opening your account...", "success");
+
+      setTimeout(() => {
+        window.location.href = auth.getSafeRedirect("account.html");
+      }, 500);
+    });
+
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+
+    if (redirect) {
+      document.getElementById("registerLink").href =
+        `register.html?redirect=${encodeURIComponent(redirect)}`;
+    }
+  </script>
+  <script src="js/backend-client.js"></script>
+  <script src="js/ai-helper.js"></script>
+</body>
+</html>
