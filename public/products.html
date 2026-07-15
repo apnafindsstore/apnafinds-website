@@ -1,110 +1,260 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products | ApnaFinds</title>
-  <meta name="description" content="Browse and filter all ApnaFinds products with connected cart quantities and wishlist controls.">
+  <meta name="description" content="Browse all 28 ApnaFinds products with photographic product images, connected cart quantities and wishlist controls.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Plus Jakarta Sans", "sans-serif"] },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          }
+        }
+      }
+    };
+  </script>
+
   <link rel="stylesheet" href="css/storefront.css">
   <link rel="stylesheet" href="css/ai-helper.css">
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15,92,74,.07), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245,158,11,.08), transparent 28%),
+        #FAF7F2;
+    }
+
+    .catalog-hero {
+      background:
+        radial-gradient(circle at 90% 10%, rgba(245,158,11,.24), transparent 28%),
+        radial-gradient(circle at 15% 85%, rgba(255,255,255,.08), transparent 30%),
+        linear-gradient(135deg, #0F5C4A 0%, #114D41 42%, #0A3622 100%);
+    }
+
+    .catalog-glass {
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(255,255,255,.94);
+      box-shadow: 0 20px 60px -30px rgba(10,54,34,.32);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .catalog-mobile-menu {
+      display: none;
+    }
+
+    .catalog-mobile-menu.open {
+      display: grid;
+    }
+
+    .catalog-stat {
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .catalog-version-ribbon {
+      position: absolute;
+      right: 22px;
+      top: 22px;
+      z-index: 5;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      padding: 8px 13px;
+      color: rgba(255,255,255,.82);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+    }
+
+    #productsGrid.product-grid {
+      margin-top: 0;
+    }
+
+    .photo-note {
+      border: 1px solid #d1fae5;
+      background: #ecfdf5;
+      color: #065f46;
+    }
+
+    @media (max-width: 1023px) {
+      .catalog-desktop-nav,
+      .catalog-desktop-search {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
-<body data-page="products">
-  <header class="site-header">
-  <div class="container">
-    <div class="nav-row">
-      <a class="logo" href="index.html">
-        <span class="logo-mark"><i class="fa-solid fa-bag-shopping"></i></span>
-        <span class="logo-text">
-          <span class="logo-apna">Apna</span><span class="logo-finds">Finds.</span>
-        </span>
-      </a>
 
-      <nav class="desktop-nav" aria-label="Primary navigation">
-        <a href="index.html" class="">Home</a>
-<a href="categories.html" class="">Categories</a>
-<a href="products.html" class="active">Products</a>
-<a href="track-order.html" class="">Track Order</a>
-<a href="account.html" class="">Account</a>
-        <button type="button" data-open-wishlist>
-          Wishlist
-        </button>
-      </nav>
-
-      <div class="nav-actions">
-        <button
-          type="button"
-          class="icon-button"
-          data-open-wishlist
-          aria-label="Open wishlist"
-        >
-          <i class="fa-solid fa-heart"></i>
-          <span class="count-badge red" data-wishlist-count>0</span>
-        </button>
-
-        <a class="icon-button" href="cart.html" aria-label="Open cart">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="count-badge" data-cart-count>0</span>
+<body data-page="products" class="min-h-screen text-gray-800 antialiased">
+  <!-- Same visual language as the supplied index.html; index.html itself is untouched. -->
+  <nav class="sticky top-0 z-[80] border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="flex h-20 items-center justify-between gap-4">
+        <a href="index.html" class="flex shrink-0 items-center gap-2" aria-label="ApnaFinds home">
+          <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white shadow-lg shadow-brand-green/20">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </span>
+          <span class="text-xl font-extrabold tracking-tight text-gray-900 sm:text-2xl">
+            <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds.</span>
+          </span>
         </a>
 
-        <button
-          id="mobileMenuButton"
-          type="button"
-          class="icon-button mobile-menu-button"
-          aria-label="Open menu"
-        >
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
-    </div>
+        <form id="catalogHeaderSearch" class="catalog-desktop-search relative hidden w-full max-w-md lg:flex">
+          <label for="catalogHeaderSearchInput" class="sr-only">Search products</label>
+          <input id="catalogHeaderSearchInput" type="search" autocomplete="off" placeholder="Search all 28 products..." class="min-w-0 flex-1 rounded-l-2xl border border-r-0 border-gray-200 bg-gray-50/80 px-5 py-3 text-sm outline-none transition focus:border-brand-green focus:bg-white focus:ring-2 focus:ring-brand-green/10">
+          <button type="submit" class="rounded-r-2xl bg-brand-orange px-5 text-white transition hover:bg-orange-600" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
 
-    <nav id="mobileMenu" class="mobile-menu" aria-label="Mobile navigation">
-      <a href="index.html">Home</a>
-<a href="categories.html">Categories</a>
-<a href="products.html">Products</a>
-<a href="track-order.html">Track Order</a>
-<a href="account.html">Account</a>
-      <button type="button" data-open-wishlist>Wishlist</button>
-      <a href="cart.html">Cart</a>
-    </nav>
-  </div>
-</header>
+        <nav class="catalog-desktop-nav desktop-nav hidden items-center gap-6 text-sm font-bold text-gray-700 lg:flex" aria-label="Primary navigation">
+          <a href="index.html" class="transition hover:text-brand-green">Home</a>
+          <a href="categories.html" class="transition hover:text-brand-green">Categories</a>
+          <a href="products.html" class="text-brand-green">Products</a>
+          <button type="button" data-open-wishlist class="relative transition hover:text-brand-green">
+            Wishlist
+            <span class="absolute -right-4 -top-3 grid h-5 min-w-5 place-items-center rounded-full bg-red-500 px-1 text-[10px] font-black text-white" data-wishlist-count>0</span>
+          </button>
+          <a href="cart.html" class="relative transition hover:text-brand-green">
+            Cart
+            <span class="absolute -right-4 -top-3 grid h-5 min-w-5 place-items-center rounded-full bg-brand-orange px-1 text-[10px] font-black text-white" data-cart-count>0</span>
+          </a>
+          <a href="account.html" class="transition hover:text-brand-green"><i class="fa-regular fa-user mr-1"></i> Login</a>
+        </nav>
+
+        <div class="flex items-center gap-3 lg:hidden">
+          <button type="button" class="icon-button" data-open-wishlist aria-label="Open wishlist">
+            <i class="fa-solid fa-heart"></i>
+            <span class="count-badge red" data-wishlist-count>0</span>
+          </button>
+          <a class="icon-button" href="cart.html" aria-label="Open cart">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span class="count-badge" data-cart-count>0</span>
+          </a>
+          <button id="mobileMenuButton" type="button" class="icon-button" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <nav id="mobileMenu" class="catalog-mobile-menu gap-2 border-t border-gray-100 pb-5 pt-4 lg:hidden" aria-label="Mobile navigation">
+        <a href="index.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Home</a>
+        <a href="categories.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Categories</a>
+        <a href="products.html" class="rounded-xl bg-green-50 px-4 py-3 font-bold text-brand-green">Products</a>
+        <button type="button" data-open-wishlist class="rounded-xl px-4 py-3 text-left font-bold text-gray-700 hover:bg-gray-50">Wishlist</button>
+        <a href="cart.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Cart</a>
+        <a href="account.html" class="rounded-xl px-4 py-3 font-bold text-gray-700 hover:bg-gray-50">Account</a>
+      </nav>
+    </div>
+  </nav>
 
   <main>
-    <section class="page-section">
-      <div class="container">
-        <div class="list-header">
+    <section class="catalog-hero relative overflow-hidden text-white">
+      <span class="catalog-version-ribbon">Corrected catalogue V4</span>
+      <div class="pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full bg-white/5 blur-3xl"></div>
+      <div class="pointer-events-none absolute -right-28 bottom-0 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+        <div class="grid items-center gap-10 lg:grid-cols-[1.15fr_.85fr]">
           <div>
-            <h1 id="productListTitle">All Products</h1>
-            <p id="productResultCount">0 products</p>
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-sm font-bold backdrop-blur">
+              <i class="fa-solid fa-camera text-brand-orange"></i>
+              Photographic Product Catalogue
+            </span>
+            <h1 class="mt-7 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              28 Smart Products.
+              <br>
+              <span class="text-amber-400">No Cartoon Images.</span>
+            </h1>
+            <p class="mt-5 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
+              Browse kitchen, home, technology, pet-care, beauty and lifestyle products with connected wishlist, quantities, cart and product-detail pages.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="#catalog" class="inline-flex items-center gap-2 rounded-2xl bg-brand-orange px-7 py-4 font-black text-white shadow-xl transition hover:bg-orange-600">
+                <i class="fa-solid fa-bag-shopping"></i> Shop Products
+              </a>
+              <button type="button" data-open-wishlist class="inline-flex items-center gap-2 rounded-2xl border border-white/25 bg-white/5 px-7 py-4 font-bold text-white backdrop-blur transition hover:bg-white/10">
+                <i class="fa-solid fa-heart"></i> Open Wishlist
+              </button>
+            </div>
           </div>
 
-          <div class="inline-actions">
-            <button class="danger-button" type="button" data-open-wishlist>
-              <i class="fa-solid fa-heart"></i>
-              Wishlist
-              <span data-wishlist-count>0</span>
-            </button>
+          <div class="grid grid-cols-2 gap-4">
+            <article class="catalog-stat rounded-3xl p-5">
+              <i class="fa-solid fa-boxes-stacked text-2xl text-brand-orange"></i>
+              <strong class="mt-4 block text-3xl font-black">28</strong>
+              <span class="mt-1 block text-xs font-bold text-white/55">Curated products</span>
+            </article>
+            <article class="catalog-stat rounded-3xl p-5">
+              <i class="fa-solid fa-camera-retro text-2xl text-brand-orange"></i>
+              <strong class="mt-4 block text-3xl font-black">100%</strong>
+              <span class="mt-1 block text-xs font-bold text-white/55">Photo presentation</span>
+            </article>
+            <article class="catalog-stat rounded-3xl p-5">
+              <i class="fa-solid fa-heart text-2xl text-brand-orange"></i>
+              <strong class="mt-4 block text-3xl font-black">Live</strong>
+              <span class="mt-1 block text-xs font-bold text-white/55">Wishlist connection</span>
+            </article>
+            <article class="catalog-stat rounded-3xl p-5">
+              <i class="fa-solid fa-cart-plus text-2xl text-brand-orange"></i>
+              <strong class="mt-4 block text-3xl font-black">− 0 +</strong>
+              <span class="mt-1 block text-xs font-bold text-white/55">Cart quantities</span>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <a class="secondary-button" href="cart.html">
-              <i class="fa-solid fa-bag-shopping"></i>
-              Cart
-              <span data-cart-count>0</span>
+    <section id="catalog" class="py-14 sm:py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="photo-note mb-6 flex items-start gap-3 rounded-2xl p-4 text-sm font-semibold leading-6">
+          <i class="fa-solid fa-circle-check mt-1"></i>
+          <p>Old SVG/cartoon product images are automatically replaced the first time this corrected page opens. Exact supplier-model photos can still be pasted from Admin → Products → Edit.</p>
+        </div>
+
+        <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <span class="text-xs font-black uppercase tracking-[.22em] text-brand-orange">Shop the collection</span>
+            <h2 id="productListTitle" class="mt-3 text-4xl font-black tracking-tight text-gray-900 sm:text-5xl">All Products</h2>
+            <p id="productResultCount" class="mt-3 font-semibold text-gray-500">Loading products...</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-open-wishlist class="danger-button">
+              <i class="fa-solid fa-heart"></i> Wishlist <span data-wishlist-count>0</span>
+            </button>
+            <a href="cart.html" class="secondary-button">
+              <i class="fa-solid fa-bag-shopping"></i> Cart <span data-cart-count>0</span>
             </a>
           </div>
         </div>
 
-        <section class="filters-card">
+        <section class="filters-card mt-8">
           <div class="filter-top">
             <label class="search-box">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input
-                id="productSearch"
-                type="search"
-                placeholder="Search products, categories or features..."
-              >
+              <input id="productSearch" type="search" autocomplete="off" placeholder="Search products, categories or features...">
             </label>
-
             <select id="productSort" aria-label="Sort products">
               <option value="featured">Featured first</option>
               <option value="price-low">Price: Low to high</option>
@@ -113,18 +263,16 @@
               <option value="name">Name: A to Z</option>
             </select>
           </div>
-
           <div id="categoryPills" class="category-pills"></div>
         </section>
 
         <div class="list-header">
           <div>
-            <h2 style="font-size: 27px;">Choose your products</h2>
-            <p>Tap the heart to save. Use − 0 + to control the exact cart quantity.</p>
+            <h2 style="font-size:27px">Choose your products</h2>
+            <p>Save favourites, open product details or adjust the exact cart quantity.</p>
           </div>
-
           <button id="resetFilters" class="secondary-button" type="button">
-            Reset Filters
+            <i class="fa-solid fa-rotate-left"></i> Reset Filters
           </button>
         </div>
 
@@ -133,135 +281,108 @@
         <section id="productsEmpty" class="empty-state hidden">
           <div class="empty-icon"><i class="fa-solid fa-box-open"></i></div>
           <h2>No products found</h2>
-          <p>Try another keyword or reset the category filter.</p>
-          <button class="primary-button" type="button" onclick="ApnaFindsStore.showToast('Use Reset Filters above')">
-            Search Again
-          </button>
+          <p>Try a different search or reset the category filter.</p>
         </section>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <a class="logo" href="index.html">
-        <span class="logo-mark"><i class="fa-solid fa-bag-shopping"></i></span>
-        <span>
-          <span class="logo-apna">Apna</span><span class="logo-finds">Finds.</span>
-        </span>
-      </a>
-      <p>Smart products for the kitchen, home, technology, pets, beauty and everyday life.</p>
-    </div>
-
-    <div>
-      <h3>Shop</h3>
-      <a href="products.html">All Products</a>
-      <a href="categories.html">Categories</a>
-      <a href="wishlist.html">Wishlist</a>
-      <a href="cart.html">Cart</a>
-    </div>
-
-    <div>
-      <h3>Support</h3>
-      <a href="track-order.html">Track Order</a>
-      <a href="returns-center.html">Returns & Cancellations</a>
-      <a href="contact.html">Contact</a>
-      <a href="account.html">My Account</a>
-    </div>
-
-    <div>
-      <h3>Policies</h3>
-      <a href="shipping.html">Shipping</a>
-      <a href="refund.html">Refunds</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    © <span data-current-year></span> ApnaFinds. Smart Finds. Better Living.
-  </div>
-</footer>
-  <div id="wishlistDrawerOverlay" class="drawer-overlay"></div>
-
-<aside id="wishlistDrawer" class="wishlist-drawer" aria-label="Wishlist drawer">
-  <div class="drawer-header">
-    <div>
-      <h2>My Wishlist</h2>
-      <p><span id="wishlistDrawerCount">0</span> saved products</p>
-    </div>
-
-    <button
-      type="button"
-      class="icon-button"
-      data-close-wishlist
-      aria-label="Close wishlist"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-
-  <div id="wishlistDrawerList" class="drawer-content"></div>
-
-  <div id="wishlistDrawerEmpty" class="drawer-content hidden">
-    <div class="empty-state">
-      <div class="empty-icon"><i class="fa-regular fa-heart"></i></div>
-      <h2>Wishlist is empty</h2>
-      <p>Tap the heart icon on a product to save it.</p>
-    </div>
-  </div>
-
-  <div id="wishlistDrawerFooter" class="drawer-footer hidden">
-    <div class="drawer-footer-grid">
-      <button type="button" class="primary-button" data-add-all-wishlist>
-        Add All to Cart
-      </button>
-      <a class="secondary-button" href="wishlist.html">
-        Full Wishlist
-      </a>
-    </div>
-  </div>
-</aside>
-
-<div id="savedWishlistPopup" class="popup-overlay">
-  <section class="saved-popup">
-    <div class="popup-top">
-      <div>
-        <div class="product-category">Welcome back</div>
-        <h2>You have <span id="savedWishlistPopupCount">0</span> saved products</h2>
-        <p>Your saved wishlist is still available. Continue shopping or add an item directly to the cart.</p>
+  <footer class="bg-[#071A14] text-white">
+    <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+      <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <a href="index.html" class="inline-flex items-center gap-2">
+            <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-brand-orange"><i class="fa-solid fa-bag-shopping"></i></span>
+            <span class="text-2xl font-black"><span class="text-green-400">Apna</span><span class="text-amber-400">Finds.</span></span>
+          </a>
+          <p class="mt-5 leading-7 text-gray-400">Smart Finds. Better Living. Practical products for modern homes.</p>
+        </div>
+        <div>
+          <h3 class="font-black">Shop</h3>
+          <div class="mt-4 grid gap-3 text-sm font-semibold text-gray-400">
+            <a href="products.html" class="hover:text-white">All Products</a>
+            <a href="categories.html" class="hover:text-white">Categories</a>
+            <a href="wishlist.html" class="hover:text-white">Wishlist</a>
+            <a href="cart.html" class="hover:text-white">Cart</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-black">Support</h3>
+          <div class="mt-4 grid gap-3 text-sm font-semibold text-gray-400">
+            <a href="track-order.html" class="hover:text-white">Track Order</a>
+            <a href="returns-center.html" class="hover:text-white">Returns & Cancellations</a>
+            <a href="contact.html" class="hover:text-white">Contact</a>
+            <a href="account.html" class="hover:text-white">My Account</a>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-black">Policies</h3>
+          <div class="mt-4 grid gap-3 text-sm font-semibold text-gray-400">
+            <a href="shipping.html" class="hover:text-white">Shipping</a>
+            <a href="refund.html" class="hover:text-white">Refunds</a>
+            <a href="privacy.html" class="hover:text-white">Privacy</a>
+            <a href="terms.html" class="hover:text-white">Terms</a>
+          </div>
+        </div>
       </div>
-
-      <button
-        type="button"
-        class="icon-button"
-        data-close-saved-popup
-        aria-label="Close popup"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <div class="mt-10 border-t border-white/10 pt-7 text-sm font-semibold text-gray-500">
+        © <span data-current-year></span> ApnaFinds. All Rights Reserved.
+      </div>
     </div>
+  </footer>
 
-    <div id="savedWishlistPopupList" class="popup-list"></div>
-
-    <div class="popup-actions">
-      <button type="button" class="danger-button" data-popup-open-wishlist>
-        <i class="fa-solid fa-heart"></i>
-        View Saved Items
-      </button>
-      <button type="button" class="primary-button" data-close-saved-popup>
-        Continue Shopping
-      </button>
+  <div id="wishlistDrawerOverlay" class="drawer-overlay"></div>
+  <aside id="wishlistDrawer" class="wishlist-drawer" aria-label="Wishlist drawer">
+    <div class="drawer-header">
+      <div><h2>My Wishlist</h2><p><span id="wishlistDrawerCount">0</span> saved products</p></div>
+      <button type="button" class="icon-button" data-close-wishlist aria-label="Close wishlist"><i class="fa-solid fa-xmark"></i></button>
     </div>
-  </section>
-</div>
+    <div id="wishlistDrawerList" class="drawer-content"></div>
+    <div id="wishlistDrawerEmpty" class="drawer-content hidden">
+      <div class="empty-state"><div class="empty-icon"><i class="fa-regular fa-heart"></i></div><h2>Wishlist is empty</h2><p>Tap the heart icon on a product to save it.</p></div>
+    </div>
+    <div id="wishlistDrawerFooter" class="drawer-footer hidden">
+      <div class="drawer-footer-grid">
+        <button type="button" class="primary-button" data-add-all-wishlist>Add All to Cart</button>
+        <a class="secondary-button" href="wishlist.html">Full Wishlist</a>
+      </div>
+    </div>
+  </aside>
 
-<div id="storeToast" class="toast"></div>
+  <div id="savedWishlistPopup" class="popup-overlay">
+    <section class="saved-popup">
+      <div class="popup-top">
+        <div><div class="product-category">Welcome back</div><h2>You have <span id="savedWishlistPopupCount">0</span> saved products</h2><p>Your saved wishlist is still available.</p></div>
+        <button type="button" class="icon-button" data-close-saved-popup aria-label="Close popup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="savedWishlistPopupList" class="popup-list"></div>
+      <div class="popup-actions">
+        <button type="button" class="danger-button" data-popup-open-wishlist><i class="fa-solid fa-heart"></i> View Saved Items</button>
+        <button type="button" class="primary-button" data-close-saved-popup>Continue Shopping</button>
+      </div>
+    </section>
+  </div>
 
+  <div id="storeToast" class="toast"></div>
+
+  <script>
+    document.getElementById("catalogHeaderSearch")?.addEventListener("submit", event => {
+      event.preventDefault();
+      const input = document.getElementById("catalogHeaderSearchInput");
+      const term = String(input?.value || "").trim();
+      if (!term) return;
+      const search = document.getElementById("productSearch");
+      if (search) {
+        search.value = term;
+        search.dispatchEvent(new Event("input", { bubbles: true }));
+        document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  </script>
   <script src="js/products.js"></script>
   <script src="js/wishlist.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/customer-auth.js"></script>
   <script src="js/backend-client.js"></script>
   <script src="js/ai-helper.js"></script>
 </body>

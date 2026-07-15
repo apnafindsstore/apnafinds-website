@@ -370,7 +370,7 @@
       image: String(
         item.image ||
         item.imageUrl ||
-        "images/products/apnafinds-product.svg"
+        "images/products/product-photo-unavailable.jpg"
       )
     }));
   }
@@ -470,8 +470,14 @@
         order.paymentMethod || order.payment || "COD",
         order.paymentStatus
           ? `(${order.paymentStatus})`
+          : "",
+        Number(order.amountPaid || 0) > 0
+          ? `Advance paid: ${money(order.amountPaid)}`
+          : "",
+        Number(order.balanceDue || 0) > 0
+          ? `COD balance: ${money(order.balanceDue)}`
           : ""
-      ].filter(Boolean).join(" ");
+      ].filter(Boolean).join(" · ");
 
     document.getElementById("resultItems").innerHTML =
       items.length
@@ -480,7 +486,7 @@
             <img
               src="${escapeHTML(item.image)}"
               alt="${escapeHTML(item.name)}"
-              onerror="this.src='images/products/apnafinds-product.svg'"
+              onerror="this.src='images/products/product-photo-unavailable.jpg'"
             >
             <div>
               <strong>${escapeHTML(item.name)}</strong>

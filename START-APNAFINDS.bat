@@ -39,6 +39,9 @@ echo  Admin login:         http://localhost:3000/admin-login.html
 echo  Admin dashboard:     http://localhost:3000/admin.html
 echo  Admin management:    http://localhost:3000/admin-management.html
 echo  Admin logistics:     http://localhost:3000/admin-logistics.html
+echo  Seller account:      http://localhost:3000/admin-seller.html
+echo  Payments:            http://localhost:3000/admin-payments.html
+echo  Customer details:    http://localhost:3000/admin-customers.html
 echo.
 echo  First local admin login:
 echo  Email:    admin@apnafinds.local

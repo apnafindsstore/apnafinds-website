@@ -1,28 +1,1975 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Returns | ApnaFinds</title>
+  <title>Returns & Refunds | ApnaFinds</title>
 
   <meta
-    http-equiv="refresh"
-    content="0; url=returns-center.html"
+    name="description"
+    content="Find your ApnaFinds order and request cancellation, return, replacement or refund."
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
   >
 
   <script>
-    window.location.replace("returns-center.html");
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          },
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B",
+              cream: "#FAF7F2"
+            }
+          }
+        }
+      }
+    };
   </script>
+
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(15,92,74,.08), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(245,158,11,.09), transparent 28%),
+        #FAF7F2;
+    }
+
+    .hero-gradient {
+      background:
+        radial-gradient(circle at 88% 10%, rgba(245,158,11,.25), transparent 28%),
+        radial-gradient(circle at 10% 90%, rgba(255,255,255,.08), transparent 30%),
+        linear-gradient(135deg, #0F5C4A 0%, #114D41 44%, #0A3622 100%);
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(255,255,255,.96);
+      box-shadow: 0 22px 65px -32px rgba(10,54,34,.36);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .request-option {
+      transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .request-option:hover {
+      transform: translateY(-2px);
+      border-color: rgba(15,92,74,.42);
+    }
+
+    .request-option.active {
+      border-color: #0F5C4A;
+      background: #ECFDF5;
+      box-shadow: 0 0 0 4px rgba(15,92,74,.09);
+    }
+
+    .section-hidden {
+      display: none !important;
+    }
+
+    .toast {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 120%);
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .status-pill::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .status-green { color: #047857; background: #ECFDF5; }
+    .status-blue { color: #1D4ED8; background: #EFF6FF; }
+    .status-amber { color: #B45309; background: #FFFBEB; }
+    .status-red { color: #B91C1C; background: #FEF2F2; }
+    .status-gray { color: #4B5563; background: #F3F4F6; }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: #0F5C4A;
+    }
+  </style>
+
   <link rel="stylesheet" href="css/ai-helper.css">
 </head>
 
-<body>
-  <p>
-    Opening the
-    <a href="returns-center.html">ApnaFinds Returns Center</a>…
-  </p>
+<body class="min-h-screen font-sans text-gray-800 antialiased">
+
+  <nav class="sticky top-0 z-50 border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-brand-green text-white shadow-lg shadow-brand-green/20">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </span>
+
+        <span class="text-xl font-black sm:text-2xl">
+          <span class="text-brand-green">Apna</span><span class="text-brand-orange">Finds.</span>
+        </span>
+      </a>
+
+      <div class="hidden items-center gap-7 text-sm font-bold text-gray-700 md:flex">
+        <a href="index.html" class="hover:text-brand-green">Home</a>
+        <a href="products.html" class="hover:text-brand-green">Products</a>
+        <a href="track-order.html" class="hover:text-brand-green">Track Order</a>
+        <a href="account.html" class="hover:text-brand-green">Account</a>
+      </div>
+
+      <a
+        href="cart.html"
+        class="grid h-11 w-11 place-items-center rounded-xl bg-green-50 text-brand-green"
+        aria-label="Cart"
+      >
+        <i class="fa-solid fa-bag-shopping"></i>
+      </a>
+
+    </div>
+  </nav>
+
+  <header class="hero-gradient overflow-hidden text-white">
+    <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_.9fr]">
+
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-3 text-xs font-black uppercase tracking-[.16em]">
+          <i class="fa-solid fa-rotate-left text-brand-orange"></i>
+          Customer resolution centre
+        </span>
+
+        <h1 class="mt-7 text-4xl font-black tracking-tight sm:text-6xl">
+          Returns, replacements
+          <br>
+          and refunds.
+        </h1>
+
+        <p class="mt-5 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
+          Find your order using the Order ID and registered phone number or email. The request is saved directly to the ApnaFinds server and appears in Admin Management.
+        </p>
+      </div>
+
+      <div class="rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur">
+        <div id="serverStatus" class="flex items-center gap-3">
+          <span id="serverStatusIcon" class="grid h-12 w-12 place-items-center rounded-2xl bg-amber-400 text-gray-950">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          </span>
+
+          <div>
+            <p class="text-xs font-black uppercase tracking-[.14em] text-white/50">
+              Server connection
+            </p>
+            <p id="serverStatusText" class="mt-1 font-black">
+              Checking ApnaFinds server…
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-3 gap-3 text-center text-xs font-bold text-white/70">
+          <div class="rounded-2xl bg-black/10 p-4">
+            <i class="fa-solid fa-ban text-brand-orange"></i>
+            <p class="mt-2">Cancel</p>
+          </div>
+
+          <div class="rounded-2xl bg-black/10 p-4">
+            <i class="fa-solid fa-rotate-left text-brand-orange"></i>
+            <p class="mt-2">Return</p>
+          </div>
+
+          <div class="rounded-2xl bg-black/10 p-4">
+            <i class="fa-solid fa-money-bill-transfer text-brand-orange"></i>
+            <p class="mt-2">Refund</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+
+    <section class="glass-card rounded-[2rem] p-6 sm:p-8">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.18em] text-brand-green">
+            Step 1
+          </p>
+          <h2 class="mt-2 text-2xl font-black text-gray-900">
+            Find your order
+          </h2>
+          <p class="mt-2 text-sm leading-6 text-gray-500">
+            Enter the exact Order ID and the phone number or email used during checkout.
+          </p>
+        </div>
+
+        <a
+          href="track-order.html"
+          class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-black text-brand-green"
+        >
+          <i class="fa-solid fa-location-dot"></i>
+          Track instead
+        </a>
+      </div>
+
+      <form id="lookupForm" class="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
+        <label class="grid gap-2 text-sm font-bold text-gray-700">
+          Order ID
+          <input
+            id="orderIdInput"
+            type="text"
+            required
+            autocomplete="off"
+            placeholder="Example: APNA-DEMO-1001"
+            class="rounded-xl border border-gray-200 bg-white px-4 py-3.5 uppercase outline-none transition focus:border-brand-green focus:ring-4 focus:ring-brand-green/10"
+          >
+        </label>
+
+        <label class="grid gap-2 text-sm font-bold text-gray-700">
+          Phone number or email
+          <input
+            id="contactInput"
+            type="text"
+            required
+            autocomplete="email"
+            placeholder="Registered phone or email"
+            class="rounded-xl border border-gray-200 bg-white px-4 py-3.5 outline-none transition focus:border-brand-green focus:ring-4 focus:ring-brand-green/10"
+          >
+        </label>
+
+        <button
+          id="findOrderButton"
+          type="submit"
+          class="self-end rounded-xl bg-brand-green px-7 py-3.5 font-black text-white transition hover:bg-brand-dark disabled:cursor-wait disabled:opacity-60"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          Find Order
+        </button>
+      </form>
+
+      <div
+        id="lookupMessage"
+        class="mt-5 hidden rounded-2xl border p-4 text-sm font-semibold leading-6"
+      ></div>
+    </section>
+
+    <section id="orderSection" class="section-hidden mt-7">
+      <div class="grid gap-7 xl:grid-cols-[1fr_390px]">
+
+        <div class="space-y-7">
+
+          <article class="glass-card rounded-[2rem] p-6 sm:p-8">
+            <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-brand-orange">
+                  Order found
+                </p>
+
+                <h2 id="orderNumber" class="mt-2 text-2xl font-black text-gray-900">
+                  —
+                </h2>
+
+                <p id="orderDate" class="mt-2 text-sm text-gray-500">
+                  —
+                </p>
+              </div>
+
+              <span id="orderStatus" class="status-pill status-gray">
+                Order status
+              </span>
+            </div>
+
+            <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div class="rounded-2xl bg-gray-50 p-4">
+                <p class="text-[10px] font-black uppercase tracking-wider text-gray-400">
+                  Order total
+                </p>
+                <p id="orderTotal" class="mt-2 text-lg font-black text-gray-900">₹0</p>
+              </div>
+
+              <div class="rounded-2xl bg-gray-50 p-4">
+                <p class="text-[10px] font-black uppercase tracking-wider text-gray-400">
+                  Advance paid
+                </p>
+                <p id="advancePaid" class="mt-2 text-lg font-black text-brand-green">₹0</p>
+              </div>
+
+              <div class="rounded-2xl bg-gray-50 p-4">
+                <p class="text-[10px] font-black uppercase tracking-wider text-gray-400">
+                  COD balance
+                </p>
+                <p id="codBalance" class="mt-2 text-lg font-black text-gray-900">₹0</p>
+              </div>
+
+              <div class="rounded-2xl bg-gray-50 p-4">
+                <p class="text-[10px] font-black uppercase tracking-wider text-gray-400">
+                  Payment
+                </p>
+                <p id="paymentStatus" class="mt-2 text-sm font-black leading-6 text-gray-900">—</p>
+              </div>
+            </div>
+          </article>
+
+          <article id="existingRequestsCard" class="glass-card section-hidden rounded-[2rem] p-6 sm:p-8">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[.18em] text-blue-600">
+                Existing requests
+              </p>
+              <h2 class="mt-2 text-2xl font-black text-gray-900">
+                Request status
+              </h2>
+            </div>
+
+            <div id="existingRequestsList" class="mt-6 space-y-4"></div>
+          </article>
+
+          <article id="newRequestCard" class="glass-card rounded-[2rem] p-6 sm:p-8">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[.18em] text-brand-green">
+                Step 2
+              </p>
+              <h2 class="mt-2 text-2xl font-black text-gray-900">
+                Choose the request
+              </h2>
+            </div>
+
+            <div id="requestOptions" class="mt-6 grid gap-4 sm:grid-cols-3"></div>
+
+            <div
+              id="eligibilityMessage"
+              class="mt-5 hidden rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-6 text-amber-900"
+            ></div>
+          </article>
+
+          <article id="itemsCard" class="glass-card rounded-[2rem] p-6 sm:p-8">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[.18em] text-brand-orange">
+                Step 3
+              </p>
+              <h2 class="mt-2 text-2xl font-black text-gray-900">
+                Select products
+              </h2>
+              <p class="mt-2 text-sm text-gray-500">
+                For cancellation, the complete order is selected automatically.
+              </p>
+            </div>
+
+            <div id="orderItems" class="mt-6 space-y-4"></div>
+          </article>
+
+          <article id="detailsCard" class="glass-card rounded-[2rem] p-6 sm:p-8">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[.18em] text-brand-green">
+                Step 4
+              </p>
+              <h2 class="mt-2 text-2xl font-black text-gray-900">
+                Request details
+              </h2>
+            </div>
+
+            <div class="mt-6 grid gap-5 sm:grid-cols-2">
+              <label class="grid gap-2 text-sm font-bold text-gray-700">
+                Reason
+                <select
+                  id="reasonSelect"
+                  class="rounded-xl border border-gray-200 bg-white px-4 py-3.5 outline-none focus:border-brand-green"
+                >
+                  <option value="">Select a reason</option>
+                  <option>Changed my mind</option>
+                  <option>Ordered by mistake</option>
+                  <option>Damaged product</option>
+                  <option>Defective product</option>
+                  <option>Wrong product received</option>
+                  <option>Product different from description</option>
+                  <option>Missing parts or accessories</option>
+                  <option>Other</option>
+                </select>
+              </label>
+
+              <label class="grid gap-2 text-sm font-bold text-gray-700">
+                Preferred refund method
+                <select
+                  id="refundMethod"
+                  class="rounded-xl border border-gray-200 bg-white px-4 py-3.5 outline-none focus:border-brand-green"
+                >
+                  <option>Original payment method</option>
+                  <option>UPI transfer</option>
+                  <option>Bank transfer</option>
+                  <option>Store credit</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="mt-5 grid gap-2 text-sm font-bold text-gray-700">
+              Additional details
+              <textarea
+                id="detailsInput"
+                rows="4"
+                placeholder="Explain the problem and include useful details."
+                class="resize-y rounded-xl border border-gray-200 bg-white px-4 py-3.5 outline-none focus:border-brand-green"
+              ></textarea>
+            </label>
+
+            <button
+              id="submitRequestButton"
+              type="button"
+              class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-6 py-4 font-black text-white transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <i class="fa-solid fa-paper-plane"></i>
+              Submit Request
+            </button>
+          </article>
+
+        </div>
+
+        <aside class="space-y-7">
+
+          <article class="glass-card sticky top-28 rounded-[2rem] p-6">
+            <p class="text-xs font-black uppercase tracking-[.18em] text-brand-orange">
+              Request summary
+            </p>
+
+            <div class="mt-5 space-y-4 text-sm">
+              <div class="flex justify-between gap-4">
+                <span class="text-gray-500">Order</span>
+                <strong id="summaryOrder">—</strong>
+              </div>
+
+              <div class="flex justify-between gap-4">
+                <span class="text-gray-500">Request</span>
+                <strong id="summaryType">Not selected</strong>
+              </div>
+
+              <div class="flex justify-between gap-4">
+                <span class="text-gray-500">Products</span>
+                <strong id="summaryQuantity">0</strong>
+              </div>
+
+              <div class="flex justify-between gap-4 border-t border-gray-100 pt-4">
+                <span class="text-gray-500">Estimated value</span>
+                <strong id="summaryValue" class="text-brand-green">₹0</strong>
+              </div>
+            </div>
+
+            <div class="mt-6 rounded-2xl bg-amber-50 p-4 text-xs font-semibold leading-6 text-amber-900">
+              <i class="fa-solid fa-circle-info mr-2"></i>
+              Final refund approval and amount depend on product verification, payment method and the seller’s policy.
+            </div>
+          </article>
+
+        </aside>
+
+      </div>
+    </section>
+
+    <section id="successSection" class="section-hidden mt-7">
+      <article class="glass-card rounded-[2rem] p-8 text-center sm:p-12">
+        <span class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-green-100 text-3xl text-brand-green">
+          <i class="fa-solid fa-circle-check"></i>
+        </span>
+
+        <p class="mt-6 text-xs font-black uppercase tracking-[.18em] text-brand-green">
+          Request submitted
+        </p>
+
+        <h2 class="mt-3 text-3xl font-black text-gray-900">
+          Your request was saved successfully.
+        </h2>
+
+        <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-gray-500">
+          Request ID:
+          <strong id="successRequestId" class="text-gray-900">—</strong>.
+          The request is visible in Admin Management and will update automatically in demo mode.
+        </p>
+
+        <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <button
+            id="checkAgainButton"
+            type="button"
+            class="rounded-xl bg-brand-green px-6 py-3.5 font-black text-white"
+          >
+            Check Request Status
+          </button>
+
+          <a
+            href="account.html"
+            class="rounded-xl border border-gray-200 bg-white px-6 py-3.5 font-black text-gray-700"
+          >
+            Open My Account
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <section class="mt-12">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-brand-orange">
+          Policy summary
+        </p>
+        <h2 class="mt-3 text-3xl font-black text-gray-900">
+          Cancellation, return and refund conditions
+        </h2>
+      </div>
+
+      <div class="mt-7 grid gap-5 md:grid-cols-3">
+        <article class="glass-card rounded-3xl p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-red-50 text-red-600">
+            <i class="fa-solid fa-ban"></i>
+          </span>
+          <h3 class="mt-5 text-xl font-black">Cancellation</h3>
+          <p class="mt-3 text-sm leading-7 text-gray-600">
+            Orders can normally be cancelled before dispatch. A paid COD advance can be reviewed for refund after cancellation approval.
+          </p>
+        </article>
+
+        <article class="glass-card rounded-3xl p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-green-50 text-brand-green">
+            <i class="fa-solid fa-rotate-left"></i>
+          </span>
+          <h3 class="mt-5 text-xl font-black">Return or replacement</h3>
+          <p class="mt-3 text-sm leading-7 text-gray-600">
+            Delivered products may be eligible when damaged, defective, incorrect or materially different from the description.
+          </p>
+        </article>
+
+        <article class="glass-card rounded-3xl p-6">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-amber-50 text-brand-orange">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+          </span>
+          <h3 class="mt-5 text-xl font-black">Refund processing</h3>
+          <p class="mt-3 text-sm leading-7 text-gray-600">
+            Refunds require seller approval. Demo mode updates the request automatically; real refunds require a connected payment provider or verified payout.
+          </p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#071A14] text-white">
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+      <div>
+        <p class="text-xl font-black">
+          Apna<span class="text-brand-orange">Finds.</span>
+        </p>
+        <p class="mt-4 text-sm leading-7 text-gray-400">
+          Smart Finds. Better Living.
+        </p>
+      </div>
+
+      <div>
+        <p class="font-black">Store</p>
+        <div class="mt-4 grid gap-3 text-sm text-gray-400">
+          <a href="products.html" class="hover:text-white">Products</a>
+          <a href="categories.html" class="hover:text-white">Categories</a>
+          <a href="account.html" class="hover:text-white">Account</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-black">Support</p>
+        <div class="mt-4 grid gap-3 text-sm text-gray-400">
+          <a href="contact.html" class="hover:text-white">Contact</a>
+          <a href="track-order.html" class="hover:text-white">Track Order</a>
+          <a href="shipping.html" class="hover:text-white">Shipping</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-black">Policies</p>
+        <div class="mt-4 grid gap-3 text-sm text-gray-400">
+          <a href="privacy.html" class="hover:text-white">Privacy</a>
+          <a href="terms.html" class="hover:text-white">Terms</a>
+          <a href="returns-center.html" class="hover:text-white">Returns & Refunds</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 py-6 text-center text-xs text-gray-500">
+      © <span id="currentYear"></span> ApnaFinds.
+    </div>
+  </footer>
+
+  <div
+    id="toast"
+    class="toast fixed bottom-5 left-1/2 z-[120] max-w-[calc(100%-2rem)] rounded-xl bg-gray-950 px-5 py-3 text-center text-sm font-bold text-white shadow-2xl"
+    role="status"
+    aria-live="polite"
+  ></div>
+
   <script src="js/backend-client.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const ORDERS_KEY = "apnafinds_orders";
+      const RETURNS_KEY = "apnafinds_returns";
+
+      const elements = {
+        lookupForm: document.getElementById("lookupForm"),
+        orderIdInput: document.getElementById("orderIdInput"),
+        contactInput: document.getElementById("contactInput"),
+        findOrderButton: document.getElementById("findOrderButton"),
+        lookupMessage: document.getElementById("lookupMessage"),
+
+        orderSection: document.getElementById("orderSection"),
+        successSection: document.getElementById("successSection"),
+
+        orderNumber: document.getElementById("orderNumber"),
+        orderDate: document.getElementById("orderDate"),
+        orderStatus: document.getElementById("orderStatus"),
+        orderTotal: document.getElementById("orderTotal"),
+        advancePaid: document.getElementById("advancePaid"),
+        codBalance: document.getElementById("codBalance"),
+        paymentStatus: document.getElementById("paymentStatus"),
+
+        existingRequestsCard: document.getElementById("existingRequestsCard"),
+        existingRequestsList: document.getElementById("existingRequestsList"),
+        newRequestCard: document.getElementById("newRequestCard"),
+
+        requestOptions: document.getElementById("requestOptions"),
+        eligibilityMessage: document.getElementById("eligibilityMessage"),
+        itemsCard: document.getElementById("itemsCard"),
+        orderItems: document.getElementById("orderItems"),
+        detailsCard: document.getElementById("detailsCard"),
+
+        reasonSelect: document.getElementById("reasonSelect"),
+        refundMethod: document.getElementById("refundMethod"),
+        detailsInput: document.getElementById("detailsInput"),
+        submitRequestButton: document.getElementById("submitRequestButton"),
+
+        summaryOrder: document.getElementById("summaryOrder"),
+        summaryType: document.getElementById("summaryType"),
+        summaryQuantity: document.getElementById("summaryQuantity"),
+        summaryValue: document.getElementById("summaryValue"),
+
+        successRequestId: document.getElementById("successRequestId"),
+        checkAgainButton: document.getElementById("checkAgainButton"),
+
+        serverStatusIcon: document.getElementById("serverStatusIcon"),
+        serverStatusText: document.getElementById("serverStatusText"),
+        toast: document.getElementById("toast")
+      };
+
+      let currentOrder = null;
+      let currentReturns = [];
+      let selectedType = "";
+      let selectedItems = new Map();
+      let currentContact = "";
+      let serverAvailable = false;
+      let toastTimer = null;
+
+      function readArray(key) {
+        try {
+          const value = JSON.parse(
+            localStorage.getItem(key) || "[]"
+          );
+
+          return Array.isArray(value)
+            ? value
+            : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function writeArray(key, value) {
+        localStorage.setItem(
+          key,
+          JSON.stringify(value)
+        );
+      }
+
+      function escapeHTML(value) {
+        const element =
+          document.createElement("div");
+
+        element.textContent =
+          String(value ?? "");
+
+        return element.innerHTML;
+      }
+
+      function money(value) {
+        return new Intl.NumberFormat(
+          "en-IN",
+          {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+          }
+        ).format(Number(value) || 0);
+      }
+
+      function formatDate(value) {
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+          return "Date unavailable";
+        }
+
+        return new Intl.DateTimeFormat(
+          "en-IN",
+          {
+            dateStyle: "medium",
+            timeStyle: "short"
+          }
+        ).format(date);
+      }
+
+      function normalizeContact(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "");
+      }
+
+      function getOrderId(order) {
+        return String(
+          order?.id ||
+          order?.orderId ||
+          order?.number ||
+          ""
+        );
+      }
+
+      function getItems(order) {
+        if (Array.isArray(order?.items)) {
+          return order.items;
+        }
+
+        if (Array.isArray(order?.products)) {
+          return order.products;
+        }
+
+        if (Array.isArray(order?.cart)) {
+          return order.cart;
+        }
+
+        return [];
+      }
+
+      function getStatus(order) {
+        return String(
+          order?.status ||
+          order?.orderStatus ||
+          "Order placed"
+        );
+      }
+
+      function statusClass(status) {
+        const value =
+          String(status || "").toLowerCase();
+
+        if (
+          value.includes("deliver") ||
+          value.includes("approve") ||
+          value.includes("refund")
+        ) {
+          return "status-green";
+        }
+
+        if (
+          value.includes("ship") ||
+          value.includes("transit") ||
+          value.includes("pickup") ||
+          value.includes("replacement")
+        ) {
+          return "status-blue";
+        }
+
+        if (
+          value.includes("request") ||
+          value.includes("review") ||
+          value.includes("pending") ||
+          value.includes("packed") ||
+          value.includes("confirmed")
+        ) {
+          return "status-amber";
+        }
+
+        if (
+          value.includes("cancel") ||
+          value.includes("reject") ||
+          value.includes("fail")
+        ) {
+          return "status-red";
+        }
+
+        return "status-gray";
+      }
+
+      function statusPill(status) {
+        return `
+          <span class="status-pill ${statusClass(status)}">
+            ${escapeHTML(status || "Unknown")}
+          </span>
+        `;
+      }
+
+      function showToast(message) {
+        elements.toast.textContent = message;
+        elements.toast.classList.add("show");
+
+        window.clearTimeout(toastTimer);
+
+        toastTimer = window.setTimeout(() => {
+          elements.toast.classList.remove("show");
+        }, 2800);
+      }
+
+      function showLookupMessage(
+        message,
+        tone = "error"
+      ) {
+        const tones = {
+          error:
+            "border-red-200 bg-red-50 text-red-700",
+          warning:
+            "border-amber-200 bg-amber-50 text-amber-800",
+          success:
+            "border-green-200 bg-green-50 text-green-800",
+          info:
+            "border-blue-200 bg-blue-50 text-blue-800"
+        };
+
+        elements.lookupMessage.className =
+          `mt-5 rounded-2xl border p-4 text-sm font-semibold leading-6 ${tones[tone] || tones.info}`;
+
+        elements.lookupMessage.textContent =
+          message;
+      }
+
+      function hideLookupMessage() {
+        elements.lookupMessage.classList.add(
+          "hidden"
+        );
+      }
+
+      function setServerStatus(
+        online,
+        message
+      ) {
+        serverAvailable = online;
+
+        elements.serverStatusText.textContent =
+          message;
+
+        elements.serverStatusIcon.className =
+          online
+            ? "grid h-12 w-12 place-items-center rounded-2xl bg-green-400 text-gray-950"
+            : "grid h-12 w-12 place-items-center rounded-2xl bg-red-400 text-gray-950";
+
+        elements.serverStatusIcon.innerHTML =
+          online
+            ? '<i class="fa-solid fa-circle-check"></i>'
+            : '<i class="fa-solid fa-triangle-exclamation"></i>';
+      }
+
+      async function checkServer() {
+        try {
+          await window.ApnaFindsAPI.health();
+
+          setServerStatus(
+            true,
+            "Connected — requests save to Admin Management"
+          );
+        } catch (error) {
+          setServerStatus(
+            false,
+            "Server unavailable — start START-APNAFINDS.bat"
+          );
+        }
+      }
+
+      function localFindOrder(
+        orderId,
+        contact
+      ) {
+        const normalizedOrderId =
+          String(orderId || "")
+            .trim()
+            .toUpperCase();
+
+        const normalizedContact =
+          normalizeContact(contact);
+
+        const orders = [
+          ...readArray(ORDERS_KEY),
+          ...readArray("orderHistory"),
+          ...readArray("orders")
+        ];
+
+        return orders.find(order => {
+          const storedId =
+            getOrderId(order)
+              .toUpperCase();
+
+          const phone = normalizeContact(
+            order.phone ||
+            order.mobile ||
+            order.shippingAddress?.phone
+          );
+
+          const email = normalizeContact(
+            order.email ||
+            order.customerEmail
+          );
+
+          return (
+            storedId === normalizedOrderId &&
+            (
+              phone === normalizedContact ||
+              email === normalizedContact
+            )
+          );
+        }) || null;
+      }
+
+      function saveOrderLocally(order) {
+        const orders =
+          readArray(ORDERS_KEY);
+
+        const orderId = getOrderId(order);
+
+        const index =
+          orders.findIndex(item => {
+            return getOrderId(item) === orderId;
+          });
+
+        if (index >= 0) {
+          orders[index] = {
+            ...orders[index],
+            ...order
+          };
+        } else {
+          orders.unshift(order);
+        }
+
+        writeArray(
+          ORDERS_KEY,
+          orders
+        );
+      }
+
+      function saveReturnLocally(request) {
+        const returns =
+          readArray(RETURNS_KEY);
+
+        const index =
+          returns.findIndex(item => {
+            return String(item.id) ===
+              String(request.id);
+          });
+
+        if (index >= 0) {
+          returns[index] = {
+            ...returns[index],
+            ...request
+          };
+        } else {
+          returns.unshift(request);
+        }
+
+        writeArray(
+          RETURNS_KEY,
+          returns
+        );
+      }
+
+      async function findOrder() {
+        const orderId =
+          elements.orderIdInput.value
+            .trim();
+
+        const contact =
+          elements.contactInput.value
+            .trim();
+
+        if (!orderId || !contact) {
+          showLookupMessage(
+            "Enter both the Order ID and registered phone number or email."
+          );
+          return;
+        }
+
+        currentContact = contact;
+
+        elements.findOrderButton.disabled = true;
+        elements.findOrderButton.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Finding';
+
+        hideLookupMessage();
+
+        try {
+          let bundle = null;
+
+          try {
+            bundle =
+              await window.ApnaFindsAPI.getOrder(
+                orderId,
+                contact
+              );
+
+            serverAvailable = true;
+          } catch (serverError) {
+            const localOrder =
+              localFindOrder(
+                orderId,
+                contact
+              );
+
+            if (!localOrder) {
+              throw serverError;
+            }
+
+            bundle = {
+              order: localOrder,
+              returns:
+                readArray(RETURNS_KEY)
+                  .filter(request => {
+                    return String(
+                      request.orderId
+                    ) ===
+                      String(
+                        getOrderId(localOrder)
+                      );
+                  }),
+              localFallback: true
+            };
+          }
+
+          currentOrder = bundle.order;
+          currentReturns =
+            Array.isArray(bundle.returns)
+              ? bundle.returns
+              : [];
+
+          saveOrderLocally(
+            currentOrder
+          );
+
+          currentReturns.forEach(
+            saveReturnLocally
+          );
+
+          renderOrder();
+
+          showLookupMessage(
+            bundle.localFallback
+              ? "Order found in this browser. Start the Node.js server before submitting a request."
+              : "Order found successfully. Request status is connected to the server.",
+            bundle.localFallback
+              ? "warning"
+              : "success"
+          );
+        } catch (error) {
+          currentOrder = null;
+          currentReturns = [];
+
+          elements.orderSection.classList.add(
+            "section-hidden"
+          );
+          elements.successSection.classList.add(
+            "section-hidden"
+          );
+
+          showLookupMessage(
+            error.message ||
+            "Order not found. Check the Order ID and contact details."
+          );
+        } finally {
+          elements.findOrderButton.disabled = false;
+          elements.findOrderButton.innerHTML =
+            '<i class="fa-solid fa-magnifying-glass mr-2"></i> Find Order';
+        }
+      }
+
+      function getAllowedTypes() {
+        const status =
+          getStatus(currentOrder)
+            .toLowerCase();
+
+        if (
+          [
+            "order placed",
+            "confirmed",
+            "packed",
+            "processing"
+          ].some(value =>
+            status.includes(value)
+          ) &&
+          !status.includes("ship") &&
+          !status.includes("cancel")
+        ) {
+          return [
+            {
+              value: "Cancellation",
+              title: "Cancel order",
+              description:
+                "Cancel the complete order before dispatch.",
+              icon: "fa-ban"
+            }
+          ];
+        }
+
+        if (status.includes("delivered")) {
+          return [
+            {
+              value: "Return",
+              title: "Return & refund",
+              description:
+                "Return selected products for inspection and refund.",
+              icon: "fa-rotate-left"
+            },
+            {
+              value: "Replacement",
+              title: "Replacement",
+              description:
+                "Request replacement for damaged, defective or incorrect products.",
+              icon: "fa-arrow-right-arrow-left"
+            }
+          ];
+        }
+
+        return [];
+      }
+
+      function renderExistingRequests() {
+        if (!currentReturns.length) {
+          elements.existingRequestsCard.classList.add(
+            "section-hidden"
+          );
+          elements.existingRequestsList.innerHTML = "";
+          return;
+        }
+
+        elements.existingRequestsCard.classList.remove(
+          "section-hidden"
+        );
+
+        elements.existingRequestsList.innerHTML =
+          currentReturns.map(request => `
+            <article class="rounded-2xl border border-gray-100 bg-gray-50 p-5">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-wider text-gray-400">
+                    ${escapeHTML(request.id)}
+                  </p>
+                  <h3 class="mt-2 text-lg font-black text-gray-900">
+                    ${escapeHTML(request.type || "Return")} request
+                  </h3>
+                  <p class="mt-2 text-xs leading-6 text-gray-500">
+                    ${escapeHTML(request.reason || "Customer request")}
+                  </p>
+                </div>
+
+                ${statusPill(request.status || "Requested")}
+              </div>
+
+              <div class="mt-4 grid gap-3 text-xs sm:grid-cols-3">
+                <div>
+                  <span class="text-gray-400">Value</span>
+                  <strong class="mt-1 block">
+                    ${money(request.estimatedValue)}
+                  </strong>
+                </div>
+
+                <div>
+                  <span class="text-gray-400">Reverse AWB</span>
+                  <strong class="mt-1 block">
+                    ${escapeHTML(
+                      request.reverseShipment?.awb ||
+                      "Not generated"
+                    )}
+                  </strong>
+                </div>
+
+                <div>
+                  <span class="text-gray-400">Updated</span>
+                  <strong class="mt-1 block">
+                    ${escapeHTML(
+                      formatDate(
+                        request.updatedAt ||
+                        request.createdAt
+                      )
+                    )}
+                  </strong>
+                </div>
+              </div>
+
+              ${
+                request.adminNote
+                  ? `
+                    <p class="mt-4 rounded-xl bg-white p-3 text-xs font-semibold leading-6 text-gray-600">
+                      <strong>Seller note:</strong>
+                      ${escapeHTML(request.adminNote)}
+                    </p>
+                  `
+                  : ""
+              }
+            </article>
+          `).join("");
+      }
+
+      function renderRequestOptions() {
+        selectedType = "";
+        selectedItems.clear();
+
+        const allowed =
+          getAllowedTypes();
+
+        elements.requestOptions.innerHTML =
+          allowed.map(type => `
+            <button
+              type="button"
+              class="request-option rounded-2xl border-2 border-gray-200 bg-white p-5 text-left"
+              data-request-type="${type.value}"
+            >
+              <span class="grid h-12 w-12 place-items-center rounded-2xl bg-green-50 text-lg text-brand-green">
+                <i class="fa-solid ${type.icon}"></i>
+              </span>
+
+              <span class="mt-4 block font-black text-gray-900">
+                ${type.title}
+              </span>
+
+              <span class="mt-2 block text-xs leading-5 text-gray-500">
+                ${type.description}
+              </span>
+            </button>
+          `).join("");
+
+        if (!allowed.length) {
+          const status =
+            getStatus(currentOrder);
+
+          elements.eligibilityMessage.classList.remove(
+            "hidden"
+          );
+
+          elements.eligibilityMessage.innerHTML = `
+            <i class="fa-solid fa-circle-info mr-2"></i>
+            No self-service return or cancellation is available while the order status is
+            <strong>${escapeHTML(status)}</strong>.
+            Contact support when assistance is required.
+          `;
+
+          elements.submitRequestButton.disabled = true;
+        } else {
+          elements.eligibilityMessage.classList.add(
+            "hidden"
+          );
+
+          elements.submitRequestButton.disabled = false;
+        }
+      }
+
+      function renderItems() {
+        const items =
+          getItems(currentOrder);
+
+        if (!items.length) {
+          elements.orderItems.innerHTML = `
+            <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm font-semibold leading-6 text-amber-900">
+              Product details are unavailable for this order. Cancellation can still be requested before dispatch.
+            </div>
+          `;
+
+          return;
+        }
+
+        elements.orderItems.innerHTML =
+          items.map((item, index) => {
+            const quantity = Math.max(
+              1,
+              Number(
+                item.quantity ||
+                item.qty ||
+                1
+              )
+            );
+
+            const price = Math.max(
+              0,
+              Number(
+                item.price ||
+                item.salePrice ||
+                0
+              )
+            );
+
+            return `
+              <article class="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                <div class="flex gap-4">
+                  <input
+                    type="checkbox"
+                    data-item-check="${index}"
+                    class="mt-1 h-5 w-5 shrink-0 accent-brand-green"
+                  >
+
+                  <div class="min-w-0 flex-1">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 class="font-black text-gray-900">
+                          ${escapeHTML(
+                            item.name ||
+                            item.title ||
+                            "Product"
+                          )}
+                        </h3>
+
+                        <p class="mt-1 text-xs text-gray-500">
+                          ${money(price)} each
+                        </p>
+                      </div>
+
+                      <label class="flex items-center gap-2 text-xs font-bold text-gray-500">
+                        Quantity
+                        <select
+                          data-item-quantity="${index}"
+                          disabled
+                          class="rounded-lg border border-gray-200 bg-white px-3 py-2 outline-none"
+                        >
+                          ${Array.from(
+                            { length: quantity },
+                            (_, itemIndex) => `
+                              <option value="${itemIndex + 1}">
+                                ${itemIndex + 1}
+                              </option>
+                            `
+                          ).join("")}
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            `;
+          }).join("");
+      }
+
+      function renderOrder() {
+        elements.successSection.classList.add(
+          "section-hidden"
+        );
+        elements.orderSection.classList.remove(
+          "section-hidden"
+        );
+
+        const orderId =
+          getOrderId(currentOrder);
+
+        const status =
+          getStatus(currentOrder);
+
+        elements.orderNumber.textContent =
+          `Order #${orderId}`;
+
+        elements.orderDate.textContent =
+          `Placed ${formatDate(
+            currentOrder.createdAt ||
+            currentOrder.date ||
+            currentOrder.orderDate
+          )}`;
+
+        elements.orderStatus.className =
+          `status-pill ${statusClass(status)}`;
+
+        elements.orderStatus.textContent =
+          status;
+
+        elements.orderTotal.textContent =
+          money(
+            currentOrder.total ||
+            currentOrder.orderTotal
+          );
+
+        elements.advancePaid.textContent =
+          money(currentOrder.amountPaid);
+
+        elements.codBalance.textContent =
+          money(
+            currentOrder.balanceDue ??
+            Math.max(
+              0,
+              Number(
+                currentOrder.total ||
+                currentOrder.orderTotal ||
+                0
+              ) -
+              Number(
+                currentOrder.amountPaid ||
+                0
+              )
+            )
+          );
+
+        elements.paymentStatus.textContent =
+          [
+            currentOrder.paymentMethod ||
+            "COD",
+            currentOrder.paymentStatus ||
+            "Pending"
+          ].join(" · ");
+
+        elements.summaryOrder.textContent =
+          orderId;
+
+        renderExistingRequests();
+        renderRequestOptions();
+        renderItems();
+        updateSummary();
+
+        elements.orderSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+
+      function selectAllItemsForCancellation() {
+        selectedItems.clear();
+
+        const items =
+          getItems(currentOrder);
+
+        items.forEach((item, index) => {
+          const quantity = Math.max(
+            1,
+            Number(
+              item.quantity ||
+              item.qty ||
+              1
+            )
+          );
+
+          selectedItems.set(index, {
+            id:
+              String(
+                item.id ||
+                item.productId ||
+                index
+              ),
+            name:
+              String(
+                item.name ||
+                item.title ||
+                "Product"
+              ),
+            price:
+              Math.max(
+                0,
+                Number(
+                  item.price ||
+                  item.salePrice ||
+                  0
+                )
+              ),
+            quantity
+          });
+
+          const checkbox =
+            elements.orderItems.querySelector(
+              `[data-item-check="${index}"]`
+            );
+
+          const select =
+            elements.orderItems.querySelector(
+              `[data-item-quantity="${index}"]`
+            );
+
+          if (checkbox) {
+            checkbox.checked = true;
+            checkbox.disabled = true;
+          }
+
+          if (select) {
+            select.value = String(quantity);
+            select.disabled = true;
+          }
+        });
+      }
+
+      function resetItemControls() {
+        elements.orderItems
+          .querySelectorAll("[data-item-check]")
+          .forEach(checkbox => {
+            checkbox.checked = false;
+            checkbox.disabled = false;
+          });
+
+        elements.orderItems
+          .querySelectorAll("[data-item-quantity]")
+          .forEach(select => {
+            select.value = "1";
+            select.disabled = true;
+          });
+
+        selectedItems.clear();
+      }
+
+      function selectedEstimatedValue() {
+        if (
+          selectedType === "Cancellation"
+        ) {
+          return Math.max(
+            0,
+            Number(
+              currentOrder?.amountPaid ||
+              0
+            )
+          );
+        }
+
+        if (
+          selectedType === "Replacement"
+        ) {
+          return 0;
+        }
+
+        let total = 0;
+
+        selectedItems.forEach(item => {
+          total +=
+            Number(item.price || 0) *
+            Number(item.quantity || 0);
+        });
+
+        return total;
+      }
+
+      function updateSummary() {
+        let quantity = 0;
+
+        selectedItems.forEach(item => {
+          quantity +=
+            Number(item.quantity || 0);
+        });
+
+        elements.summaryType.textContent =
+          selectedType ||
+          "Not selected";
+
+        elements.summaryQuantity.textContent =
+          String(quantity);
+
+        elements.summaryValue.textContent =
+          money(
+            selectedEstimatedValue()
+          );
+      }
+
+      function createRequestId() {
+        return (
+          `RET${Date.now()}` +
+          Math.floor(
+            100 + Math.random() * 900
+          )
+        );
+      }
+
+      async function submitRequest() {
+        if (!currentOrder) {
+          showToast(
+            "Find your order first"
+          );
+          return;
+        }
+
+        if (!selectedType) {
+          showToast(
+            "Select cancellation, return or replacement"
+          );
+          return;
+        }
+
+        if (
+          selectedType !== "Cancellation" &&
+          !selectedItems.size
+        ) {
+          showToast(
+            "Select at least one product"
+          );
+          return;
+        }
+
+        const reason =
+          elements.reasonSelect.value;
+
+        const details =
+          elements.detailsInput.value.trim();
+
+        if (!reason) {
+          showToast(
+            "Select a reason"
+          );
+          return;
+        }
+
+        if (
+          reason === "Other" &&
+          details.length < 5
+        ) {
+          showToast(
+            "Enter more details for the request"
+          );
+          return;
+        }
+
+        const orderId =
+          getOrderId(currentOrder);
+
+        const request = {
+          id: createRequestId(),
+          orderId,
+          customerName:
+            String(
+              currentOrder.customerName ||
+              currentOrder.shippingAddress?.name ||
+              "Customer"
+            ),
+          phone:
+            String(
+              currentOrder.phone ||
+              currentOrder.shippingAddress?.phone ||
+              ""
+            ),
+          email:
+            String(
+              currentOrder.email ||
+              ""
+            ),
+          contact:
+            currentContact,
+          type:
+            selectedType,
+          reason,
+          details,
+          refundMethod:
+            elements.refundMethod.value,
+          items:
+            [...selectedItems.values()],
+          estimatedValue:
+            selectedEstimatedValue(),
+          status:
+            "Requested",
+          createdAt:
+            new Date().toISOString(),
+          updatedAt:
+            new Date().toISOString()
+        };
+
+        elements.submitRequestButton.disabled = true;
+        elements.submitRequestButton.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> Submitting';
+
+        try {
+          if (!serverAvailable) {
+            throw new Error(
+              "The ApnaFinds server is not connected. Start START-APNAFINDS.bat and open this page through http://localhost:3000."
+            );
+          }
+
+          const result =
+            await window.ApnaFindsAPI.createReturn(
+              orderId,
+              request
+            );
+
+          const savedRequest =
+            result.request ||
+            request;
+
+          saveReturnLocally(
+            savedRequest
+          );
+
+          currentReturns = [
+            savedRequest,
+            ...currentReturns.filter(item => {
+              return String(item.id) !==
+                String(savedRequest.id);
+            })
+          ];
+
+          elements.successRequestId.textContent =
+            savedRequest.id;
+
+          elements.orderSection.classList.add(
+            "section-hidden"
+          );
+
+          elements.successSection.classList.remove(
+            "section-hidden"
+          );
+
+          elements.successSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+          showToast(
+            "Request submitted successfully"
+          );
+        } catch (error) {
+          showToast(
+            error.message ||
+            "Request could not be submitted"
+          );
+        } finally {
+          elements.submitRequestButton.disabled = false;
+          elements.submitRequestButton.innerHTML =
+            '<i class="fa-solid fa-paper-plane"></i> Submit Request';
+        }
+      }
+
+      elements.lookupForm.addEventListener(
+        "submit",
+        event => {
+          event.preventDefault();
+          findOrder();
+        }
+      );
+
+      elements.requestOptions.addEventListener(
+        "click",
+        event => {
+          const button =
+            event.target.closest(
+              "[data-request-type]"
+            );
+
+          if (!button) {
+            return;
+          }
+
+          selectedType =
+            button.dataset.requestType;
+
+          elements.requestOptions
+            .querySelectorAll(
+              "[data-request-type]"
+            )
+            .forEach(option => {
+              option.classList.toggle(
+                "active",
+                option === button
+              );
+            });
+
+          resetItemControls();
+
+          if (
+            selectedType === "Cancellation"
+          ) {
+            selectAllItemsForCancellation();
+          }
+
+          updateSummary();
+        }
+      );
+
+      elements.orderItems.addEventListener(
+        "change",
+        event => {
+          const checkbox =
+            event.target.closest(
+              "[data-item-check]"
+            );
+
+          const quantitySelect =
+            event.target.closest(
+              "[data-item-quantity]"
+            );
+
+          const items =
+            getItems(currentOrder);
+
+          if (checkbox) {
+            const index =
+              Number(
+                checkbox.dataset.itemCheck
+              );
+
+            const item =
+              items[index];
+
+            const select =
+              elements.orderItems.querySelector(
+                `[data-item-quantity="${index}"]`
+              );
+
+            if (select) {
+              select.disabled =
+                !checkbox.checked;
+            }
+
+            if (
+              checkbox.checked &&
+              item
+            ) {
+              selectedItems.set(
+                index,
+                {
+                  id:
+                    String(
+                      item.id ||
+                      item.productId ||
+                      index
+                    ),
+                  name:
+                    String(
+                      item.name ||
+                      item.title ||
+                      "Product"
+                    ),
+                  price:
+                    Math.max(
+                      0,
+                      Number(
+                        item.price ||
+                        item.salePrice ||
+                        0
+                      )
+                    ),
+                  quantity:
+                    Number(
+                      select?.value ||
+                      1
+                    )
+                }
+              );
+            } else {
+              selectedItems.delete(index);
+            }
+
+            updateSummary();
+          }
+
+          if (
+            quantitySelect &&
+            selectedItems.has(
+              Number(
+                quantitySelect.dataset.itemQuantity
+              )
+            )
+          ) {
+            const index =
+              Number(
+                quantitySelect.dataset.itemQuantity
+              );
+
+            selectedItems.get(index).quantity =
+              Number(
+                quantitySelect.value
+              );
+
+            updateSummary();
+          }
+        }
+      );
+
+      elements.submitRequestButton.addEventListener(
+        "click",
+        submitRequest
+      );
+
+      elements.checkAgainButton.addEventListener(
+        "click",
+        async () => {
+          elements.successSection.classList.add(
+            "section-hidden"
+          );
+
+          await findOrder();
+        }
+      );
+
+      document.getElementById(
+        "currentYear"
+      ).textContent =
+        new Date().getFullYear();
+
+      const parameters =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      const orderParameter =
+        parameters.get("order") ||
+        parameters.get("orderId") ||
+        "";
+
+      const contactParameter =
+        parameters.get("contact") ||
+        "";
+
+      if (orderParameter) {
+        elements.orderIdInput.value =
+          orderParameter;
+      }
+
+      if (contactParameter) {
+        elements.contactInput.value =
+          contactParameter;
+      }
+
+      checkServer().then(() => {
+        if (
+          orderParameter &&
+          contactParameter
+        ) {
+          findOrder();
+        }
+      });
+    })();
+  </script>
+
   <script src="js/ai-helper.js"></script>
 </body>
 </html>

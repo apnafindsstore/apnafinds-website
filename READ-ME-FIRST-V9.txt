@@ -1,0 +1,56 @@
+APNAFINDS V9 — PREMIUM ACCOUNTS + GUEST OTP CHECKOUT
+=====================================================
+
+WHAT IS INCLUDED
+----------------
+1. Guest customers can browse, use cart, wishlist and checkout without login.
+2. Guest checkout requires verified mobile OTP before order placement.
+3. Registered customers verify both email and mobile during account creation.
+4. Login supports password or OTP.
+5. Passwords are hashed on the server and never visible to admin.
+6. Registered members receive:
+   - saved-account identity
+   - faster checkout
+   - linked order history
+   - optional WhatsApp and email offers
+7. Admin customer management shows:
+   - registered or guest
+   - phone/email verification
+   - marketing consent
+   - order/payment details
+8. Cart and product pages synchronize both old and new browser cart keys.
+9. Existing old cart typo "quanity" is migrated automatically.
+10. Checkout only clears the cart after server-confirmed order completion.
+
+IMPORTANT OTP INFORMATION
+-------------------------
+OTP_MODE=demo is only for local/live testing. It displays the test OTP.
+
+Real phone SMS OTP is not unlimited free. For production:
+- connect an SMS provider through OTP_SMS_WEBHOOK_URL;
+- set OTP_MODE=production;
+- set OTP_DEMO_EXPOSE=false.
+
+Email OTP can use SMTP by configuring SMTP_HOST, SMTP_USER and SMTP_PASS.
+
+MARKETING CONSENT
+-----------------
+WhatsApp/email offer consent is optional and stored separately.
+Do not send promotional messages to customers who did not consent.
+
+DEPLOYMENT
+----------
+1. Replace your current project with this V9 project.
+2. Never upload .env to GitHub.
+3. Add the values from .env.example to Railway Variables.
+4. Commit and push to GitHub.
+5. Railway automatically redeploys.
+6. Test OTP in demo mode before connecting a paid SMS provider.
+
+SECURITY
+--------
+- Admin cannot view customer passwords or OTPs.
+- OTP expires and has attempt limits.
+- Customer sessions are signed.
+- Guest orders require phone verification.
+- Use a long CUSTOMER_SESSION_SECRET in Railway.

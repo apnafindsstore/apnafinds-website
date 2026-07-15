@@ -27,9 +27,17 @@
     };
 
     try {
+      const customerSession =
+        window.ApnaFindsCustomerAuth?.getSession?.();
+
       const response = await fetch(path, {
         ...options,
-        headers,
+        headers: {
+          ...headers,
+          ...(customerSession?.token
+            ? { "x-customer-session": customerSession.token }
+            : {})
+        },
         signal: controller.signal
       });
 
@@ -120,6 +128,20 @@
       return request("/api/orders", {
         method: "POST",
         body: JSON.stringify(order)
+      });
+    },
+
+    sendOtp(payload) {
+      return request("/api/auth/otp/send", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+    },
+
+    verifyOtp(payload) {
+      return request("/api/auth/otp/verify", {
+        method: "POST",
+        body: JSON.stringify(payload)
       });
     },
 

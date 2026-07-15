@@ -9,7 +9,7 @@ const order = {
       name: "Electric Garlic Chopper",
       price: 499,
       quantity: 1,
-      image: "images/products/apnafinds-product.svg"
+      image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1000&h=1000&q=85"
     }
   ],
   subtotal: 499,

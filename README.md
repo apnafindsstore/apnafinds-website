@@ -136,3 +136,12 @@ Send the secret using `x-apnafinds-webhook-secret`, matching `LOGISTICS_WEBHOOK_
 ## Important limitations
 
 The code automates the software workflow. A real courier account is still required to collect and transport products. Real prepaid refunds require the refund API of your connected payment gateway. For production scale, replace the JSON file database with PostgreSQL, MySQL, MongoDB or another managed database and use HTTPS on a publicly hosted Node.js server.
+
+
+## Corrected V4 catalogue
+
+- `public/index.html` is byte-for-byte the supplied Index code and was not redesigned.
+- `public/products.html` is visibly redeveloped to match the Index visual style.
+- A one-time browser migration replaces old saved SVG/cartoon product images with photographic URLs.
+- Open `http://localhost:3000/products.html?v=4` or double-click `OPEN-CORRECTED-PRODUCTS.bat` after the server starts.
+- Press `Ctrl + F5` once after upgrading from an older folder.

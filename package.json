@@ -1,19 +1,20 @@
 {
-  "name": "apnafinds-full-automatic-admin",
-  "version": "3.0.0",
+  "name": "apnafinds-premium-otp-guest-checkout",
+  "version": "9.0.0",
   "private": true,
-  "description": "ApnaFinds full website with preserved index, photographic product placeholders, server-backed admin and automatic logistics.",
+  "description": "ApnaFinds premium customer accounts, guest checkout with OTP verification, secure admin and synchronized cart.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check server/lib/storage.js && node --check server/lib/logistics.js && node --check server/lib/automation.js && node --check server/lib/assistant.js && node --check server/lib/admin-auth.js && node --check public/js/admin-auth.js && node --check public/js/backend-client.js && node --check public/js/admin-logistics.js && node --check public/js/customer-tracking.js"
+    "check": "node --check server.js && node --check server/lib/storage.js && node --check server/lib/logistics.js && node --check server/lib/automation.js && node --check server/lib/assistant.js && node --check server/lib/admin-auth.js && node --check public/js/admin-auth.js && node --check public/js/backend-client.js && node --check public/js/admin-logistics.js && node --check public/js/customer-tracking.js && node --check server/lib/customer-auth.js && node --check public/js/customer-auth.js && node --check public/js/products.js"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "nodemailer": "^9.0.3"
   }
 }

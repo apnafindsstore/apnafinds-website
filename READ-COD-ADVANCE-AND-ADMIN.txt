@@ -1,0 +1,65 @@
+APNAFINDS PERFECT WEBSITE V5
+============================
+
+WHAT WAS ADDED
+--------------
+1. COD advance payment:
+   - Customer must pay an online advance before placing a COD order.
+   - Default amount: ₹49.
+   - Seller can change it from ₹10 to ₹49.
+   - The remaining balance is shown as payable on delivery.
+   - Courier booking waits until advance payment is paid or verified.
+
+2. Seller Account page:
+   http://localhost:3000/admin-seller.html
+
+3. Payments page:
+   http://localhost:3000/admin-payments.html
+
+4. Full Customer Details page:
+   http://localhost:3000/admin-customers.html
+
+CUSTOMER PASSWORDS
+------------------
+Passwords are intentionally not visible to the seller or administrator.
+A secure store must never show customer passwords, OTPs, UPI PINs or card
+details. Use password reset instead.
+
+PAYMENT DETAILS YOU CAN SEE
+---------------------------
+- Payment method
+- COD advance required
+- Advance amount paid
+- Payment status
+- Transaction/reference ID
+- Balance payable on delivery
+- Order total
+- Payment date
+
+HOW TO START
+------------
+1. Extract the ZIP.
+2. Double-click START-APNAFINDS.bat.
+3. Keep the black window open.
+4. Open http://localhost:3000.
+
+ADMIN LOGIN
+-----------
+Email: admin@apnafinds.local
+Password: ApnaFinds@123
+
+DEFAULT COD ADVANCE
+-------------------
+₹49 in demo automatic-payment mode.
+
+Change it in Admin Seller Account or in .env:
+COD_ADVANCE_AMOUNT=49
+COD_ADVANCE_MODE=demo
+
+REAL PAYMENT WARNING
+--------------------
+Demo mode simulates payment locally. It does not transfer real money.
+For real advance collection, connect Razorpay, Cashfree, PhonePe, PayU or
+another gateway and verify payments server-side.
+
+Your exact Index page remains unchanged.

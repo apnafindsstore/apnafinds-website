@@ -63,6 +63,35 @@ function orderMatchesContact(
   );
 }
 
+
+function codAdvanceIsRequired(order) {
+  return Boolean(
+    order?.advancePaymentRequired ||
+    (
+      String(order?.paymentMethod || "").toUpperCase().includes("COD") &&
+      Number(order?.advanceAmount || 0) > 0
+    )
+  );
+}
+
+function codAdvanceIsPaid(order) {
+  if (!codAdvanceIsRequired(order)) {
+    return true;
+  }
+
+  const status = String(
+    order?.advancePaymentStatus ||
+    order?.paymentStatus ||
+    ""
+  ).toLowerCase();
+
+  return (
+    status.includes("paid") ||
+    status.includes("verified") ||
+    status.includes("approved")
+  );
+}
+
 function publicOrderBundle(
   database,
   order
@@ -158,7 +187,10 @@ async function createOrUpdateOrder(
       });
     });
 
-  if (isAutoBookingEnabled()) {
+  if (
+    isAutoBookingEnabled() &&
+    codAdvanceIsPaid(order)
+  ) {
     try {
       await bookShipmentForOrder(orderId);
     } catch (error) {
@@ -197,6 +229,12 @@ async function bookShipmentForOrder(
   if (!order) {
     throw new Error(
       "Order not found"
+    );
+  }
+
+  if (!codAdvanceIsPaid(order)) {
+    throw new Error(
+      "COD advance payment must be paid or verified before courier booking"
     );
   }
 
@@ -568,6 +606,42 @@ async function advanceDemoReturns() {
       request.updatedAt = now;
       request.demoStageUpdatedAt = now;
       request.adminNote = request.adminNote || "Updated automatically by demo workflow";
+
+      if (nextStatus === "Refunded") {
+        const connectedOrder =
+          database.orders.find(order => {
+            return getOrderId(order) === request.orderId;
+          });
+
+        if (connectedOrder) {
+          connectedOrder.refundStatus = "Refunded";
+          connectedOrder.refundAmount =
+            Number(request.estimatedValue || 0);
+          connectedOrder.refundRequestId =
+            request.id;
+          connectedOrder.updatedAt = now;
+
+          if (request.type === "Cancellation") {
+            connectedOrder.paymentStatus =
+              "COD advance refunded";
+          }
+        }
+
+        const payment =
+          database.payments?.find(item => {
+            return item.orderId === request.orderId;
+          });
+
+        if (
+          payment &&
+          request.type === "Cancellation"
+        ) {
+          payment.status = "Refunded";
+          payment.adminNote =
+            "COD advance refunded through the demo return workflow";
+          payment.updatedAt = now;
+        }
+      }
 
       database.events.unshift(
         createEvent(
@@ -1074,6 +1148,7 @@ async function processQueuedOrders() {
           "booking failed"
         ].includes(status) &&
         attempts < 5 &&
+        codAdvanceIsPaid(order) &&
         !String(order.status || "")
           .toLowerCase()
           .includes("cancel")

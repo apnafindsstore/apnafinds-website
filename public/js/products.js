@@ -446,9 +446,15 @@
   }
 
   function isBadRemoteImage(value) {
-    const url = String(value || "").trim().toLowerCase();
+    const raw = String(value || "").trim();
+    const url = raw.toLowerCase();
+
+    const supportedLocation =
+      /^(https?:\/\/|data:image\/|blob:|\/|\.\/|\.\.\/|images\/)/i.test(raw);
+
     return (
       !url ||
+      !supportedLocation ||
       url.startsWith("file:") ||
       url.endsWith(".svg") ||
       url.includes("/images/products/") ||
@@ -594,15 +600,27 @@
           ? String(product?.image ?? photoFor(item.name) ?? genericImage())
           : savedImage;
       })(),
-      quantity: Math.max(1, Math.floor(Number(item.quantity ?? item.qty ?? 1)))
+      quantity: Math.max(1, Math.floor(Number(item.quantity ?? item.quanity ?? item.qty ?? 1)))
     };
   }
 
   function loadCart() {
     const primary = readJSON(KEYS.cart, []);
     const legacy = readJSON(KEYS.cartLegacy, []);
-    const source = Array.isArray(primary) && primary.length ? primary : legacy;
-    return Array.isArray(source) ? source.map(normalizeCartItem) : [];
+
+    const source =
+      Array.isArray(primary) && primary.length
+        ? primary
+        : legacy;
+
+    const normalized = Array.isArray(source)
+      ? source.map(normalizeCartItem)
+      : [];
+
+    writeJSON(KEYS.cart, normalized);
+    writeJSON(KEYS.cartLegacy, normalized);
+
+    return normalized;
   }
 
   function saveCart() {
@@ -952,8 +970,11 @@
         class="${className}"
         loading="lazy"
         onerror="
-          if (this.src !== new URL(this.dataset.fallback, document.baseURI).href) {
+          if (this.dataset.fallbackApplied !== 'true') {
+            this.dataset.fallbackApplied = 'true';
             this.src = this.dataset.fallback;
+          } else {
+            this.onerror = null;
           }
         "
       >
@@ -1720,6 +1741,12 @@
       updateHeaderCounts();
       updateAllQuantityControls();
       updateAllWishlistButtons();
+    });
+
+    window.addEventListener("apnafinds:cart-updated", () => {
+      state.cart = loadCart();
+      updateHeaderCounts();
+      updateAllQuantityControls();
     });
 
     document.addEventListener("keydown", event => {

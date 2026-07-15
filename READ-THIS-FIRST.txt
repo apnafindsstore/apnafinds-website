@@ -1,0 +1,57 @@
+APNAFINDS COMPLETE WEBSITE — START HERE
+======================================
+
+THIS PACKAGE CONTAINS
+---------------------
+- Your exact index.html design
+- Products and product-details pages
+- Real photographic placeholder images, not cartoon SVG products
+- Categories, cart and wishlist
+- Customer login, registration and account
+- Checkout, invoice and thank-you pages
+- Customer order tracking
+- Returns, replacements and refunds
+- Admin login and dashboard
+- Admin orders, customers and returns
+- Logistics automation
+- Node.js server and local database
+- Automatic demo courier, AWB and tracking workflow
+
+HOW TO OPEN
+-----------
+1. Extract the complete ZIP.
+2. Open the extracted ApnaFinds_Perfect_Complete_Website folder.
+3. Double-click START-APNAFINDS.bat.
+4. Keep the black server window open.
+5. Open http://localhost:3000 in Chrome.
+6. Press Ctrl + F5 once.
+
+ADMIN LOGIN
+-----------
+URL:
+http://localhost:3000/admin-login.html
+
+Email:
+admin@apnafinds.local
+
+Password:
+ApnaFinds@123
+
+LOGIN PROBLEM
+-------------
+Double-click RESET-LOCAL-LOGIN.bat, then restart START-APNAFINDS.bat.
+
+TEST AUTOMATIC PROCESS
+----------------------
+Double-click CREATE-DEMO-ORDER.bat while the server is running.
+
+IMPORTANT
+---------
+Do not open HTML files using file:/// and do not use Live Server.
+Always use http://localhost:3000.
+
+The supplied product photographs are representative placeholders.
+Replace them with supplier-approved photos before selling publicly.
+
+Live Shiprocket booking requires your real account, KYC, pickup address,
+wallet/plan and API credentials.

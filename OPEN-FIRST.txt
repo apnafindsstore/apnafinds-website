@@ -1,0 +1,15 @@
+APNAFINDS WITH YOUR EXACT INDEX
+===============================
+
+1. Close every old ApnaFinds server/black window.
+2. Extract this ZIP into a NEW folder.
+3. Open the extracted folder.
+4. Double-click START-APNAFINDS.bat.
+5. Keep the server window open.
+6. Double-click OPEN-MY-EXACT-INDEX.bat.
+7. In Chrome press Ctrl + F5 once.
+
+Your exact Index is:
+public/index.html
+
+The remaining pages are the corrected/redeveloped files.

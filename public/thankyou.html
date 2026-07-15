@@ -287,7 +287,15 @@
         formatMoney(order.total ?? order.orderTotal ?? 0);
 
       document.getElementById("paymentMethod").textContent =
-        order.paymentMethod ?? "COD";
+        [
+          order.paymentMethod ?? "COD",
+          Number(order.amountPaid || 0) > 0
+            ? `${formatMoney(order.amountPaid)} advance paid`
+            : "",
+          Number(order.balanceDue || 0) > 0
+            ? `${formatMoney(order.balanceDue)} due on delivery`
+            : ""
+        ].filter(Boolean).join(" · ");
 
       document.getElementById("orderStatus").textContent =
         order.status ?? "Order placed";

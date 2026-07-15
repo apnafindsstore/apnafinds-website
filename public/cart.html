@@ -315,6 +315,7 @@
 
   <script>
     const CART_KEY = "apnafinds_cart";
+    const CART_LEGACY_KEY = "cart";
     const COUPON_KEY = "apnafinds_coupon";
 
     const FREE_SHIPPING_MINIMUM = 499;
@@ -352,13 +353,24 @@
     }
 
     function loadCart() {
-      const savedCart = safeParse(localStorage.getItem(CART_KEY));
+      const primaryCart = safeParse(
+        localStorage.getItem(CART_KEY)
+      );
 
-      return savedCart
+      const legacyCart = safeParse(
+        localStorage.getItem(CART_LEGACY_KEY)
+      );
+
+      const sourceCart = primaryCart.length
+        ? primaryCart
+        : legacyCart;
+
+      const normalizedCart = sourceCart
         .map((item, index) => {
           return {
             id: String(item.id ?? item.productId ?? index),
             name: String(item.name ?? item.title ?? "ApnaFinds Product"),
+            category: String(item.category ?? "Other"),
             price: Math.max(
               0,
               Number(
@@ -368,17 +380,28 @@
                 0
               )
             ),
+            oldPrice: Math.max(
+              0,
+              Number(
+                item.oldPrice ??
+                item.originalPrice ??
+                item.mrp ??
+                item.price ??
+                0
+              )
+            ),
             image: String(
               item.image ??
               item.imageUrl ??
               item.thumbnail ??
-              "https://placehold.co/300x300/f3f4f6/0F5C4A?text=ApnaFinds"
+              "images/products/product-photo-unavailable.jpg"
             ),
             quantity: Math.max(
               1,
               Math.floor(
                 Number(
                   item.quantity ??
+                  item.quanity ??
                   item.qty ??
                   1
                 )
@@ -387,10 +410,34 @@
           };
         })
         .filter(item => Number.isFinite(item.price));
+
+      const serialized = JSON.stringify(normalizedCart);
+
+      localStorage.setItem(CART_KEY, serialized);
+      localStorage.setItem(CART_LEGACY_KEY, serialized);
+
+      return normalizedCart;
     }
 
     function saveCart() {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      const serialized = JSON.stringify(cart);
+
+      localStorage.setItem(CART_KEY, serialized);
+      localStorage.setItem(CART_LEGACY_KEY, serialized);
+
+      window.dispatchEvent(
+        new CustomEvent("apnafinds:cart-updated", {
+          detail: {
+            cart,
+            quantity: cart.reduce((sum, item) => {
+              return sum + Math.max(
+                0,
+                Number(item.quantity || 0)
+              );
+            }, 0)
+          }
+        })
+      );
     }
 
     function formatMoney(amount) {
@@ -479,7 +526,14 @@
                     src="${escapeHTML(item.image)}"
                     alt="${escapeHTML(item.name)}"
                     class="h-24 w-24 shrink-0 rounded-2xl bg-white object-cover sm:h-28 sm:w-28"
-                    onerror="this.src='https://placehold.co/300x300/f3f4f6/0F5C4A?text=ApnaFinds'"
+                    onerror="
+                      if (this.dataset.fallbackApplied !== 'true') {
+                        this.dataset.fallbackApplied = 'true';
+                        this.src = 'images/products/product-photo-unavailable.jpg';
+                      } else {
+                        this.onerror = null;
+                      }
+                    "
                   >
 
                   <div class="min-w-0 py-1">
@@ -789,10 +843,18 @@
     });
 
     window.addEventListener("storage", event => {
-      if (event.key === CART_KEY) {
+      if (
+        event.key === CART_KEY ||
+        event.key === CART_LEGACY_KEY
+      ) {
         cart = loadCart();
         renderCart();
       }
+    });
+
+    window.addEventListener("apnafinds:cart-updated", () => {
+      cart = loadCart();
+      renderCart();
     });
 
     document.getElementById("currentYear").textContent =
@@ -801,6 +863,7 @@
     renderCart();
   </script>
 
+  <script src="js/customer-auth.js"></script>
   <script src="js/backend-client.js"></script>
   <script src="js/ai-helper.js"></script>
 </body>

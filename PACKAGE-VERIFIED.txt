@@ -1,0 +1,19 @@
+PACKAGE VERIFICATION
+====================
+Exact Index SHA-256:
+d8f2c424b7628c4dbcd4853d848a88d453426180c0c5e9fa9f1aae7f2df82c84
+
+Main files confirmed:
+- START-APNAFINDS.bat
+- server.js
+- package.json
+- public/index.html
+- public/products.html
+- public/product.html
+- public/wishlist.html
+- public/account.html
+- public/checkout.html
+- public/track-order.html
+- public/admin.html
+- public/admin-management.html
+- public/admin-logistics.html

@@ -8,7 +8,10 @@ const EMPTY_DB = {
   shipments: [],
   returns: [],
   customers: [],
+  payments: [],
+  settings: {},
   support: [],
+  otpAudit: [],
   events: []
 };
 
@@ -39,7 +42,15 @@ function normalizeDatabase(value) {
     shipments: Array.isArray(source.shipments) ? source.shipments : [],
     returns: Array.isArray(source.returns) ? source.returns : [],
     customers: Array.isArray(source.customers) ? source.customers : [],
+    payments: Array.isArray(source.payments) ? source.payments : [],
+    settings:
+      source.settings &&
+      typeof source.settings === "object" &&
+      !Array.isArray(source.settings)
+        ? source.settings
+        : {},
     support: Array.isArray(source.support) ? source.support : [],
+    otpAudit: Array.isArray(source.otpAudit) ? source.otpAudit : [],
     events: Array.isArray(source.events) ? source.events : []
   };
 }

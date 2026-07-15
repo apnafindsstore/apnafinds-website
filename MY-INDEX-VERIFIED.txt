@@ -1,0 +1,28 @@
+APNAFINDS — YOUR EXACT INDEX VERIFIED
+=====================================
+
+The file below is copied byte-for-byte from the Index code you supplied:
+
+public/index.html
+
+SHA-256:
+d8f2c424b7628c4dbcd4853d848a88d453426180c0c5e9fa9f1aae7f2df82c84
+
+No design, text, image, CSS or JavaScript inside your Index page was changed.
+
+The other website files remain the corrected version:
+- products.html
+- product.html
+- wishlist.html
+- cart.html
+- account.html
+- checkout.html
+- admin pages
+- logistics
+- tracking
+- returns/refunds
+- Node.js backend
+
+IMPORTANT:
+If localhost still shows an older Index page, an old Node.js server is still running.
+Close all old ApnaFinds black server windows before starting this folder.

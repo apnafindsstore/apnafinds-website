@@ -14,7 +14,7 @@ css/storefront.css
 js/products.js
 js/wishlist.js
 js/app.js
-images/products/*.svg
+photographic image URLs and a JPG fallback
 
 CONNECTED FEATURES
 ------------------
@@ -31,7 +31,7 @@ CONNECTED FEATURES
 - Admin products from adminProducts are merged into the default catalogue.
 - Random remote image services are ignored.
 - All default product images are local.
-- Missing product images fall back to images/products/apnafinds-product.svg.
+- Missing product images fall back to images/products/product-photo-unavailable.jpg.
 - Product cards use an animated gold travelling border.
 - These pages do not use Tailwind, so the Tailwind CDN warning is removed.
 

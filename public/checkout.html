@@ -206,6 +206,19 @@
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3.5 outline-none focus:border-brand-green focus:ring-2 focus:ring-brand-green/15"
               >
             </div>
+            <div class="sm:col-span-2 rounded-2xl border border-green-100 bg-green-50/70 p-4">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="font-black text-brand-green"><i class="fa-solid fa-mobile-screen-button mr-2"></i>Verify delivery mobile</p>
+                  <p id="checkoutOtpStatus" class="mt-1 text-xs text-gray-600">Required for guest checkout. Signed-in members with a verified matching number are verified automatically.</p>
+                </div>
+                <button id="sendCheckoutOtp" type="button" class="rounded-xl border-2 border-brand-green px-5 py-3 text-sm font-black text-brand-green">Send OTP</button>
+              </div>
+              <div id="checkoutOtpBox" class="mt-4 hidden grid gap-3 sm:grid-cols-[1fr_auto]">
+                <input id="checkoutOtpCode" maxlength="6" inputmode="numeric" placeholder="Enter 6-digit OTP" class="rounded-xl border bg-white px-4 py-3 text-center text-lg font-black tracking-[.35em] outline-none focus:border-brand-green">
+                <button id="verifyCheckoutOtp" type="button" class="rounded-xl bg-brand-green px-6 py-3 font-black text-white">Verify</button>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -341,7 +354,9 @@
 
                 <div>
                   <p class="font-black text-gray-900">Cash on Delivery</p>
-                  <p class="mt-2 text-xs leading-5 text-gray-500">Pay when your order arrives.</p>
+                  <p class="mt-2 text-xs leading-5 text-gray-500">
+                    Pay a small online advance now and the remaining balance when the order arrives.
+                  </p>
                 </div>
               </div>
             </label>
@@ -373,8 +388,70 @@
             class="mt-5 hidden rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900"
           >
             <i class="fa-solid fa-circle-info mr-2"></i>
-            Online payment is currently a demo selection. Connect Razorpay, Cashfree, PhonePe, PayU or another payment gateway before accepting real online payments.
+            Full online payment is currently unavailable. Use Cash on Delivery with the required advance payment.
           </div>
+
+          <div
+            id="codAdvancePanel"
+            class="mt-5 rounded-2xl border border-green-200 bg-green-50 p-5"
+          >
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.16em] text-brand-green">
+                  Required for COD
+                </p>
+                <h3 class="mt-2 text-lg font-black text-gray-900">
+                  Pay <span id="codAdvanceAmount">₹49</span> advance
+                </h3>
+                <p class="mt-2 text-xs font-semibold leading-5 text-gray-600">
+                  Your COD order is confirmed and sent to the courier only after this advance payment is completed.
+                </p>
+              </div>
+
+              <span
+                id="codAdvanceBadge"
+                class="inline-flex shrink-0 items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-black text-amber-800"
+              >
+                <i class="fa-solid fa-clock"></i>
+                Payment pending
+              </span>
+            </div>
+
+            <div class="mt-5 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-xl bg-white p-4">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                  Advance now
+                </p>
+                <p id="codAdvanceSummary" class="mt-2 text-xl font-black text-brand-green">₹49</p>
+              </div>
+
+              <div class="rounded-xl bg-white p-4">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                  Pay on delivery
+                </p>
+                <p id="codBalanceSummary" class="mt-2 text-xl font-black text-gray-900">₹0</p>
+              </div>
+            </div>
+
+            <button
+              id="payCodAdvanceButton"
+              type="button"
+              class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-orange px-5 py-3.5 text-sm font-black text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <i class="fa-solid fa-mobile-screen-button"></i>
+              Pay COD Advance
+            </button>
+
+            <div
+              id="advancePaymentReceipt"
+              class="mt-4 hidden rounded-xl border border-green-200 bg-white p-4 text-xs font-semibold leading-6 text-gray-600"
+            ></div>
+
+            <p id="advanceModeNote" class="mt-4 text-[11px] font-semibold leading-5 text-gray-500">
+              Local demo mode simulates this payment automatically. A real store must connect Razorpay, Cashfree, PhonePe, PayU or another payment gateway.
+            </p>
+          </div>
+
         </article>
 
         <article class="glass-card rounded-3xl p-6 sm:p-8">
@@ -420,6 +497,16 @@
             <div class="flex justify-between gap-4 text-gray-600">
               <span>Shipping</span>
               <span id="shippingAmount" class="font-black text-brand-green">FREE</span>
+            </div>
+
+            <div id="advanceSummaryRow" class="flex justify-between gap-4 text-brand-green">
+              <span>COD advance paid</span>
+              <span id="advancePaidAmount" class="font-black">₹0</span>
+            </div>
+
+            <div id="codBalanceRow" class="flex justify-between gap-4 text-gray-700">
+              <span>Balance payable on delivery</span>
+              <span id="codBalanceAmount" class="font-black">₹0</span>
             </div>
           </div>
 
@@ -504,7 +591,9 @@
 
   <script>
     const CART_KEY = "apnafinds_cart";
+    const CART_LEGACY_KEY = "cart";
     const COUPON_KEY = "apnafinds_coupon";
+    const COMPLETED_ORDER_KEY = "apnafinds_completed_order_id";
     const ORDERS_KEY = "apnafinds_orders";
     const USER_KEY = "currentUser";
     const USERS_KEY = "users";
@@ -531,17 +620,43 @@
       totalAmount: document.getElementById("totalAmount"),
       savedAddressSelect: document.getElementById("savedAddressSelect"),
       onlinePaymentNotice: document.getElementById("onlinePaymentNotice"),
+      codAdvancePanel: document.getElementById("codAdvancePanel"),
+      codAdvanceAmount: document.getElementById("codAdvanceAmount"),
+      codAdvanceSummary: document.getElementById("codAdvanceSummary"),
+      codBalanceSummary: document.getElementById("codBalanceSummary"),
+      codAdvanceBadge: document.getElementById("codAdvanceBadge"),
+      payCodAdvanceButton: document.getElementById("payCodAdvanceButton"),
+      advancePaymentReceipt: document.getElementById("advancePaymentReceipt"),
+      advanceModeNote: document.getElementById("advanceModeNote"),
+      advancePaidAmount: document.getElementById("advancePaidAmount"),
+      codBalanceAmount: document.getElementById("codBalanceAmount"),
       placeOrderButton: document.getElementById("placeOrderButton"),
+      sendCheckoutOtp: document.getElementById("sendCheckoutOtp"),
+      checkoutOtpBox: document.getElementById("checkoutOtpBox"),
+      checkoutOtpCode: document.getElementById("checkoutOtpCode"),
+      verifyCheckoutOtp: document.getElementById("verifyCheckoutOtp"),
+      checkoutOtpStatus: document.getElementById("checkoutOtpStatus"),
       toast: document.getElementById("toast")
     };
 
-    let cart = readArray(CART_KEY);
+    let cart = loadCheckoutCart();
     let currentUser = readObject(USER_KEY);
     let users = readArray(USERS_KEY);
     let addresses = loadAddresses();
     let settings = loadSettings();
     let selectedPaymentMethod = "COD";
     let placingOrder = false;
+    let paymentSettings = {
+      codAdvanceEnabled: true,
+      codAdvanceAmount: 49,
+      codAdvanceMode: "demo",
+      upiId: ""
+    };
+    let codAdvancePayment = null;
+    let pendingOrderId = "";
+    let checkoutOtpChallenge = null;
+    let phoneVerificationToken = "";
+    let verifiedPhone = "";
 
     function readArray(key) {
       try {
@@ -550,6 +665,54 @@
       } catch (error) {
         return [];
       }
+    }
+
+    function loadCheckoutCart() {
+      const primary =
+        readArray(CART_KEY);
+
+      return primary.length
+        ? primary
+        : readArray(CART_LEGACY_KEY);
+    }
+
+    function clearCartAfterCompletedOrder(
+      orderId
+    ) {
+      cart = [];
+
+      localStorage.removeItem(
+        CART_KEY
+      );
+
+      localStorage.removeItem(
+        CART_LEGACY_KEY
+      );
+
+      localStorage.removeItem(
+        COUPON_KEY
+      );
+
+      localStorage.setItem(
+        COMPLETED_ORDER_KEY,
+        String(orderId || "")
+      );
+
+      sessionStorage.removeItem(
+        "apnafinds_checkout_summary"
+      );
+
+      window.dispatchEvent(
+        new CustomEvent(
+          "apnafinds:order-completed",
+          {
+            detail: {
+              orderId:
+                String(orderId || "")
+            }
+          }
+        )
+      );
     }
 
     function readObject(key) {
@@ -724,6 +887,48 @@
           ? "FREE"
           : formatMoney(summary.shipping);
       elements.totalAmount.textContent = formatMoney(summary.total);
+
+      const advance =
+        selectedPaymentMethod === "COD" &&
+        paymentSettings.codAdvanceEnabled
+          ? Math.min(
+              summary.total,
+              Number(paymentSettings.codAdvanceAmount || 49)
+            )
+          : 0;
+
+      const paid =
+        codAdvancePayment &&
+        ["Paid", "Verified"].includes(codAdvancePayment.status)
+          ? advance
+          : 0;
+
+      const balance = Math.max(
+        0,
+        summary.total - paid
+      );
+
+      elements.codAdvanceAmount.textContent =
+        formatMoney(advance);
+      elements.codAdvanceSummary.textContent =
+        formatMoney(advance);
+      elements.codBalanceSummary.textContent =
+        formatMoney(
+          Math.max(
+            0,
+            summary.total - advance
+          )
+        );
+      elements.advancePaidAmount.textContent =
+        formatMoney(paid);
+      elements.codBalanceAmount.textContent =
+        formatMoney(balance);
+
+      elements.codAdvancePanel.classList.toggle(
+        "hidden",
+        selectedPaymentMethod !== "COD" ||
+        !paymentSettings.codAdvanceEnabled
+      );
     }
 
     function prefillCustomer() {
@@ -819,6 +1024,20 @@
 
       if (!/^[6-9][0-9]{9}$/.test(data.phone)) {
         return "Enter a valid 10-digit Indian mobile number";
+      }
+
+      const signedInCustomer =
+        window.ApnaFindsCustomerAuth?.getCustomer?.();
+
+      const accountPhoneVerified =
+        signedInCustomer?.phoneVerified &&
+        String(signedInCustomer.phone || "").replace(/\D/g, "").slice(-10) === data.phone;
+
+      if (!accountPhoneVerified && (
+        !phoneVerificationToken ||
+        verifiedPhone !== data.phone
+      )) {
+        return "Verify your mobile number with OTP";
       }
 
       if (data.addressLine.length < 8) {
@@ -958,6 +1177,265 @@
       }
     }
 
+
+    async function loadPaymentSettings() {
+      try {
+        const response = await fetch(
+          "/api/store/payment-settings",
+          {
+            headers: {
+              Accept: "application/json"
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            "Could not load payment settings"
+          );
+        }
+
+        paymentSettings = {
+          ...paymentSettings,
+          ...data
+        };
+      } catch (error) {
+        console.warn(
+          "Using default COD advance settings:",
+          error.message
+        );
+      }
+
+      elements.advanceModeNote.textContent =
+        paymentSettings.codAdvanceMode === "demo"
+          ? "Local demo mode simulates the advance payment automatically. A real store must connect a payment gateway before publishing."
+          : paymentSettings.codAdvanceMode === "manual"
+            ? `Pay to ${paymentSettings.upiId || "the seller UPI ID"} and the seller must verify the transaction before shipment.`
+            : "Live mode requires a connected payment gateway and server-side payment verification.";
+
+      renderCheckout();
+    }
+
+    function resetCodAdvancePayment() {
+      codAdvancePayment = null;
+      pendingOrderId = "";
+
+      elements.codAdvanceBadge.className =
+        "inline-flex shrink-0 items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-xs font-black text-amber-800";
+      elements.codAdvanceBadge.innerHTML =
+        '<i class="fa-solid fa-clock"></i> Payment pending';
+
+      elements.advancePaymentReceipt.classList.add(
+        "hidden"
+      );
+      elements.advancePaymentReceipt.innerHTML = "";
+
+      elements.payCodAdvanceButton.disabled = false;
+      elements.payCodAdvanceButton.innerHTML =
+        '<i class="fa-solid fa-mobile-screen-button"></i> Pay COD Advance';
+
+      renderCheckout();
+    }
+
+    async function payCodAdvance() {
+      const data = getCheckoutData();
+      const validationError = validateCheckout(data);
+
+      if (validationError) {
+        showToast(validationError);
+        return;
+      }
+
+      const summary = getSummary();
+      const amount = Math.min(
+        summary.total,
+        Number(
+          paymentSettings.codAdvanceAmount ||
+          49
+        )
+      );
+
+      pendingOrderId =
+        pendingOrderId ||
+        createOrderId();
+
+      elements.payCodAdvanceButton.disabled = true;
+      elements.payCodAdvanceButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Processing Advance';
+
+      try {
+        if (
+          paymentSettings.codAdvanceMode !== "demo"
+        ) {
+          throw new Error(
+            paymentSettings.codAdvanceMode === "manual"
+              ? "Manual payment verification is enabled. Connect a UPI collection form or payment gateway before using this mode."
+              : "A live payment gateway has not been connected yet."
+          );
+        }
+
+        const response = await fetch(
+          "/api/payments/cod-advance/demo",
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              Accept: "application/json"
+            },
+            body: JSON.stringify({
+              orderId: pendingOrderId,
+              customerName: data.customerName,
+              phone: data.phone,
+              email: data.email,
+              total: summary.total,
+              amount
+            })
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result.error ||
+            "Advance payment failed"
+          );
+        }
+
+        codAdvancePayment = result.payment;
+
+        elements.codAdvanceBadge.className =
+          "inline-flex shrink-0 items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-xs font-black text-green-800";
+        elements.codAdvanceBadge.innerHTML =
+          '<i class="fa-solid fa-circle-check"></i> Advance paid';
+
+        elements.advancePaymentReceipt.classList.remove(
+          "hidden"
+        );
+        elements.advancePaymentReceipt.innerHTML = `
+          <p class="font-black text-green-800">
+            Advance payment successful
+          </p>
+          <p class="mt-1">
+            Transaction:
+            <strong>${escapeHTML(
+              codAdvancePayment.transactionId
+            )}</strong>
+          </p>
+          <p>
+            Amount:
+            <strong>${formatMoney(
+              codAdvancePayment.amountPaid
+            )}</strong>
+          </p>
+        `;
+
+        elements.payCodAdvanceButton.innerHTML =
+          '<i class="fa-solid fa-circle-check"></i> Advance Paid';
+
+        showToast(
+          `${formatMoney(amount)} COD advance paid`
+        );
+
+        renderCheckout();
+      } catch (error) {
+        codAdvancePayment = null;
+        elements.payCodAdvanceButton.disabled = false;
+        elements.payCodAdvanceButton.innerHTML =
+          '<i class="fa-solid fa-mobile-screen-button"></i> Pay COD Advance';
+        showToast(error.message);
+      }
+    }
+
+
+    async function sendCheckoutOtp() {
+      const phone =
+        document.getElementById("phone").value.trim();
+
+      if (!/^[6-9][0-9]{9}$/.test(phone)) {
+        showToast("Enter a valid mobile number first");
+        return;
+      }
+
+      const customer =
+        window.ApnaFindsCustomerAuth?.getCustomer?.();
+
+      if (
+        customer?.phoneVerified &&
+        String(customer.phone || "").replace(/\D/g, "").slice(-10) === phone
+      ) {
+        verifiedPhone = phone;
+        phoneVerificationToken = "ACCOUNT_SESSION";
+        elements.checkoutOtpStatus.textContent =
+          "Verified through your signed-in ApnaFinds account ✓";
+        elements.checkoutOtpStatus.className =
+          "mt-1 text-xs font-black text-brand-green";
+        return;
+      }
+
+      try {
+        elements.sendCheckoutOtp.disabled = true;
+        checkoutOtpChallenge =
+          await window.ApnaFindsAPI.sendOtp({
+            channel: "phone",
+            destination: phone,
+            purpose: "guest-checkout"
+          });
+
+        elements.checkoutOtpBox.classList.remove("hidden");
+        elements.checkoutOtpStatus.textContent =
+          `OTP sent to ${checkoutOtpChallenge.maskedDestination}` +
+          (
+            checkoutOtpChallenge.demoOtp
+              ? ` — testing code: ${checkoutOtpChallenge.demoOtp}`
+              : ""
+          );
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        elements.sendCheckoutOtp.disabled = false;
+      }
+    }
+
+    async function verifyCheckoutOtp() {
+      try {
+        if (!checkoutOtpChallenge) {
+          throw new Error("Send OTP first");
+        }
+
+        const result =
+          await window.ApnaFindsAPI.verifyOtp({
+            challengeId:
+              checkoutOtpChallenge.challengeId,
+            otp:
+              elements.checkoutOtpCode.value.trim()
+          });
+
+        phoneVerificationToken =
+          result.verificationToken;
+
+        verifiedPhone =
+          document.getElementById("phone").value.trim();
+
+        elements.checkoutOtpStatus.textContent =
+          "Mobile number verified ✓";
+
+        elements.checkoutOtpStatus.className =
+          "mt-1 text-xs font-black text-brand-green";
+
+        elements.checkoutOtpBox.classList.add("hidden");
+        elements.sendCheckoutOtp.textContent = "Verified ✓";
+        elements.sendCheckoutOtp.disabled = true;
+
+        showToast("Mobile number verified");
+      } catch (error) {
+        showToast(error.message);
+      }
+    }
+
     async function placeOrder() {
       if (placingOrder) return;
 
@@ -970,7 +1448,24 @@
       }
 
       if (data.paymentMethod !== "COD") {
-        showToast("Online gateway is not connected yet. Select Cash on Delivery.");
+        showToast("Full online payment is not connected yet. Select Cash on Delivery.");
+        return;
+      }
+
+      if (
+        paymentSettings.codAdvanceEnabled &&
+        (
+          !codAdvancePayment ||
+          !["Paid", "Verified"].includes(
+            codAdvancePayment.status
+          )
+        )
+      ) {
+        showToast(
+          `Pay the ${formatMoney(
+            paymentSettings.codAdvanceAmount
+          )} COD advance first`
+        );
         return;
       }
 
@@ -982,19 +1477,60 @@
       const summary = getSummary();
 
       const order = {
-        id: createOrderId(),
+        id:
+          pendingOrderId ||
+          createOrderId(),
         orderId: "",
         customerName: data.customerName,
         email: data.email,
         phone: data.phone,
+        phoneVerificationToken,
+        marketingConsent: {
+          whatsapp: Boolean(
+            window.ApnaFindsCustomerAuth?.getCustomer?.()?.marketingConsent?.whatsapp
+          ),
+          email: Boolean(
+            window.ApnaFindsCustomerAuth?.getCustomer?.()?.marketingConsent?.email
+          )
+        },
         date: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         status: "Order placed",
-        paymentMethod: data.paymentMethod,
-        paymentStatus:
+        paymentMethod:
           data.paymentMethod === "COD"
-            ? "Pending"
-            : "Paid",
+            ? "COD + Online Advance"
+            : data.paymentMethod,
+        paymentStatus:
+          paymentSettings.codAdvanceEnabled
+            ? "Advance paid; COD balance pending"
+            : "COD pending",
+        advancePaymentRequired:
+          Boolean(
+            paymentSettings.codAdvanceEnabled
+          ),
+        advanceAmount:
+          paymentSettings.codAdvanceEnabled
+            ? Number(
+                paymentSettings.codAdvanceAmount
+              )
+            : 0,
+        advancePaymentStatus:
+          codAdvancePayment?.status ||
+          (
+            paymentSettings.codAdvanceEnabled
+              ? "Pending"
+              : "Not required"
+          ),
+        advanceTransactionId:
+          codAdvancePayment?.transactionId ||
+          "",
+        advancePaymentMode:
+          paymentSettings.codAdvanceMode,
+        amountPaid:
+          Number(
+            codAdvancePayment?.amountPaid ||
+            0
+          ),
         items: cart.map(item => ({
           id: String(item.id ?? ""),
           name: String(item.name ?? item.title ?? "Product"),
@@ -1013,6 +1549,15 @@
         shipping: summary.shipping,
         total: summary.total,
         orderTotal: summary.total,
+        balanceDue:
+          Math.max(
+            0,
+            summary.total -
+            Number(
+              codAdvancePayment?.amountPaid ||
+              0
+            )
+          ),
         notes: data.notes,
         shippingAddress: {
           name: data.customerName,
@@ -1028,85 +1573,94 @@
 
       order.orderId = order.id;
 
-      const orders = readArray(ORDERS_KEY);
-      orders.unshift(order);
-
-      localStorage.setItem(
-        ORDERS_KEY,
-        JSON.stringify(orders)
-      );
-
-      localStorage.setItem(
-        LAST_ORDER_KEY,
-        JSON.stringify(order)
-      );
-
       try {
-        if (window.ApnaFindsAPI) {
-          const serverResult =
-            await window.ApnaFindsAPI.createOrder(order);
-
-          if (serverResult.order) {
-            Object.assign(
-              order,
-              serverResult.order
-            );
-          }
-
-          if (serverResult.shipment) {
-            order.shipment =
-              serverResult.shipment;
-          }
-
-          const updatedOrders =
-            readArray(ORDERS_KEY);
-
-          const savedIndex =
-            updatedOrders.findIndex(saved => {
-              return String(
-                saved.id || saved.orderId
-              ) === order.id;
-            });
-
-          if (savedIndex >= 0) {
-            updatedOrders[savedIndex] =
-              order;
-          } else {
-            updatedOrders.unshift(order);
-          }
-
-          localStorage.setItem(
-            ORDERS_KEY,
-            JSON.stringify(updatedOrders)
-          );
-
-          localStorage.setItem(
-            LAST_ORDER_KEY,
-            JSON.stringify(order)
+        if (!window.ApnaFindsAPI) {
+          throw new Error(
+            "The ApnaFinds order server is not connected"
           );
         }
-      } catch (error) {
-        order.automationStatus =
-          "Waiting for automation server";
-        order.automationError =
-          error.message;
+
+        const serverResult =
+          await window.ApnaFindsAPI.createOrder(
+            order
+          );
+
+        if (!serverResult?.order) {
+          throw new Error(
+            "The order was not confirmed by the server"
+          );
+        }
+
+        Object.assign(
+          order,
+          serverResult.order
+        );
+
+        if (serverResult.shipment) {
+          order.shipment =
+            serverResult.shipment;
+        }
+
+        const updatedOrders =
+          readArray(ORDERS_KEY);
+
+        const savedIndex =
+          updatedOrders.findIndex(saved => {
+            return String(
+              saved.id ||
+              saved.orderId
+            ) ===
+              String(order.id);
+          });
+
+        if (savedIndex >= 0) {
+          updatedOrders[savedIndex] =
+            order;
+        } else {
+          updatedOrders.unshift(order);
+        }
+
+        localStorage.setItem(
+          ORDERS_KEY,
+          JSON.stringify(updatedOrders)
+        );
 
         localStorage.setItem(
           LAST_ORDER_KEY,
           JSON.stringify(order)
         );
+
+        saveAddressToAccount(data);
+        saveOrderToCustomer(order);
+
+        clearCartAfterCompletedOrder(
+          order.id
+        );
+
+        setTimeout(() => {
+          window.location.href =
+            `thankyou.html?order=${
+              encodeURIComponent(order.id)
+            }`;
+        }, 450);
+      } catch (error) {
+        placingOrder = false;
+
+        elements.placeOrderButton.disabled =
+          false;
+
+        elements.placeOrderButton.innerHTML =
+          '<i class="fa-solid fa-lock"></i> Complete Order';
+
+        showToast(
+          `${
+            error.message ||
+            "Order could not be completed"
+          }. Your cart has been kept.`
+        );
+
+        return;
       }
-
-      saveAddressToAccount(data);
-      saveOrderToCustomer(order);
-
-      localStorage.removeItem(CART_KEY);
-      localStorage.removeItem(COUPON_KEY);
-
-      setTimeout(() => {
-        window.location.href =
-          `thankyou.html?order=${encodeURIComponent(order.id)}`;
-      }, 600);
     }
 
     function selectPaymentMethod(method) {
@@ -1128,6 +1682,12 @@
         "hidden",
         method === "COD"
       );
+
+      if (method !== "COD") {
+        resetCodAdvancePayment();
+      }
+
+      renderCheckout();
     }
 
     function showToast(message) {
@@ -1163,13 +1723,47 @@
       });
     });
 
+    elements.sendCheckoutOtp.addEventListener(
+      "click",
+      sendCheckoutOtp
+    );
+
+    elements.verifyCheckoutOtp.addEventListener(
+      "click",
+      verifyCheckoutOtp
+    );
+
+    document.getElementById("phone").addEventListener(
+      "input",
+      () => {
+        const value =
+          document.getElementById("phone").value.trim();
+
+        if (value !== verifiedPhone) {
+          phoneVerificationToken = "";
+          verifiedPhone = "";
+          elements.sendCheckoutOtp.disabled = false;
+          elements.sendCheckoutOtp.textContent = "Send OTP";
+          elements.checkoutOtpStatus.textContent =
+            "Required for guest checkout. Signed-in members with a verified matching number are verified automatically.";
+          elements.checkoutOtpStatus.className =
+            "mt-1 text-xs text-gray-600";
+        }
+      }
+    );
+
     elements.placeOrderButton.addEventListener(
       "click",
       placeOrder
     );
 
+    elements.payCodAdvanceButton.addEventListener(
+      "click",
+      payCodAdvance
+    );
+
     window.addEventListener("pageshow", () => {
-      cart = readArray(CART_KEY);
+      cart = loadCheckoutCart();
       currentUser = readObject(USER_KEY);
       users = readArray(USERS_KEY);
       addresses = loadAddresses();
@@ -1185,7 +1779,9 @@
     renderCheckout();
     prefillCustomer();
     selectPaymentMethod("COD");
+    loadPaymentSettings();
   </script>
+  <script src="js/customer-auth.js"></script>
   <script src="js/backend-client.js"></script>
   <script src="js/ai-helper.js"></script>
 </body>

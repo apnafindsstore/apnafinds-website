@@ -561,12 +561,20 @@
         "COD";
 
       document.getElementById("paymentStatus").textContent =
-        order.paymentStatus ??
-        (
-          String(order.paymentMethod ?? "COD").toUpperCase() === "COD"
-            ? "Pending"
-            : "Paid"
-        );
+        [
+          order.paymentStatus ??
+          (
+            String(order.paymentMethod ?? "COD").toUpperCase().includes("COD")
+              ? "Pending"
+              : "Paid"
+          ),
+          Number(order.amountPaid || 0) > 0
+            ? `${formatMoney(order.amountPaid)} advance paid`
+            : "",
+          Number(order.balanceDue || 0) > 0
+            ? `${formatMoney(order.balanceDue)} COD balance`
+            : ""
+        ].filter(Boolean).join(" · ");
 
       document.getElementById("orderStatus").textContent =
         order.status ??

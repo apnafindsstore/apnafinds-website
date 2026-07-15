@@ -81,14 +81,13 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
         <a class="active" href="admin-management.html#orders"><i class="fa-solid fa-layer-group"></i> Admin Management</a>
         <a href="admin-management.html#orders"><i class="fa-solid fa-receipt"></i> Orders</a>
         <a href="admin-management.html#customers"><i class="fa-solid fa-users"></i> Customers</a>
-        <a href="admin-management.html#returns"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</a>
+        <a href="admin-returns.html"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</a>
         <a href="admin-logistics.html"><i class="fa-solid fa-truck-fast"></i> Logistics Automation</a>
-        <a href="track-order.html"><i class="fa-solid fa-location-dot"></i> Customer Tracking</a>
-      </nav>
+        <a href="admin-payments.html"><i class="fa-solid fa-indian-rupee-sign"></i> Payments</a>
+        <a href="admin-seller.html"><i class="fa-solid fa-store"></i> Seller Account</a>
+        <a href="admin-customers.html"><i class="fa-solid fa-address-card"></i> Customer Details</a>
+              </nav>
 
-      <div class="sidebar-foot">
-        <a class="store-link" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Store</a>
-      </div>
     </aside>
 
     <div class="main-area">
@@ -97,7 +96,7 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
           <button id="openSidebar" class="icon-btn mobile-menu-btn" type="button"><i class="fa-solid fa-bars"></i></button>
           <div>
             <h1>Admin Management</h1>
-            <p>Orders, customers, returns, refunds and store activity</p>
+            <p>Orders, customers and server activity</p>
           </div>
         </div>
         <div class="top-actions">
@@ -111,8 +110,8 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
       <main class="content">
         <section class="hero-card">
           <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Store operations centre</span>
-          <h2>Control orders, customers and returns.</h2>
-          <p>This page reads server data, imports browser records, updates order status, controls customer access and manages return or refund progress.</p>
+          <h2>Control orders and customers.</h2>
+          <p>This page reads server data, imports browser records, updates order status and controls customer access. Return and refund management is maintained on its own administrator page.</p>
         </section>
 
         <section class="connection-row">
@@ -159,7 +158,7 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
         <nav class="tabs" aria-label="Management sections">
           <button class="tab-button active" type="button" data-tab="orders"><i class="fa-solid fa-receipt"></i> Orders</button>
           <button class="tab-button" type="button" data-tab="customers"><i class="fa-solid fa-users"></i> Customers</button>
-          <button class="tab-button" type="button" data-tab="returns"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</button>
+          <a class="tab-button" href="admin-returns.html"><i class="fa-solid fa-rotate-left"></i> Returns & Refunds</a>
           <button class="tab-button" type="button" data-tab="activity"><i class="fa-solid fa-list-check"></i> Activity</button>
         </nav>
 
@@ -169,7 +168,7 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
               <div>
                 <span class="section-label">Order management</span>
                 <h2>All Orders</h2>
-                <p class="muted">Update fulfilment status, add notes, book courier or open customer tracking.</p>
+                <p class="muted">Update fulfilment status, add notes and manage shipment operations.</p>
               </div>
               <a href="admin-logistics.html" class="button primary"><i class="fa-solid fa-truck-fast"></i> Logistics Dashboard</a>
             </div>
@@ -189,8 +188,8 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
             </div>
             <div class="table-wrap">
               <table class="data-table">
-                <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Courier</th><th>Updated</th><th>Actions</th></tr></thead>
-                <tbody id="ordersBody"><tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-key"></i><strong>Connect to the server</strong><span>Enter your Admin API Token to load orders.</span></div></td></tr></tbody>
+                <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Courier</th><th>Updated</th><th>Actions</th></tr></thead>
+                <tbody id="ordersBody"><tr><td colspan="9"><div class="empty-state"><i class="fa-solid fa-key"></i><strong>Connect to the server</strong><span>Enter your Admin API Token to load orders.</span></div></td></tr></tbody>
               </table>
             </div>
             <div id="ordersCount" class="table-footer">0 orders displayed</div>
@@ -736,7 +735,7 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
     });
 
     if (!visible.length) {
-      el.ordersBody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-box-open"></i><strong>No matching orders</strong><span>Import browser orders or change the filters.</span></div></td></tr>`;
+      el.ordersBody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><i class="fa-solid fa-box-open"></i><strong>No matching orders</strong><span>Import browser orders or change the filters.</span></div></td></tr>`;
     } else {
       el.ordersBody.innerHTML = visible.map(bundle => {
         const order = bundle.order || {};
@@ -751,12 +750,27 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
           <td><strong>${esc(order.customerName || "Customer")}</strong><small>${esc(contact || "No contact")}</small></td>
           <td><strong>${quantity} item${quantity===1?"":"s"}</strong><small>${esc(items.slice(0,2).map(item=>item.name||item.title).filter(Boolean).join(", ") || "Item details unavailable")}</small></td>
           <td><strong>${money(order.total || order.orderTotal)}</strong></td>
+          <td>
+            <strong>${esc(order.paymentMethod || "COD")}</strong>
+            <small>${esc(order.paymentStatus || "Pending")}</small>
+            <small>
+              Advance: ${money(order.amountPaid || 0)}
+              · Due: ${money(
+                order.balanceDue ??
+                Math.max(
+                  0,
+                  Number(order.total || order.orderTotal || 0) -
+                  Number(order.amountPaid || 0)
+                )
+              )}
+            </small>
+          </td>
           <td>${pill(order.status || "Order placed")}</td>
           <td><strong>${esc(shipment.courier || order.courier || "Not assigned")}</strong><small>${esc(shipment.awb || order.awb || "No AWB")}</small></td>
           <td><strong>${esc(date(order.updatedAt || order.createdAt))}</strong></td>
           <td><div class="row-actions">
             <button class="small-btn primary" data-edit-order="${esc(id)}"><i class="fa-solid fa-pen"></i> Update</button>
-            <a class="small-btn blue" href="track-order.html?order=${encodeURIComponent(id)}&contact=${encodeURIComponent(contact)}"><i class="fa-solid fa-location-dot"></i> Track</a>
+            <a class="small-btn blue" href="admin-logistics.html?order=${encodeURIComponent(id)}"><i class="fa-solid fa-truck-fast"></i> Shipment</a>
             <a class="small-btn secondary" href="invoice.html?order=${encodeURIComponent(id)}"><i class="fa-solid fa-file-invoice"></i> Invoice</a>
           </div></td>
         </tr>`;
@@ -862,7 +876,7 @@ linear-gradient(135deg,var(--green),#114d41 48%,var(--green-dark));color:white;b
   }
 
   function setTab(tab) {
-    activeTab = ["orders","customers","returns","activity"].includes(tab) ? tab : "orders";
+    activeTab = ["orders","customers","activity"].includes(tab) ? tab : "orders";
     document.querySelectorAll("[data-tab]").forEach(button => button.classList.toggle("active", button.dataset.tab === activeTab));
     document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
     document.getElementById(`${activeTab}Panel`).classList.add("active");

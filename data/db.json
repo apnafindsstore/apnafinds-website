@@ -1,8 +1,595 @@
 {
-  "orders": [],
-  "shipments": [],
+  "orders": [
+    {
+      "id": "APNA-COD-TEST-1783939722",
+      "orderId": "APNA-COD-TEST-1783939722",
+      "customerName": "COD Test Customer",
+      "phone": "9888888888",
+      "email": "codtest@apnafinds.local",
+      "items": [
+        {
+          "name": "Test Product",
+          "price": 499,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 499,
+      "shipping": 0,
+      "total": 499,
+      "orderTotal": 499,
+      "status": "Confirmed",
+      "paymentMethod": "COD + Online Advance",
+      "paymentStatus": "Advance paid; COD balance pending",
+      "advancePaymentRequired": true,
+      "advanceAmount": 49,
+      "advancePaymentStatus": "Paid",
+      "advanceTransactionId": "DEMO-UPI-1783939722193759",
+      "advancePaymentMode": "demo",
+      "amountPaid": 49,
+      "balanceDue": 450,
+      "shippingAddress": {
+        "name": "COD Test Customer",
+        "phone": "9888888888",
+        "address": "Test Address",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500072"
+      },
+      "createdAt": "2026-07-13T10:48:42.198Z",
+      "updatedAt": "2026-07-13T10:48:42.203Z",
+      "automationStatus": "Courier booked",
+      "automationAttempts": 1,
+      "shipmentId": "DEMO-SHP-1783939722",
+      "awb": "APNA1783939722",
+      "courier": "ApnaFinds Demo Express"
+    },
+    {
+      "id": "APNA-VERIFY-033181",
+      "customerName": "ApnaFinds Verification",
+      "phone": "9888888888",
+      "email": "verify@apnafinds.local",
+      "items": [
+        {
+          "name": "Verification Product",
+          "price": 499,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 499,
+      "shipping": 0,
+      "total": 499,
+      "status": "Packed",
+      "paymentMethod": "COD",
+      "shippingAddress": {
+        "name": "ApnaFinds Verification",
+        "phone": "9888888888",
+        "address": "Verification Address",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500072"
+      },
+      "orderId": "APNA-VERIFY-033181",
+      "createdAt": "2026-07-13T10:20:33.183Z",
+      "updatedAt": "2026-07-13T10:20:33.207Z",
+      "automationStatus": "Courier booked",
+      "automationAttempts": 1,
+      "shipmentId": "DEMO-SHP-RIFY033181",
+      "awb": "APNARIFY033181",
+      "courier": "ApnaFinds Demo Express"
+    },
+    {
+      "id": "APNA-VERIFY-104140",
+      "customerName": "ApnaFinds Verification",
+      "phone": "9888888888",
+      "email": "verify@apnafinds.local",
+      "items": [
+        {
+          "name": "Verification Product",
+          "price": 499,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 499,
+      "shipping": 0,
+      "total": 499,
+      "status": "Delivered",
+      "paymentMethod": "COD",
+      "shippingAddress": {
+        "name": "ApnaFinds Verification",
+        "phone": "9888888888",
+        "address": "Verification Address",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500072"
+      },
+      "orderId": "APNA-VERIFY-104140",
+      "createdAt": "2026-07-13T10:05:04.142Z",
+      "updatedAt": "2026-07-13T10:09:01.250Z",
+      "automationStatus": "Courier booked",
+      "automationAttempts": 1,
+      "shipmentId": "DEMO-SHP-RIFY104140",
+      "awb": "APNARIFY104140",
+      "courier": "ApnaFinds Demo Express"
+    },
+    {
+      "id": "APNA-DEMO-103957",
+      "customerName": "Narender Mangala",
+      "phone": "9666337370",
+      "email": "demo@apnafinds.com",
+      "items": [
+        {
+          "id": "1",
+          "name": "Electric Garlic Chopper",
+          "price": 499,
+          "quantity": 1,
+          "image": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1000&h=1000&q=85"
+        }
+      ],
+      "subtotal": 499,
+      "discount": 0,
+      "shipping": 0,
+      "total": 499,
+      "status": "Delivered",
+      "paymentMethod": "COD",
+      "shippingAddress": {
+        "name": "Narender Mangala",
+        "phone": "9666337370",
+        "address": "Kukatpally",
+        "city": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500072"
+      },
+      "orderId": "APNA-DEMO-103957",
+      "createdAt": "2026-07-13T10:05:03.999Z",
+      "updatedAt": "2026-07-13T10:10:01.253Z",
+      "automationStatus": "Courier booked",
+      "automationAttempts": 1,
+      "shipmentId": "DEMO-SHP-DEMO103957",
+      "awb": "APNADEMO103957",
+      "courier": "ApnaFinds Demo Express"
+    }
+  ],
+  "shipments": [
+    {
+      "id": "SHP1783939722203129",
+      "orderId": "APNA-COD-TEST-1783939722",
+      "provider": "Shiprocket",
+      "mode": "demo",
+      "providerOrderId": "DEMO-ORD-1783939722",
+      "shipmentId": "DEMO-SHP-1783939722",
+      "awb": "APNA1783939722",
+      "courier": "ApnaFinds Demo Express",
+      "courierId": 101,
+      "status": "Pickup Scheduled",
+      "customerStatus": "Confirmed",
+      "pickupStatus": "Scheduled",
+      "estimatedDelivery": "2026-07-17T10:48:42.203Z",
+      "trackingEvents": [
+        {
+          "status": "Order received",
+          "activity": "Order automatically sent to the demo logistics system",
+          "date": "2026-07-13T10:48:42.203Z"
+        },
+        {
+          "status": "Pickup scheduled",
+          "activity": "Pickup is scheduled from the configured seller location",
+          "date": "2026-07-13T10:48:42.203Z"
+        }
+      ],
+      "raw": {
+        "demo": true
+      },
+      "createdAt": "2026-07-13T10:48:42.203Z",
+      "updatedAt": "2026-07-13T10:48:42.203Z",
+      "demoStageUpdatedAt": "2026-07-13T10:48:42.203Z"
+    },
+    {
+      "id": "SHP1783938033192862",
+      "orderId": "APNA-VERIFY-033181",
+      "provider": "Shiprocket",
+      "mode": "demo",
+      "providerOrderId": "DEMO-ORD-RIFY033181",
+      "shipmentId": "DEMO-SHP-RIFY033181",
+      "awb": "APNARIFY033181",
+      "courier": "ApnaFinds Demo Express",
+      "courierId": 101,
+      "status": "Ready for Pickup",
+      "customerStatus": "Packed",
+      "pickupStatus": "Scheduled",
+      "estimatedDelivery": "2026-07-17T10:20:33.191Z",
+      "trackingEvents": [
+        {
+          "status": "Packed",
+          "activity": "The seller packed the order and prepared it for pickup",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:20:33.207Z"
+        },
+        {
+          "status": "Order received",
+          "activity": "Order automatically sent to the demo logistics system",
+          "date": "2026-07-13T10:20:33.191Z"
+        },
+        {
+          "status": "Pickup scheduled",
+          "activity": "Pickup is scheduled from the configured seller location",
+          "date": "2026-07-13T10:20:33.191Z"
+        }
+      ],
+      "raw": {
+        "demo": true
+      },
+      "createdAt": "2026-07-13T10:20:33.192Z",
+      "updatedAt": "2026-07-13T10:20:33.207Z",
+      "demoStageUpdatedAt": "2026-07-13T10:20:33.207Z"
+    },
+    {
+      "id": "SHP1783937104154428",
+      "orderId": "APNA-VERIFY-104140",
+      "provider": "Shiprocket",
+      "mode": "demo",
+      "providerOrderId": "DEMO-ORD-RIFY104140",
+      "shipmentId": "DEMO-SHP-RIFY104140",
+      "awb": "APNARIFY104140",
+      "courier": "ApnaFinds Demo Express",
+      "courierId": 101,
+      "status": "Delivered",
+      "customerStatus": "Delivered",
+      "pickupStatus": "Scheduled",
+      "estimatedDelivery": "2026-07-17T10:05:04.153Z",
+      "trackingEvents": [
+        {
+          "status": "Delivered",
+          "activity": "The package was delivered successfully",
+          "location": "Delivery address",
+          "date": "2026-07-13T10:09:01.250Z"
+        },
+        {
+          "status": "Out for delivery",
+          "activity": "The package is out for delivery",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:08:01.249Z"
+        },
+        {
+          "status": "In transit",
+          "activity": "The package is moving through the courier network",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:07:01.248Z"
+        },
+        {
+          "status": "Shipped",
+          "activity": "The courier collected the package",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:06:01.244Z"
+        },
+        {
+          "status": "Packed",
+          "activity": "The seller packed the order and prepared it for pickup",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:05:04.162Z"
+        },
+        {
+          "status": "Order received",
+          "activity": "Order automatically sent to the demo logistics system",
+          "date": "2026-07-13T10:05:04.153Z"
+        },
+        {
+          "status": "Pickup scheduled",
+          "activity": "Pickup is scheduled from the configured seller location",
+          "date": "2026-07-13T10:05:04.153Z"
+        }
+      ],
+      "raw": {
+        "demo": true
+      },
+      "createdAt": "2026-07-13T10:05:04.154Z",
+      "updatedAt": "2026-07-13T10:09:01.250Z",
+      "demoStageUpdatedAt": "2026-07-13T10:09:01.250Z"
+    },
+    {
+      "id": "SHP1783937104004418",
+      "orderId": "APNA-DEMO-103957",
+      "provider": "Shiprocket",
+      "mode": "demo",
+      "providerOrderId": "DEMO-ORD-DEMO103957",
+      "shipmentId": "DEMO-SHP-DEMO103957",
+      "awb": "APNADEMO103957",
+      "courier": "ApnaFinds Demo Express",
+      "courierId": 101,
+      "status": "Delivered",
+      "customerStatus": "Delivered",
+      "pickupStatus": "Scheduled",
+      "estimatedDelivery": "2026-07-17T10:05:04.003Z",
+      "trackingEvents": [
+        {
+          "status": "Delivered",
+          "activity": "The package was delivered successfully",
+          "location": "Delivery address",
+          "date": "2026-07-13T10:10:01.253Z"
+        },
+        {
+          "status": "Out for delivery",
+          "activity": "The package is out for delivery",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:09:01.250Z"
+        },
+        {
+          "status": "In transit",
+          "activity": "The package is moving through the courier network",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:08:01.249Z"
+        },
+        {
+          "status": "Shipped",
+          "activity": "The courier collected the package",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:07:01.248Z"
+        },
+        {
+          "status": "Packed",
+          "activity": "The seller packed the order and prepared it for pickup",
+          "location": "ApnaFinds Demo Network",
+          "date": "2026-07-13T10:06:01.244Z"
+        },
+        {
+          "status": "Order received",
+          "activity": "Order automatically sent to the demo logistics system",
+          "date": "2026-07-13T10:05:04.003Z"
+        },
+        {
+          "status": "Pickup scheduled",
+          "activity": "Pickup is scheduled from the configured seller location",
+          "date": "2026-07-13T10:05:04.003Z"
+        }
+      ],
+      "raw": {
+        "demo": true
+      },
+      "createdAt": "2026-07-13T10:05:04.004Z",
+      "updatedAt": "2026-07-13T10:10:01.253Z",
+      "demoStageUpdatedAt": "2026-07-13T10:10:01.253Z"
+    }
+  ],
   "returns": [],
   "customers": [],
+  "payments": [
+    {
+      "id": "PAY1783939722195241",
+      "orderId": "APNA-COD-TEST-1783939722",
+      "customerName": "COD Test Customer",
+      "phone": "9888888888",
+      "email": "codtest@apnafinds.local",
+      "paymentMethod": "COD Advance",
+      "amount": 49,
+      "amountPaid": 49,
+      "status": "Paid",
+      "transactionId": "DEMO-UPI-1783939722193759",
+      "mode": "demo",
+      "total": 499,
+      "balanceDue": 450,
+      "createdAt": "2026-07-13T10:48:42.193Z",
+      "updatedAt": "2026-07-13T10:48:42.193Z"
+    }
+  ],
+  "settings": {},
   "support": [],
-  "events": []
+  "events": [
+    {
+      "id": "EVT1783939722203489",
+      "type": "shipment.booked",
+      "message": "Courier booked for APNA-COD-TEST-1783939722",
+      "details": {
+        "orderId": "APNA-COD-TEST-1783939722",
+        "awb": "APNA1783939722",
+        "courier": "ApnaFinds Demo Express",
+        "mode": "demo"
+      },
+      "createdAt": "2026-07-13T10:48:42.203Z"
+    },
+    {
+      "id": "EVT1783939722199833",
+      "type": "order.received",
+      "message": "Order APNA-COD-TEST-1783939722 was received",
+      "details": {
+        "orderId": "APNA-COD-TEST-1783939722"
+      },
+      "createdAt": "2026-07-13T10:48:42.199Z"
+    },
+    {
+      "id": "EVT1783939722195869",
+      "type": "payment.cod_advance_paid",
+      "message": "COD advance payment received for APNA-COD-TEST-1783939722",
+      "details": {
+        "orderId": "APNA-COD-TEST-1783939722",
+        "amount": 49,
+        "transactionId": "DEMO-UPI-1783939722193759",
+        "mode": "demo"
+      },
+      "createdAt": "2026-07-13T10:48:42.195Z"
+    },
+    {
+      "id": "EVT1783938033207890",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-033181 advanced to Packed",
+      "details": {
+        "orderId": "APNA-VERIFY-033181",
+        "awb": "APNARIFY033181",
+        "status": "Packed"
+      },
+      "createdAt": "2026-07-13T10:20:33.207Z"
+    },
+    {
+      "id": "EVT1783938033192191",
+      "type": "shipment.booked",
+      "message": "Courier booked for APNA-VERIFY-033181",
+      "details": {
+        "orderId": "APNA-VERIFY-033181",
+        "awb": "APNARIFY033181",
+        "courier": "ApnaFinds Demo Express",
+        "mode": "demo"
+      },
+      "createdAt": "2026-07-13T10:20:33.192Z"
+    },
+    {
+      "id": "EVT1783938033185167",
+      "type": "order.received",
+      "message": "Order APNA-VERIFY-033181 was received",
+      "details": {
+        "orderId": "APNA-VERIFY-033181"
+      },
+      "createdAt": "2026-07-13T10:20:33.185Z"
+    },
+    {
+      "id": "EVT1783937401253580",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-DEMO-103957 advanced to Delivered",
+      "details": {
+        "orderId": "APNA-DEMO-103957",
+        "awb": "APNADEMO103957",
+        "status": "Delivered"
+      },
+      "createdAt": "2026-07-13T10:10:01.253Z"
+    },
+    {
+      "id": "EVT1783937341251309",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-DEMO-103957 advanced to Out for delivery",
+      "details": {
+        "orderId": "APNA-DEMO-103957",
+        "awb": "APNADEMO103957",
+        "status": "Out for delivery"
+      },
+      "createdAt": "2026-07-13T10:09:01.251Z"
+    },
+    {
+      "id": "EVT1783937341251796",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-104140 advanced to Delivered",
+      "details": {
+        "orderId": "APNA-VERIFY-104140",
+        "awb": "APNARIFY104140",
+        "status": "Delivered"
+      },
+      "createdAt": "2026-07-13T10:09:01.251Z"
+    },
+    {
+      "id": "EVT1783937281249253",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-DEMO-103957 advanced to In transit",
+      "details": {
+        "orderId": "APNA-DEMO-103957",
+        "awb": "APNADEMO103957",
+        "status": "In transit"
+      },
+      "createdAt": "2026-07-13T10:08:01.249Z"
+    },
+    {
+      "id": "EVT1783937281249981",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-104140 advanced to Out for delivery",
+      "details": {
+        "orderId": "APNA-VERIFY-104140",
+        "awb": "APNARIFY104140",
+        "status": "Out for delivery"
+      },
+      "createdAt": "2026-07-13T10:08:01.249Z"
+    },
+    {
+      "id": "EVT1783937221248883",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-DEMO-103957 advanced to Shipped",
+      "details": {
+        "orderId": "APNA-DEMO-103957",
+        "awb": "APNADEMO103957",
+        "status": "Shipped"
+      },
+      "createdAt": "2026-07-13T10:07:01.248Z"
+    },
+    {
+      "id": "EVT1783937221248950",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-104140 advanced to In transit",
+      "details": {
+        "orderId": "APNA-VERIFY-104140",
+        "awb": "APNARIFY104140",
+        "status": "In transit"
+      },
+      "createdAt": "2026-07-13T10:07:01.248Z"
+    },
+    {
+      "id": "EVT1783937161244872",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-DEMO-103957 advanced to Packed",
+      "details": {
+        "orderId": "APNA-DEMO-103957",
+        "awb": "APNADEMO103957",
+        "status": "Packed"
+      },
+      "createdAt": "2026-07-13T10:06:01.244Z"
+    },
+    {
+      "id": "EVT1783937161244489",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-104140 advanced to Shipped",
+      "details": {
+        "orderId": "APNA-VERIFY-104140",
+        "awb": "APNARIFY104140",
+        "status": "Shipped"
+      },
+      "createdAt": "2026-07-13T10:06:01.244Z"
+    },
+    {
+      "id": "EVT1783937104162381",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-104140 advanced to Packed",
+      "details": {
+        "orderId": "APNA-VERIFY-104140",
+        "awb": "APNARIFY104140",
+        "status": "Packed"
+      },
+      "createdAt": "2026-07-13T10:05:04.162Z"
+    },
+    {
+      "id": "EVT1783937104154393",
+      "type": "shipment.booked",
+      "message": "Courier booked for APNA-VERIFY-104140",
+      "details": {
+        "orderId": "APNA-VERIFY-104140",
+        "awb": "APNARIFY104140",
+        "courier": "ApnaFinds Demo Express",
+        "mode": "demo"
+      },
+      "createdAt": "2026-07-13T10:05:04.154Z"
+    },
+    {
+      "id": "EVT1783937104142172",
+      "type": "order.received",
+      "message": "Order APNA-VERIFY-104140 was received",
+      "details": {
+        "orderId": "APNA-VERIFY-104140"
+      },
+      "createdAt": "2026-07-13T10:05:04.142Z"
+    },
+    {
+      "id": "EVT1783937104004778",
+      "type": "shipment.booked",
+      "message": "Courier booked for APNA-DEMO-103957",
+      "details": {
+        "orderId": "APNA-DEMO-103957",
+        "awb": "APNADEMO103957",
+        "courier": "ApnaFinds Demo Express",
+        "mode": "demo"
+      },
+      "createdAt": "2026-07-13T10:05:04.004Z"
+    },
+    {
+      "id": "EVT1783937104000669",
+      "type": "order.received",
+      "message": "Order APNA-DEMO-103957 was received",
+      "details": {
+        "orderId": "APNA-DEMO-103957"
+      },
+      "createdAt": "2026-07-13T10:05:04.000Z"
+    }
+  ],
+  "otpAudit": []
 }
