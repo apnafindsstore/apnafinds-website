@@ -675,7 +675,9 @@ app.post("/api/auth/otp/verify", (request, response) => {
 app.post("/api/auth/register", async (request, response) => {
   const name = normalizeCustomerName(request.body?.name);
   const email = normalizeCustomerEmail(request.body?.email);
-  const phone = normalizeCustomerPhone(request.body?.phone);
+  const phone = String(request.body?.phone || "").trim()
+    ? normalizeCustomerPhone(request.body?.phone)
+    : "";
   const password = String(request.body?.password || "");
 
   if (name.length < 2) {
@@ -686,7 +688,7 @@ app.post("/api/auth/register", async (request, response) => {
     return response.status(400).json({ ok: false, error: "Enter a valid email address" });
   }
 
-  if (!isValidIndianPhone(phone)) {
+  if (phone && !isValidIndianPhone(phone)) {
     return response.status(400).json({ ok: false, error: "Enter a valid Indian mobile number" });
   }
 
@@ -697,13 +699,6 @@ app.post("/api/auth/register", async (request, response) => {
     });
   }
 
-  const phoneVerified = consumeVerificationToken({
-    token: request.body?.phoneVerificationToken,
-    channel: "phone",
-    destination: phone,
-    purpose: "register-phone"
-  });
-
   const emailVerified = consumeVerificationToken({
     token: request.body?.emailVerificationToken,
     channel: "email",
@@ -711,15 +706,15 @@ app.post("/api/auth/register", async (request, response) => {
     purpose: "register-email"
   });
 
-  if (!phoneVerified || !emailVerified) {
+  if (!emailVerified) {
     return response.status(400).json({
       ok: false,
-      error: "Verify both your mobile number and email address"
+      error: "Verify your email address first"
     });
   }
 
   const created = await mutateDatabase(database => {
-    if (findCustomer(database, email) || findCustomer(database, phone)) {
+    if (findCustomer(database, email) || (phone && findCustomer(database, phone))) {
       return null;
     }
 
@@ -729,11 +724,11 @@ app.post("/api/auth/register", async (request, response) => {
       id: stableCustomerId(email || phone),
       name,
       email,
-      phone,
+      phone: phone || null,
       passwordHash: passwordRecord.hash,
       passwordSalt: passwordRecord.salt,
       accountType: "registered",
-      phoneVerified: true,
+      phoneVerified: false,
       emailVerified: true,
       marketingConsent: {
         whatsapp: Boolean(request.body?.marketingConsent?.whatsapp),
