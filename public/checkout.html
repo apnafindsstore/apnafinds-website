@@ -210,9 +210,9 @@
               <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p class="font-black text-brand-green"><i class="fa-solid fa-mobile-screen-button mr-2"></i>Verify delivery mobile</p>
-                  <p id="checkoutOtpStatus" class="mt-1 text-xs text-gray-600">Required for guest checkout. Signed-in members with a verified matching number are verified automatically.</p>
+                  <p id="checkoutOtpStatus" class="mt-1 text-xs text-gray-600">Phone verification is optional and will be available later. Required for guest checkout when enabled.</p>
                 </div>
-                <button id="sendCheckoutOtp" type="button" class="rounded-xl border-2 border-brand-green px-5 py-3 text-sm font-black text-brand-green">Send OTP</button>
+                <button id="sendCheckoutOtp" type="button" disabled class="rounded-xl border-2 border-gray-300 px-5 py-3 text-sm font-black text-gray-400 cursor-not-allowed">Coming later</button>
               </div>
               <div id="checkoutOtpBox" class="mt-4 hidden grid gap-3 sm:grid-cols-[1fr_auto]">
                 <input id="checkoutOtpCode" maxlength="6" inputmode="numeric" placeholder="Enter 6-digit OTP" class="rounded-xl border bg-white px-4 py-3 text-center text-lg font-black tracking-[.35em] outline-none focus:border-brand-green">
@@ -1026,20 +1026,6 @@
         return "Enter a valid 10-digit Indian mobile number";
       }
 
-      const signedInCustomer =
-        window.ApnaFindsCustomerAuth?.getCustomer?.();
-
-      const accountPhoneVerified =
-        signedInCustomer?.phoneVerified &&
-        String(signedInCustomer.phone || "").replace(/\D/g, "").slice(-10) === data.phone;
-
-      if (!accountPhoneVerified && (
-        !phoneVerificationToken ||
-        verifiedPhone !== data.phone
-      )) {
-        return "Verify your mobile number with OTP";
-      }
-
       if (data.addressLine.length < 8) {
         return "Enter your complete delivery address";
       }
@@ -1742,10 +1728,8 @@
         if (value !== verifiedPhone) {
           phoneVerificationToken = "";
           verifiedPhone = "";
-          elements.sendCheckoutOtp.disabled = false;
-          elements.sendCheckoutOtp.textContent = "Send OTP";
           elements.checkoutOtpStatus.textContent =
-            "Required for guest checkout. Signed-in members with a verified matching number are verified automatically.";
+            "Phone verification is optional and will be available later. Required for guest checkout when enabled.";
           elements.checkoutOtpStatus.className =
             "mt-1 text-xs text-gray-600";
         }

@@ -973,28 +973,10 @@ app.post(
       const database = await readDatabase();
       verifiedCustomer = database.customers.find(item => item.id === session.sub);
 
-      if (
-        !verifiedCustomer ||
-        normalizeCustomerPhone(verifiedCustomer.phone) !== phone ||
-        !verifiedCustomer.phoneVerified
-      ) {
+      if (!verifiedCustomer) {
         return response.status(403).json({
           ok: false,
-          error: "Your account mobile number must be verified before checkout"
-        });
-      }
-    } else {
-      const verifiedGuest = consumeVerificationToken({
-        token: request.body?.phoneVerificationToken,
-        channel: "phone",
-        destination: phone,
-        purpose: "guest-checkout"
-      });
-
-      if (!verifiedGuest) {
-        return response.status(403).json({
-          ok: false,
-          error: "Verify your mobile number with OTP before placing the order"
+          error: "Your session is invalid"
         });
       }
     }
@@ -1014,7 +996,7 @@ app.post(
         ...request.body,
         customerId: verifiedCustomer?.id || "",
         customerType: verifiedCustomer ? "registered" : "guest",
-        phoneVerified: true
+        phoneVerified: false
       };
 
       const bundle =
@@ -1029,7 +1011,7 @@ app.post(
           email: orderPayload.email,
           phone: orderPayload.phone,
           accountType: verifiedCustomer ? "registered" : "guest",
-          phoneVerified: true,
+          phoneVerified: false,
           emailVerified: Boolean(verifiedCustomer?.emailVerified),
           marketingConsent: orderPayload.marketingConsent || {
             whatsapp: false,
