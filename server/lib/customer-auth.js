@@ -150,6 +150,54 @@ function createOtp() {
 }
 
 async function sendEmailOtp({ destination, otp, purpose }) {
+  // Construct email content once
+  const subject = `Your ApnaFinds verification code: ${otp}`;
+  const text =
+    `Your ApnaFinds verification code is ${otp}. ` +
+    `It expires in ${Math.round(OTP_TTL_MS / 60000)} minutes. ` +
+    `Purpose: ${purpose}. Never share this code.`;
+  const html =
+    `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto">` +
+    `<h2 style="color:#0F5C4A">ApnaFinds verification</h2>` +
+    `<p>Your one-time code is:</p>` +
+    `<div style="font-size:34px;font-weight:800;letter-spacing:8px;padding:18px;background:#f4f7f6;border-radius:14px;text-align:center">${otp}</div>` +
+    `<p>This code expires in ${Math.round(OTP_TTL_MS / 60000)} minutes.</p>` +
+    `<p style="color:#666">Never share this code with anyone.</p>` +
+    `</div>`;
+
+  // Try Resend API if RESEND_API_KEY is configured
+  const resendApiKey = String(process.env.RESEND_API_KEY || "").trim();
+
+  if (resendApiKey) {
+    const from =
+      process.env.RESEND_FROM ||
+      process.env.SMTP_FROM ||
+      "ApnaFinds <onboarding@resend.dev>";
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${resendApiKey}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        from,
+        to: [destination],
+        subject,
+        text,
+        html
+      }),
+      signal: AbortSignal.timeout(15000)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Resend API returned ${response.status}`);
+    }
+
+    return;
+  }
+
+  // Fallback to Nodemailer SMTP
   const nodemailer = require("nodemailer");
 
   const host = String(process.env.SMTP_HOST || "").trim();
@@ -173,19 +221,9 @@ async function sendEmailOtp({ destination, otp, purpose }) {
       process.env.SMTP_FROM ||
       `ApnaFinds <${user}>`,
     to: destination,
-    subject: `Your ApnaFinds verification code: ${otp}`,
-    text:
-      `Your ApnaFinds verification code is ${otp}. ` +
-      `It expires in ${Math.round(OTP_TTL_MS / 60000)} minutes. ` +
-      `Purpose: ${purpose}. Never share this code.`,
-    html:
-      `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto">` +
-      `<h2 style="color:#0F5C4A">ApnaFinds verification</h2>` +
-      `<p>Your one-time code is:</p>` +
-      `<div style="font-size:34px;font-weight:800;letter-spacing:8px;padding:18px;background:#f4f7f6;border-radius:14px;text-align:center">${otp}</div>` +
-      `<p>This code expires in ${Math.round(OTP_TTL_MS / 60000)} minutes.</p>` +
-      `<p style="color:#666">Never share this code with anyone.</p>` +
-      `</div>`
+    subject,
+    text,
+    html
   });
 }
 
