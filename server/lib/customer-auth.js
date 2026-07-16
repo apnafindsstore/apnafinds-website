@@ -313,15 +313,53 @@ async function createChallenge({
     item.expiresAt > Date.now()
   ));
 
-  if (
-    existing &&
-    Date.now() - existing.sentAt < OTP_RESEND_SECONDS * 1000
-  ) {
-    const wait = Math.ceil(
-      (OTP_RESEND_SECONDS * 1000 - (Date.now() - existing.sentAt)) / 1000
-    );
+  if (existing) {
+    const resendCount = Number(existing.resendCount || 0);
+    const resendWaitSeconds = resendCount >= 3 ? 60 : 30;
+    const timeSinceLastSend = Date.now() - existing.sentAt;
+    const resendWaitMs = resendWaitSeconds * 1000;
 
-    throw new Error(`Please wait ${wait} seconds before requesting another OTP`);
+    if (timeSinceLastSend < resendWaitMs) {
+      const wait = Math.ceil((resendWaitMs - timeSinceLastSend) / 1000);
+      throw new Error(`Please wait ${wait} seconds before requesting another OTP`);
+    }
+
+    existing.resendCount = resendCount + 1;
+    existing.sentAt = Date.now();
+    existing.attempts = 0;
+
+    const otp = createOtp();
+    const otpHash = hashPassword(otp);
+
+    existing.otpSalt = otpHash.salt;
+    existing.otpHash = otpHash.hash;
+
+    await deliverOtp({
+      channel: normalizedChannel,
+      destination: normalizedDestination,
+      otp,
+      purpose: existing.purpose
+    });
+
+    const nextResendCount = resendCount + 1;
+    const nextResendWaitSeconds = nextResendCount >= 3 ? 60 : 30;
+
+    const demoExpose =
+      String(process.env.OTP_MODE || "demo").toLowerCase() === "demo" &&
+      String(process.env.OTP_DEMO_EXPOSE || "true").toLowerCase() === "true";
+
+    return {
+      challengeId: existing.id,
+      channel: normalizedChannel,
+      maskedDestination: maskDestination(
+        normalizedChannel,
+        normalizedDestination
+      ),
+      expiresInSeconds: Math.floor(OTP_TTL_MS / 1000),
+      resendInSeconds: nextResendWaitSeconds,
+      resendCount: nextResendCount,
+      ...(demoExpose ? { demoOtp: otp } : {})
+    };
   }
 
   const id = crypto.randomUUID();
@@ -336,6 +374,7 @@ async function createChallenge({
     otpSalt: otpHash.salt,
     otpHash: otpHash.hash,
     attempts: 0,
+    resendCount: 0,
     sentAt: Date.now(),
     expiresAt: Date.now() + OTP_TTL_MS,
     ip
@@ -362,7 +401,8 @@ async function createChallenge({
       normalizedDestination
     ),
     expiresInSeconds: Math.floor(OTP_TTL_MS / 1000),
-    resendInSeconds: OTP_RESEND_SECONDS,
+    resendInSeconds: 30,
+    resendCount: 0,
     ...(demoExpose ? { demoOtp: otp } : {})
   };
 }
