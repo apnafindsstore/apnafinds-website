@@ -1,4 +1,10 @@
+HEAD
 node_modules/
 .env
 data/db.json
 *.log
+
+
+node_modules/
+.env
+ 96aba08 (Remove node_modules and add Zoho SMTP)
