@@ -2,7 +2,10 @@ require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
-
+const {
+  sendEmail,
+  verifyMailConnection
+} = require("./server/mailer");
 const {
   ensureDatabase,
   readDatabase,
@@ -2889,26 +2892,65 @@ app.use((request, response) => {
 async function start() {
   await ensureDatabase();
 
+  try {
+    await verifyMailConnection();
+  } catch (error) {
+    console.error(
+      "Zoho SMTP connection failed:",
+      error.message
+    );
+  }
+
   app.listen(PORT, () => {
     console.log("");
-    console.log(
-      `ApnaFinds is running at http://localhost:${PORT}`
-    );
-    console.log(
-      `Admin login: http://localhost:${PORT}/admin-login.html`
-    );
-    console.log(
-      `Admin logistics: http://localhost:${PORT}/admin-logistics.html`
-    );
-    console.log(
-      `Admin management: http://localhost:${PORT}/admin-management.html`
-    );
-    console.log(
-      `Logistics mode: ${logistics.getProviderStatus().mode}`
-    );
+    console.log(`ApnaFinds is running at http://localhost:${PORT}`);
+    console.log(`Admin login: http://localhost:${PORT}/admin-login.html`);
+    console.log(`Admin logistics: http://localhost:${PORT}/admin-logistics.html`);
+    console.log(`Admin management: http://localhost:${PORT}/admin-management.html`);
+    console.log(`Logistics mode: ${logistics.getProviderStatus().mode}`);
     console.log("");
   });
 
+  const automationIntervalSeconds = Math.max(
+    10,
+    Number(process.env.AUTOMATION_INTERVAL_SECONDS || 20)
+  );
+
+  const runAutomaticProcess = async () => {
+    try {
+      const booking = await processQueuedOrders();
+      const demoTracking = await advanceDemoShipments();
+      const demoReturns = await advanceDemoReturns();
+
+      if (
+        booking.processed ||
+        demoTracking.advanced ||
+        demoReturns.advanced
+      ) {
+        console.log(
+          `[automation] booked=${booking.processed || 0}, tracking=${demoTracking.advanced || 0}, returns=${demoReturns.advanced || 0}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Background automation failed:",
+        error.message
+      );
+    }
+  };
+
+  setTimeout(runAutomaticProcess, 1200).unref();
+
+  setInterval(
+    runAutomaticProcess,
+    automationIntervalSeconds * 1000
+  ).unref();
+}
+
+start().catch(error => {
+  console.error("Server failed to start:", error);
+  process.exitCode = 1;
+});
   const automationIntervalSeconds =
     Math.max(
       10,
