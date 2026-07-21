@@ -1,8 +1,5 @@
 const nodemailer = require("nodemailer");
-const {
-  sendEmail,
-  verifyMailConnection
-} = require("./server/mailer");
+
 const requiredVariables = [
   "SMTP_HOST",
   "SMTP_PORT",
@@ -13,7 +10,9 @@ const requiredVariables = [
 
 for (const variable of requiredVariables) {
   if (!process.env[variable]) {
-    throw new Error(`Missing required environment variable: ${variable}`);
+    throw new Error(
+      `Missing required environment variable: ${variable}`
+    );
   }
 }
 
@@ -27,7 +26,18 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-async function sendEmail({ to, subject, text, html }) {
+async function sendEmail({
+  to,
+  subject,
+  text,
+  html
+}) {
+  if (!to || !subject) {
+    throw new Error(
+      "Email recipient and subject are required."
+    );
+  }
+
   return transporter.sendMail({
     from: process.env.MAIL_FROM,
     to,
@@ -39,7 +49,9 @@ async function sendEmail({ to, subject, text, html }) {
 
 async function verifyMailConnection() {
   await transporter.verify();
-  console.log("Zoho SMTP connection successful.");
+  console.log(
+    "Zoho SMTP connection successful."
+  );
 }
 
 module.exports = {
