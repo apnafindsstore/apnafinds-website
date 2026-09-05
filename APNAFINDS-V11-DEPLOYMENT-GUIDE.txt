@@ -1,0 +1,23 @@
+APNAFINDS ULTIMATE V11 - SAFE DEPLOYMENT
+
+1. Extract this ZIP into a new folder. Do not overwrite the live project first.
+2. Copy your private .env values into a new .env file. Never copy .env into GitHub.
+3. Add Razorpay TEST values only:
+   RAZORPAY_MODE=test
+   RAZORPAY_KEY_ID=rzp_test_...
+   RAZORPAY_KEY_SECRET=...
+4. Run: npm.cmd install
+5. Run: npm.cmd run check
+6. Run: npm start
+7. Test locally:
+   - Email OTP login and registration
+   - COD checkout
+   - Razorpay Test Mode checkout
+   - Order tracking, returns and admin login
+   - CSV/JSON catalog import/export
+8. Only after local tests, replace the clean Git project contents while preserving its .git folder and private .env.
+9. Run git status, npm.cmd run check and git diff --check.
+10. Commit and push only after confirming no secrets are staged.
+
+Razorpay keys, SMTP passwords, API keys and webhook secrets must stay only in .env or Railway Variables.
+Amazon, Meesho, Flipkart, Shiprocket and supplier APIs are dashboard foundations until approved API access is configured.

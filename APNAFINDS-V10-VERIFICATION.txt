@@ -1,0 +1,16 @@
+ApnaFinds Ultimate v10 verification
+===================================
+Wed Jul 22 07:40:34 UTC 2026
+
+$ node --check server.js
+PASS
+$ node --check public/js/business-contacts.js
+PASS
+$ npm run check
+
+> apnafinds-premium-otp-guest-checkout@10.0.0 check
+> node --check server.js && node --check server/lib/storage.js && node --check server/lib/logistics.js && node --check server/lib/automation.js && node --check server/lib/assistant.js && node --check server/lib/admin-auth.js && node --check public/js/admin-auth.js && node --check public/js/backend-client.js && node --check public/js/admin-logistics.js && node --check public/js/customer-tracking.js && node --check server/lib/customer-auth.js && node --check public/js/customer-auth.js && node --check public/js/products.js
+
+PASS
+
+Runtime note: npm start requires npm.cmd install first; node_modules is intentionally excluded from the release ZIP.

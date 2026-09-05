@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Catalog Operations | ApnaFinds</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              green: "#0F5C4A",
+              dark: "#0A3622",
+              orange: "#F59E0B"
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+  <header class="border-b bg-white">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5">
+      <div>
+        <a href="admin-commerce-hub.html" class="text-sm font-bold text-brand-green">← Commerce Hub</a>
+        <h1 class="mt-1 text-2xl font-black">Catalog operations</h1>
+        <p class="mt-1 text-sm text-slate-500">Import, review, search, filter, edit and manage supplier products.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button id="downloadTemplate" class="rounded-xl border bg-white px-4 py-2 font-bold">
+          <i class="fa-solid fa-file-arrow-down mr-2"></i>Template
+        </button>
+        <a href="admin.html#products" class="rounded-xl bg-slate-950 px-4 py-2 font-bold text-white">Open products</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl space-y-6 p-5 py-8">
+    <section class="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+      <div class="rounded-3xl bg-white p-6 shadow-sm">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-black">Import supplier catalog</h2>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+              Supported: CSV and JSON. PDF files are accepted for review only.
+            </p>
+          </div>
+          <label class="flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold">
+            <input id="replace" type="checkbox">
+            Replace catalog
+          </label>
+        </div>
+
+        <div class="mt-6 rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center">
+          <input id="file" type="file" accept=".csv,.json,.pdf" class="mx-auto block max-w-full">
+          <p class="mt-3 text-xs text-slate-500">
+            Recommended columns: name, sku, price, mrp, cost, shipping_cost, stock, category, brand, barcode,
+            supplier, supplier_sku, warehouse, fulfillment_type, image_url, status, website, amazon, meesho, flipkart
+          </p>
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <button id="preview" class="rounded-xl bg-brand-green px-5 py-3 font-black text-white">
+            Preview file
+          </button>
+          <button id="clearCatalog" class="rounded-xl border border-red-200 px-5 py-3 font-black text-red-700">
+            Clear local catalog
+          </button>
+        </div>
+
+        <div id="result" class="mt-6 hidden rounded-2xl bg-slate-50 p-5"></div>
+      </div>
+
+      <aside class="space-y-6">
+        <section class="rounded-3xl bg-slate-950 p-6 text-white">
+          <h2 class="text-xl font-black">Export catalog</h2>
+          <p class="mt-2 text-sm text-slate-400">Export all current products.</p>
+          <div class="mt-5 grid gap-3">
+            <button id="exportCSV" class="rounded-xl bg-white px-4 py-3 font-black text-slate-950">Export CSV</button>
+            <button id="exportJSON" class="rounded-xl border border-white/20 px-4 py-3 font-black">Export JSON</button>
+          </div>
+        </section>
+
+        <section class="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 class="font-black">Catalog summary</h2>
+          <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-slate-500">Products</p>
+              <p id="summaryProducts" class="mt-1 text-2xl font-black">0</p>
+            </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-slate-500">Stock units</p>
+              <p id="summaryStock" class="mt-1 text-2xl font-black">0</p>
+            </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-slate-500">Stock value</p>
+              <p id="summaryValue" class="mt-1 text-xl font-black">₹0</p>
+            </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-slate-500">Avg. margin</p>
+              <p id="summaryMargin" class="mt-1 text-xl font-black">0%</p>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black">Product catalog</h2>
+          <p id="catalogCount" class="mt-1 text-sm text-slate-500">0 products</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="bulkWebsiteOn" class="rounded-xl border px-4 py-2 text-sm font-black">Website ON</button>
+          <button id="bulkInactive" class="rounded-xl border px-4 py-2 text-sm font-black">Set inactive</button>
+          <button id="bulkDelete" class="rounded-xl border border-red-200 px-4 py-2 text-sm font-black text-red-700">Delete selected</button>
+        </div>
+      </div>
+
+      <div class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+        <input id="search" class="rounded-xl border px-4 py-3 outline-none focus:border-brand-green xl:col-span-2"
+               placeholder="Search name, SKU, brand, barcode, supplier or HSN">
+        <select id="categoryFilter" class="rounded-xl border px-4 py-3">
+          <option value="">All categories</option>
+        </select>
+        <select id="supplierFilter" class="rounded-xl border px-4 py-3">
+          <option value="">All suppliers</option>
+        </select>
+        <select id="statusFilter" class="rounded-xl border px-4 py-3">
+          <option value="">All status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="low-stock">Low stock</option>
+        </select>
+      </div>
+
+      <div class="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <select id="channelFilter" class="rounded-xl border px-4 py-3">
+          <option value="">All channels</option>
+          <option value="website">Website enabled</option>
+          <option value="amazon">Amazon enabled</option>
+          <option value="meesho">Meesho enabled</option>
+          <option value="flipkart">Flipkart enabled</option>
+        </select>
+        <select id="fulfillmentFilter" class="rounded-xl border px-4 py-3">
+          <option value="">All fulfillment</option>
+          <option value="self">Self fulfilled</option>
+          <option value="dropship">Dropship</option>
+        </select>
+        <button id="clearFilters" class="rounded-xl border px-4 py-3 font-bold">Clear filters</button>
+      </div>
+
+      <div class="mt-6 overflow-x-auto rounded-2xl border">
+        <table class="min-w-[1500px] w-full text-left text-sm">
+          <thead class="bg-slate-100 text-xs uppercase text-slate-600">
+            <tr>
+              <th class="px-3 py-3"><input id="selectAll" type="checkbox"></th>
+              <th class="px-3 py-3">Product</th>
+              <th class="px-3 py-3">SKU</th>
+              <th class="px-3 py-3">Brand / Barcode</th>
+              <th class="px-3 py-3">Category</th>
+              <th class="px-3 py-3">Supplier</th>
+              <th class="px-3 py-3">Cost</th>
+              <th class="px-3 py-3">Price</th>
+              <th class="px-3 py-3">Profit</th>
+              <th class="px-3 py-3">Margin</th>
+              <th class="px-3 py-3">Stock</th>
+              <th class="px-3 py-3">Warehouse</th>
+              <th class="px-3 py-3">Fulfillment</th>
+              <th class="px-3 py-3">Channels</th>
+              <th class="px-3 py-3">Status</th>
+              <th class="px-3 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody id="catalogBody" class="divide-y"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="hidden py-12 text-center text-slate-500">
+        No products match the current search and filters.
+      </div>
+    </section>
+  </main>
+
+  <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
+    <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="text-xl font-black">Edit product</h2>
+        <button id="closeEdit" class="rounded-xl border px-3 py-2">✕</button>
+      </div>
+      <form id="editForm" class="mt-6 grid gap-4 md:grid-cols-2">
+        <input id="editKey" type="hidden">
+        <label class="text-sm font-bold">Name<input id="editName" required class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">SKU<input id="editSku" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Brand<input id="editBrand" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Barcode<input id="editBarcode" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Category<input id="editCategory" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Supplier<input id="editSupplier" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Cost<input id="editCost" type="number" step="0.01" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Shipping cost<input id="editShippingCost" type="number" step="0.01" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Price<input id="editPrice" type="number" step="0.01" required class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Stock<input id="editStock" type="number" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Warehouse<input id="editWarehouse" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Fulfillment
+          <select id="editFulfillment" class="mt-2 w-full rounded-xl border px-4 py-3">
+            <option value="self">Self fulfilled</option>
+            <option value="dropship">Dropship</option>
+          </select>
+        </label>
+        <label class="text-sm font-bold md:col-span-2">Image URL<input id="editImage" class="mt-2 w-full rounded-xl border px-4 py-3"></label>
+        <label class="text-sm font-bold">Status
+          <select id="editStatus" class="mt-2 w-full rounded-xl border px-4 py-3">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </label>
+        <div class="md:col-span-2 flex flex-wrap gap-4 rounded-2xl bg-slate-50 p-4 text-sm font-bold">
+          <label><input id="editWebsite" type="checkbox" class="mr-2">Website</label>
+          <label><input id="editAmazon" type="checkbox" class="mr-2">Amazon</label>
+          <label><input id="editMeesho" type="checkbox" class="mr-2">Meesho</label>
+          <label><input id="editFlipkart" type="checkbox" class="mr-2">Flipkart</label>
+        </div>
+        <div class="md:col-span-2 flex justify-end gap-3">
+          <button type="button" id="cancelEdit" class="rounded-xl border px-5 py-3 font-bold">Cancel</button>
+          <button class="rounded-xl bg-brand-green px-5 py-3 font-black text-white">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/admin-auth.js"></script>
+  <script src="js/catalog-manager.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const file = $("file");
+    const box = $("result");
+    let rowsCache = [];
+
+    function money(value) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      }).format(Number(value || 0));
+    }
+
+    function safeImage(url) {
+      return url || "https://placehold.co/120x120?text=Product";
+    }
+
+    function uniqueValues(products, key) {
+      return [...new Set(products.map(p => String(p[key] || "").trim()).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
+    }
+
+    function refillSelect(select, values, label) {
+      const current = select.value;
+      select.innerHTML = `<option value="">${label}</option>` +
+        values.map(v => `<option value="${v.replace(/"/g, "&quot;")}">${v}</option>`).join("");
+      select.value = current;
+    }
+
+    function productKey(p) {
+      return String(p.sku || p.id || p.slug);
+    }
+
+    function filteredProducts() {
+      const products = ApnaFindsCatalog.readProducts();
+      const q = $("search").value.trim().toLowerCase();
+      const category = $("categoryFilter").value;
+      const supplier = $("supplierFilter").value;
+      const status = $("statusFilter").value;
+      const channel = $("channelFilter").value;
+      const fulfillment = $("fulfillmentFilter").value;
+
+      return products.filter(p => {
+        const haystack = [
+          p.name, p.sku, p.brand, p.barcode, p.supplier, p.hsn, p.category
+        ].join(" ").toLowerCase();
+
+        if (q && !haystack.includes(q)) return false;
+        if (category && p.category !== category) return false;
+        if (supplier && p.supplier !== supplier) return false;
+        if (fulfillment && p.fulfillmentType !== fulfillment) return false;
+
+        if (status === "active" && !p.active) return false;
+        if (status === "inactive" && p.active) return false;
+        if (status === "low-stock" && Number(p.stock || 0) > 5) return false;
+
+        if (channel && !p.channels?.[channel]) return false;
+
+        return true;
+      });
+    }
+
+    function render() {
+      const products = ApnaFindsCatalog.readProducts();
+      const filtered = filteredProducts();
+      const tbody = $("catalogBody");
+
+      refillSelect($("categoryFilter"), uniqueValues(products, "category"), "All categories");
+      refillSelect($("supplierFilter"), uniqueValues(products, "supplier"), "All suppliers");
+
+      $("summaryProducts").textContent = products.length;
+      $("summaryStock").textContent = products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
+      $("summaryValue").textContent = money(products.reduce((sum, p) => sum + Number(p.cost || 0) * Number(p.stock || 0), 0));
+
+      const margins = products.map(p => ApnaFindsCatalog.marginPercent(p)).filter(Number.isFinite);
+      $("summaryMargin").textContent = `${margins.length ? (margins.reduce((a, b) => a + b, 0) / margins.length).toFixed(1) : 0}%`;
+      $("catalogCount").textContent = `${filtered.length} of ${products.length} products`;
+
+      tbody.innerHTML = filtered.map(p => {
+        const key = productKey(p);
+        const profit = ApnaFindsCatalog.profit(p);
+        const margin = ApnaFindsCatalog.marginPercent(p);
+        return `
+          <tr class="align-top">
+            <td class="px-3 py-4"><input class="rowCheck" data-key="${key}" type="checkbox"></td>
+            <td class="px-3 py-4">
+              <div class="flex min-w-[230px] gap-3">
+                <img src="${safeImage(p.image)}" alt="" class="h-14 w-14 rounded-xl border object-cover" onerror="this.src='https://placehold.co/120x120?text=Product'">
+                <div>
+                  <p class="font-black">${p.name || "Unnamed product"}</p>
+                  <p class="mt-1 text-xs text-slate-500">${p.description || ""}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-3 py-4 font-mono text-xs">${p.sku || p.id}</td>
+            <td class="px-3 py-4"><p class="font-bold">${p.brand || "—"}</p><p class="text-xs text-slate-500">${p.barcode || "—"}</p></td>
+            <td class="px-3 py-4">${p.category || "General"}</td>
+            <td class="px-3 py-4"><p class="font-bold">${p.supplier || "—"}</p><p class="text-xs text-slate-500">${p.supplierSku || ""}</p></td>
+            <td class="px-3 py-4">${money(Number(p.cost || 0) + Number(p.shippingCost || 0))}</td>
+            <td class="px-3 py-4 font-black">${money(p.price)}</td>
+            <td class="px-3 py-4 font-bold ${profit >= 0 ? "text-emerald-700" : "text-red-700"}">${money(profit)}</td>
+            <td class="px-3 py-4">${margin.toFixed(1)}%</td>
+            <td class="px-3 py-4">${p.stock || 0}${Number(p.reservedStock || 0) ? `<span class="block text-xs text-slate-500">Reserved: ${p.reservedStock}</span>` : ""}</td>
+            <td class="px-3 py-4">${p.warehouse || "Default"}</td>
+            <td class="px-3 py-4">${p.fulfillmentType === "dropship" ? "Dropship" : "Self"}</td>
+            <td class="px-3 py-4">
+              <div class="flex min-w-[190px] flex-wrap gap-1 text-[11px] font-bold">
+                ${["website","amazon","meesho","flipkart"].map(c => `<span class="rounded-full px-2 py-1 ${p.channels?.[c] ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-500"}">${c}</span>`).join("")}
+              </div>
+            </td>
+            <td class="px-3 py-4">
+              <span class="rounded-full px-3 py-1 text-xs font-black ${p.active ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"}">${p.active ? "Active" : "Inactive"}</span>
+            </td>
+            <td class="px-3 py-4">
+              <div class="flex gap-2">
+                <button class="editBtn rounded-lg border px-3 py-2 text-xs font-black" data-key="${key}">Edit</button>
+                <button class="deleteBtn rounded-lg border border-red-200 px-3 py-2 text-xs font-black text-red-700" data-key="${key}">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      $("emptyState").classList.toggle("hidden", filtered.length > 0);
+      $("selectAll").checked = false;
+      bindRows();
+    }
+
+    function bindRows() {
+      document.querySelectorAll(".editBtn").forEach(btn => {
+        btn.onclick = () => openEdit(btn.dataset.key);
+      });
+      document.querySelectorAll(".deleteBtn").forEach(btn => {
+        btn.onclick = () => {
+          if (confirm("Delete this product?")) {
+            ApnaFindsCatalog.deleteByKeys([btn.dataset.key]);
+            render();
+          }
+        };
+      });
+    }
+
+    function selectedKeys() {
+      return [...document.querySelectorAll(".rowCheck:checked")].map(x => x.dataset.key);
+    }
+
+    function openEdit(key) {
+      const p = ApnaFindsCatalog.findByKey(key);
+      if (!p) return;
+      $("editKey").value = key;
+      $("editName").value = p.name || "";
+      $("editSku").value = p.sku || "";
+      $("editBrand").value = p.brand || "";
+      $("editBarcode").value = p.barcode || "";
+      $("editCategory").value = p.category || "";
+      $("editSupplier").value = p.supplier || "";
+      $("editCost").value = p.cost || 0;
+      $("editShippingCost").value = p.shippingCost || 0;
+      $("editPrice").value = p.price || 0;
+      $("editStock").value = p.stock || 0;
+      $("editWarehouse").value = p.warehouse || "";
+      $("editFulfillment").value = p.fulfillmentType || "self";
+      $("editImage").value = p.image || "";
+      $("editStatus").value = p.active ? "Active" : "Inactive";
+      $("editWebsite").checked = Boolean(p.channels?.website);
+      $("editAmazon").checked = Boolean(p.channels?.amazon);
+      $("editMeesho").checked = Boolean(p.channels?.meesho);
+      $("editFlipkart").checked = Boolean(p.channels?.flipkart);
+      $("editModal").classList.remove("hidden");
+      $("editModal").classList.add("flex");
+    }
+
+    function closeEdit() {
+      $("editModal").classList.add("hidden");
+      $("editModal").classList.remove("flex");
+    }
+
+    $("editForm").onsubmit = e => {
+      e.preventDefault();
+      const key = $("editKey").value;
+      ApnaFindsCatalog.updateByKey(key, {
+        name: $("editName").value,
+        sku: $("editSku").value,
+        brand: $("editBrand").value,
+        barcode: $("editBarcode").value,
+        category: $("editCategory").value,
+        supplier: $("editSupplier").value,
+        cost: Number($("editCost").value || 0),
+        shippingCost: Number($("editShippingCost").value || 0),
+        price: Number($("editPrice").value || 0),
+        stock: Number($("editStock").value || 0),
+        warehouse: $("editWarehouse").value,
+        fulfillmentType: $("editFulfillment").value,
+        image: $("editImage").value,
+        status: $("editStatus").value,
+        active: $("editStatus").value.toLowerCase() !== "inactive",
+        channels: {
+          website: $("editWebsite").checked,
+          amazon: $("editAmazon").checked,
+          meesho: $("editMeesho").checked,
+          flipkart: $("editFlipkart").checked
+        }
+      });
+      closeEdit();
+      render();
+    };
+
+    $("closeEdit").onclick = closeEdit;
+    $("cancelEdit").onclick = closeEdit;
+
+    $("preview").onclick = async () => {
+      if (!file.files[0]) return alert("Choose a file first");
+      const f = file.files[0];
+      const ext = f.name.split(".").pop().toLowerCase();
+      box.classList.remove("hidden");
+
+      if (ext === "pdf") {
+        box.innerHTML = `<h3 class="font-black">PDF received for review</h3><p class="mt-2 text-sm text-slate-600">${f.name} (${Math.round(f.size / 1024)} KB). Convert it to CSV before importing.</p>`;
+        return;
+      }
+
+      try {
+        const text = await f.text();
+        rowsCache = ext === "json" ? JSON.parse(text) : ApnaFindsCatalog.parseCSV(text);
+        if (!Array.isArray(rowsCache)) throw new Error("File must contain a product list");
+      } catch (error) {
+        box.innerHTML = `<p class="font-bold text-red-600">${error.message}</p>`;
+        return;
+      }
+
+      const validation = ApnaFindsCatalog.validate(rowsCache);
+      const issues = validation.filter(x => x.missing.length || x.errors.length);
+
+      box.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="font-black">${rowsCache.length} rows detected</h3>
+            <p class="text-sm text-slate-600">${issues.length} rows need attention.</p>
+          </div>
+          <button id="importNow" class="rounded-xl bg-brand-green px-4 py-3 font-black text-white">Import valid rows</button>
+        </div>
+        ${issues.length ? `<div class="mt-4 max-h-48 overflow-auto text-sm">${issues.slice(0, 50).map(x => `<p>Row ${x.row}: ${[...x.missing.map(v => `missing ${v}`), ...x.errors].join(", ")}</p>`).join("")}</div>` : ""}
+      `;
+
+      $("importNow").onclick = () => {
+        const valid = rowsCache.filter((_, i) => !issues.some(x => x.row === i + 2));
+        const done = ApnaFindsCatalog.importRows(valid, { replace: $("replace").checked });
+        box.innerHTML = `<p class="font-black text-brand-green">Imported ${done.imported} products. Catalog total: ${done.total}.</p>`;
+        render();
+      };
+    };
+
+    $("exportCSV").onclick = () => ApnaFindsCatalog.exportCSV();
+    $("exportJSON").onclick = () => ApnaFindsCatalog.exportJSON();
+    $("downloadTemplate").onclick = () => ApnaFindsCatalog.downloadTemplate();
+
+    $("clearCatalog").onclick = () => {
+      if (confirm("Clear all locally stored products?")) {
+        ApnaFindsCatalog.saveProducts([]);
+        render();
+      }
+    };
+
+    ["search","categoryFilter","supplierFilter","statusFilter","channelFilter","fulfillmentFilter"].forEach(id => {
+      $(id).addEventListener(id === "search" ? "input" : "change", render);
+    });
+
+    $("clearFilters").onclick = () => {
+      ["search","categoryFilter","supplierFilter","statusFilter","channelFilter","fulfillmentFilter"].forEach(id => $(id).value = "");
+      render();
+    };
+
+    $("selectAll").onchange = e => {
+      document.querySelectorAll(".rowCheck").forEach(x => x.checked = e.target.checked);
+    };
+
+    $("bulkWebsiteOn").onclick = () => {
+      const keys = selectedKeys();
+      if (!keys.length) return alert("Select products first");
+      ApnaFindsCatalog.bulkUpdate(keys, p => ({
+        ...p,
+        channels: { ...(p.channels || {}), website: true }
+      }));
+      render();
+    };
+
+    $("bulkInactive").onclick = () => {
+      const keys = selectedKeys();
+      if (!keys.length) return alert("Select products first");
+      ApnaFindsCatalog.bulkUpdate(keys, p => ({ ...p, active: false, status: "Inactive" }));
+      render();
+    };
+
+    $("bulkDelete").onclick = () => {
+      const keys = selectedKeys();
+      if (!keys.length) return alert("Select products first");
+      if (confirm(`Delete ${keys.length} selected products?`)) {
+        ApnaFindsCatalog.deleteByKeys(keys);
+        render();
+      }
+    };
+
+    render();
+  </script>
+</body>
+</html>

@@ -17,7 +17,7 @@
       "shipping": 0,
       "total": 499,
       "orderTotal": 499,
-      "status": "Confirmed",
+      "status": "Delivered",
       "paymentMethod": "COD + Online Advance",
       "paymentStatus": "Advance paid; COD balance pending",
       "advancePaymentRequired": true,
@@ -36,7 +36,7 @@
         "pincode": "500072"
       },
       "createdAt": "2026-07-13T10:48:42.198Z",
-      "updatedAt": "2026-07-13T10:48:42.203Z",
+      "updatedAt": "2026-07-26T15:20:35.693Z",
       "automationStatus": "Courier booked",
       "automationAttempts": 1,
       "shipmentId": "DEMO-SHP-1783939722",
@@ -58,7 +58,7 @@
       "subtotal": 499,
       "shipping": 0,
       "total": 499,
-      "status": "Packed",
+      "status": "Delivered",
       "paymentMethod": "COD",
       "shippingAddress": {
         "name": "ApnaFinds Verification",
@@ -70,7 +70,7 @@
       },
       "orderId": "APNA-VERIFY-033181",
       "createdAt": "2026-07-13T10:20:33.183Z",
-      "updatedAt": "2026-07-13T10:20:33.207Z",
+      "updatedAt": "2026-07-26T15:20:35.693Z",
       "automationStatus": "Courier booked",
       "automationAttempts": 1,
       "shipmentId": "DEMO-SHP-RIFY033181",
@@ -160,11 +160,17 @@
       "awb": "APNA1783939722",
       "courier": "ApnaFinds Demo Express",
       "courierId": 101,
-      "status": "Pickup Scheduled",
-      "customerStatus": "Confirmed",
+      "status": "Delivered",
+      "customerStatus": "Delivered",
       "pickupStatus": "Scheduled",
       "estimatedDelivery": "2026-07-17T10:48:42.203Z",
       "trackingEvents": [
+        {
+          "status": "Delivered",
+          "activity": "The package was delivered successfully",
+          "location": "Delivery address",
+          "date": "2026-07-26T15:20:35.693Z"
+        },
         {
           "status": "Order received",
           "activity": "Order automatically sent to the demo logistics system",
@@ -180,8 +186,8 @@
         "demo": true
       },
       "createdAt": "2026-07-13T10:48:42.203Z",
-      "updatedAt": "2026-07-13T10:48:42.203Z",
-      "demoStageUpdatedAt": "2026-07-13T10:48:42.203Z"
+      "updatedAt": "2026-07-26T15:20:35.693Z",
+      "demoStageUpdatedAt": "2026-07-26T15:20:35.693Z"
     },
     {
       "id": "SHP1783938033192862",
@@ -193,11 +199,17 @@
       "awb": "APNARIFY033181",
       "courier": "ApnaFinds Demo Express",
       "courierId": 101,
-      "status": "Ready for Pickup",
-      "customerStatus": "Packed",
+      "status": "Delivered",
+      "customerStatus": "Delivered",
       "pickupStatus": "Scheduled",
       "estimatedDelivery": "2026-07-17T10:20:33.191Z",
       "trackingEvents": [
+        {
+          "status": "Delivered",
+          "activity": "The package was delivered successfully",
+          "location": "Delivery address",
+          "date": "2026-07-26T15:20:35.693Z"
+        },
         {
           "status": "Packed",
           "activity": "The seller packed the order and prepared it for pickup",
@@ -219,8 +231,8 @@
         "demo": true
       },
       "createdAt": "2026-07-13T10:20:33.192Z",
-      "updatedAt": "2026-07-13T10:20:33.207Z",
-      "demoStageUpdatedAt": "2026-07-13T10:20:33.207Z"
+      "updatedAt": "2026-07-26T15:20:35.693Z",
+      "demoStageUpdatedAt": "2026-07-26T15:20:35.693Z"
     },
     {
       "id": "SHP1783937104154428",
@@ -372,7 +384,30 @@
   ],
   "settings": {},
   "support": [],
+  "otpAudit": [],
   "events": [
+    {
+      "id": "EVT1785079235694750",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-VERIFY-033181 advanced to Delivered",
+      "details": {
+        "orderId": "APNA-VERIFY-033181",
+        "awb": "APNARIFY033181",
+        "status": "Delivered"
+      },
+      "createdAt": "2026-07-26T15:20:35.694Z"
+    },
+    {
+      "id": "EVT1785079235694161",
+      "type": "shipment.demo-progress",
+      "message": "Demo shipment APNA-COD-TEST-1783939722 advanced to Delivered",
+      "details": {
+        "orderId": "APNA-COD-TEST-1783939722",
+        "awb": "APNA1783939722",
+        "status": "Delivered"
+      },
+      "createdAt": "2026-07-26T15:20:35.694Z"
+    },
     {
       "id": "EVT1783939722203489",
       "type": "shipment.booked",
@@ -590,6 +625,5 @@
       },
       "createdAt": "2026-07-13T10:05:04.000Z"
     }
-  ],
-  "otpAudit": []
+  ]
 }

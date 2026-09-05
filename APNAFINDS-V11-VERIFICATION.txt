@@ -1,0 +1,15 @@
+ApnaFinds Ultimate V11 verification
+
+- server.js syntax: PASS
+- backend-client.js syntax: PASS
+- catalog-manager.js syntax: PASS
+- npm run check: PASS
+- Razorpay mode: TEST ONLY
+- Razorpay order creation: server-side REST endpoint added
+- Razorpay signature verification: server-side HMAC SHA-256 added
+- OTP/authentication code: retained
+- Zoho mailer: retained
+- COD checkout: retained
+- Business emails: support/orders/hello/returns/business configured
+- Marketplace and logistics APIs: foundations only; no false live connection claimed
+- Secrets included: NO
